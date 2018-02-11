@@ -1,6 +1,11 @@
 '''
-fittings and valve dictionaries
+Fittings module:
+    This module holds the data for a variety of fittings and pipe sizes.
+    It holds a class called Fitting that allows you to create fitting objects
+    and calculate K-values for minor losses.
 '''
+
+# fittings and pipe dictionaries
 fitting = {
     'elbow_90' : {
         'standard_threaded' : [1, 800, 0.4],
@@ -74,8 +79,9 @@ pipe = {
         10 : [10.75, 0.5]
     }
 }
+# fittings class
 class Fitting:
-    
+ 
     def __init__(self, kind, style, size, sch=40):
         self.kind = kind
         self.style = style
@@ -129,5 +135,3 @@ if __name__=='__main__':
     a.getInfo()
     a.getInfo(detail=True)
     
-
-
