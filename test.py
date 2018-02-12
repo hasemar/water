@@ -25,3 +25,7 @@ fitting2.set_Kvalue()
 
 fitting1.getInfo()
 fitting2.getInfo(detail=True)
+
+pump = Pump()
+pump.load_pump('Goulds 3657')
+pump.plot_curve()
