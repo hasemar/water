@@ -5,6 +5,10 @@ Pumps Module:
 import csv
 import matplotlib.pyplot as plt
 import numpy as np
+from os import path
+
+pumps_dir = path.join(path.dirname(__file__), 'pumps')
+
 
 available_pumps = {
     'Goulds 3657' : '3657_1-5x2_GOULDS_3500.csv',
@@ -36,7 +40,7 @@ class Pump:
         'Grunfos CM1' : 'CM1-2-A-GRUNFOS.csv'
         }
         '''
-        file_path = 'pumps/' + available_pumps[selection]
+        file_path = pumps_dir + '/' + available_pumps[selection]
         with open(file_path, 'r') as csv_file:
             csv_reader = csv.reader(csv_file)
             next(csv_reader)
