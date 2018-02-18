@@ -18,9 +18,9 @@ def horizontal_vol(L, R, height=None):
         vol_lookup = dict(zip(vol, h_arr))
         return vol_lookup
 
-L = 20
-R = 10
-H = 2
+L = 20.0
+R = 10.0
+H = 2.0
 vol_dic = horizontal_vol(L,R)
 vol = horizontal_vol(L, R, H)
 

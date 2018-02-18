@@ -9,18 +9,16 @@ def get_gals(vol):
 
 def horizontal_vol(L, R, height=None):
     if height:
-        h = height 
+        h = float(height) 
         v = L*(R**2 * acos((R-h)/R) - (R-h) * sqrt(2*R*h - h**2))
         return v
     else: # create a height lookup dictionary
-        h_arr = linspace(0, 2*R, 11)
+        h_arr = linspace(0, 2*R, 1001)
         vol = []
         for h in h_arr:
             vol.append(L*(R**2 * acos((R-h)/R) - (R-h) * sqrt(2*R*h - h**2)))
             
         vol_lookup = dict(zip(vol, h_arr))
-        print vol
-        print h_arr
         return vol_lookup
 
 class Tank:
@@ -183,14 +181,5 @@ if __name__=='__main__':
 
     total = v_tank.vol + h_tank.vol
 
-    dead_vol = horizontal_vol(h_tank.length, h_tank.diameter/2, h_tank.deadstorage)
-    num_vol = horizontal_vol(20, 10, 2)
-    vols = horizontal_vol(h_tank.length, h_tank.diameter/2)
-    print vols
-    print h_tank.deadstorage
-    print h_tank.length
-    print h_tank.diameter/2
-    print dead_vol
-    print num_vol
     #tank.getInfo()
    # tank.getInfo(SB=100, ES=100, OS=100, total_vol=total, details=True)
