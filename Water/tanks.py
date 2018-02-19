@@ -80,13 +80,13 @@ class Tank:
 
     def getHeight(self, vol):
         v = vol/c  # change back to cu.ft
-        print 'getHeight volume = ' + str(v) + 'ft^3'
+
         if self.shape == 'horizontal':
             v_dict = horizontal_vol(self.length, self.diameter/2)
             h = v_dict[vol] if vol in v_dict else v_dict[min(v_dict.keys(), key=lambda k: abs(k-vol))]
             return h
         else:
-            h = vol/self.area
+            h = v/self.area
             return h
         
     def getInfo(self, SB=0, ES=0, OS=0, total_vol=0, details=False):
@@ -101,15 +101,15 @@ class Tank:
             Total Volume: {1:.1f} gal \r\n
             Effective Volume: {2:.1f} gal \r\n
             '''.format(
-                        self.area,
-                        self.vol,
-                        self.useable,
-                        self.name,
-                        self.elevation,
-                        self.shape,
-                        self.length,
-                        self.diameter
-                        )
+                    self.area,
+                    self.vol,
+                    self.useable,
+                    self.name,
+                    self.elevation,
+                    self.shape,
+                    self.length,
+                    self.diameter
+                    )
         else:
              info = '''
             {3:} \r\n
@@ -121,18 +121,21 @@ class Tank:
             Total volume: {1:.1f} gal \r\n
             Effective volume: {2:.1f} gal \r\n
             '''.format(
-                        self.area,
-                        self.vol,
-                        self.useable,
-                        self.name,
-                        self.elevation,
-                        self.shape,
-                        self.height,
-                        self.diameter
-                        )
+                    self.area,
+                    self.vol,
+                    self.useable,
+                    self.name,
+                    self.elevation,
+                    self.shape,
+                    self.height,
+                    self.diameter
+                    )
 
         if details:
-            perc = self.getPercent(self.useable, total_vol)
+            perc = self.getPercent(self.useable, total_vol) 
+            SB_height = self.getHeight(SB*perc) + self.deadstorage
+            ES_height = self.getHeight((ES+SB)*perc) + self.deadstorage
+            OS_height = self.getHeight((OS+ES+SB)*perc) + self.deadstorage
             info +='''
             Standby volume: {0:.1f} gal --> Equivalent height: {1:.1f} ft from base \n\r
             Equalizing volume: {2:.1f} gal --> Equivalent height: {3:.1f} ft from base \n\r
@@ -140,16 +143,16 @@ class Tank:
             From the bottom of Equalizing Storage, the height is: {6:.1f} ft from base \n\r
             Operational Storage operates in a {7:.2f} ft range \n\r
             '''.format(
-                       SB * perc,
-                       self.getHeight(SB * perc) + self.deadstorage,
-                       ES * perc,
-                       self.getHeight(ES * perc) + self.getHeight(SB * perc) + self.deadstorage,
-                       OS * perc,
-                       self.getHeight(OS * perc) + self.getHeight(ES * perc) + self.getHeight(SB * perc) + self.deadstorage,
-                       self.getHeight(SB * perc) + self.deadstorage,
-                       self.getHeight(OS*perc)
-                      )
-            
+                SB * perc,
+                SB_height,
+                ES * perc,
+                ES_height,
+                OS * perc,
+                OS_height,
+                SB_height,
+                self.getHeight(OS*perc)
+                )
+
         print info
 
 
@@ -158,21 +161,21 @@ if __name__=='__main__':
     
     horiz_tank_data = {      
         'name' : 'horizontal tank',
-        'diameter' : 20,
-        'length' : 20,
+        'diameter' : 7.83,
+        'length' : 22,
         'freeboard' : 1,
-        'deadstorage' : 2,
-        'elevation' : 157,
+        'deadstorage' : .1,
+        'elevation' : 100,
         'shape' : 'horizontal'
         }
 
     vert_tank_data = {      
         'name' : 'vertical tank',
-        'diameter' : 20,
-        'height' : 22,
+        'diameter' : 8,
+        'height' : 10,
         'freeboard' : 1,
-        'deadstorage' : 2,
-        'elevation' : 157,
+        'deadstorage' : .1,
+        'elevation' : 100,
         'shape' : 'vertical'
         }
 
@@ -181,5 +184,7 @@ if __name__=='__main__':
 
     total = v_tank.vol + h_tank.vol
 
-    #tank.getInfo()
-   # tank.getInfo(SB=100, ES=100, OS=100, total_vol=total, details=True)
+    h_tank.getInfo()
+    v_tank.getInfo()
+    h_tank.getInfo(SB=1000, ES=1000, OS=1000, total_vol=total, details=True)
+    v_tank.getInfo(SB=1000, ES=1000, OS=1000, total_vol=total, details=True)

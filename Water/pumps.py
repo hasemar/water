@@ -18,10 +18,8 @@ available_pumps = {
 def affinitize(pump_data, pwr):
     percent_speed = (np.linspace(10,60,6)/60)**pwr
     affinity_data = []
-
     for percent in percent_speed:
-        affinity_data.append(pump_data*percent)
-
+        affinity_data.append(data * percent for data in pump_data)
     return affinity_data
 
 class Pump:
@@ -85,4 +83,9 @@ if __name__=="__main__":
 
     pump = Pump()
     pump.load_pump('Goulds 3657')
-    pump.plot_curve()
+    for obs in pump.vfd_flow:
+        for data in obs:
+            print data
+    
+    
+    #pump.plot_curve()
