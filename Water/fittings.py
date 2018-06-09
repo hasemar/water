@@ -4,6 +4,7 @@ Fittings module:
     It holds a class called Fitting that allows you to create fitting objects
     and calculate K-values for minor losses.
 '''
+from __future__ import print_function
 
 # fittings and pipe dictionaries
 fitting = {
@@ -123,10 +124,10 @@ class Fitting:
                 self.Kfactors[2],
                 self.Kfactors[0]
             )
-        print info
+        print(info)
 
 if __name__=='__main__':
-    print "Test Script"
+    print("Test Script")
     
     a = Fitting('elbow_90','standard_flanged',size=4, sch=80)
     Re = 10000

@@ -1,5 +1,6 @@
 from math import sqrt, acos
 from numpy import linspace
+from __future__ import print_function, division
 
 def horizontal_vol(L, R, height=None):
     if height: # use height in calculation
@@ -24,8 +25,8 @@ H = 2.0
 vol_dic = horizontal_vol(L,R)
 vol = horizontal_vol(L, R, H)
 
-print vol_dic
+print(vol_dic)
 
-print vol
+print(vol)
 
-print 'what the fuck dude'
+print('what the fuck dude')

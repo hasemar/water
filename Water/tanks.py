@@ -1,3 +1,4 @@
+from __future__ import print_function, division
 from math import pi, acos, sqrt
 from numpy import linspace
 
@@ -153,11 +154,11 @@ class Tank:
                 self.getHeight(OS*perc)
                 )
 
-        print info
+        print(info)
 
 
 if __name__=='__main__':
-    print "Test Script"
+    print("Test Script")
     
     horiz_tank_data = {      
         'name' : 'horizontal tank',

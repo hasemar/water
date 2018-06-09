@@ -2,6 +2,7 @@
 Pumps Module:
     This module calculates and produces pump curves based on mfg's data points
 '''
+from __future__ import print_function, division
 import csv
 import matplotlib.pyplot as plt
 import numpy as np
@@ -79,13 +80,13 @@ class Pump:
 
 
 if __name__=="__main__":
-    print 'test script:'
+    print('test script:')
 
     pump = Pump()
     pump.load_pump('Goulds 3657')
     for obs in pump.vfd_flow:
         for data in obs:
-            print data
+            print(data)
     
     
     #pump.plot_curve()
