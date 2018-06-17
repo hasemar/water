@@ -54,7 +54,7 @@ fitting = {
     }
 }
 
-pipe = {
+pipe_dims = {
     40 : {
         1 : [1.315, 0.133],
         1.25 : [1.66, 0.140],
@@ -78,17 +78,25 @@ pipe = {
         6 : [6.625, 0.432],
         8 : [8.625, 0.5],
         10 : [10.75, 0.5]
+    },
+    'C-900 DR-18' : {
+        4 : [4.80, 0.267],
+        6 : [6.90, 0.383],
+        8 : [9.05, 0.503],
+        10 : [11.10, 0.617],
+        12 : [13.20, 0.733]
     }
 }
+
 # fittings class
 class Fitting:
  
-    def __init__(self, kind, style, size, sch=40):
+    def __init__(self, kind, con_type, size, sch=40):
         self.kind = kind
-        self.style = style
+        self.con_type = con_type
         self.nominal = (size, sch)
-        self.Kfactors = fitting[kind][style]
-        self.size = pipe[sch][size]
+        self.Kfactors = fitting[kind][con_type]
+        self.size = pipe_dims[sch][size]
         self.Kvalue = 0.0
 
     @property
@@ -105,7 +113,7 @@ class Fitting:
         info = '''
             Fitting: {} {}  Size: {} sch {} OD = {} ID = {}
             '''.format(
-               self.style,
+               self.con_type,
                self.kind,
                self.nominal[0],
                self.nominal[1],
@@ -133,6 +141,10 @@ if __name__=='__main__':
     Re = 10000
     a.set_Kvalue(Re)
 
+    b = Fitting('tee_through','stub_in',size=6,sch='C-900 DR-18')
+
     a.getInfo()
     a.getInfo(detail=True)
     
+    b.getInfo()
+    b.getInfo(detail=True)
