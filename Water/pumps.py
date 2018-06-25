@@ -2,6 +2,7 @@
 Pumps Module:
     This module calculates and produces pump curves based on mfg's data points
 '''
+from __future__ import print_function, division
 import csv
 import matplotlib.pyplot as plt
 import numpy as np
@@ -16,10 +17,10 @@ available_pumps = {
     }
 
 def affinitize(pump_data, pwr):
-    percent_speed = (np.linspace(10,60,6)/60)**pwr
+    percent_speed = (np.linspace(60,10,6)/60)**pwr
     affinity_data = []
     for percent in percent_speed:
-        affinity_data.append(data * percent for data in pump_data)
+        affinity_data.append([data * percent for data in pump_data])
     return affinity_data
 
 class Pump:
@@ -47,7 +48,7 @@ class Pump:
                 if line[0]:
                     self.model = line[0]
                     self.rpm = int(line[1])
-                    self.impeller = float(line[2])
+                    self.impeller = line[2]
                 self.flow.append(int(line[3]))
                 self.head.append(int(line[4]))
                 self.eff.append(float(line[5]))
@@ -64,28 +65,31 @@ class Pump:
     def vfd_eff(self):
         return affinitize(self.eff, 3)
 
-    def plot_curve(self):
+    def plot_curve(self, target_flow=None, tdh=None):
         title_str = 'Pump: ' + self.model + ' - ' + str(self.rpm) + ' RPM - ' + str(self.impeller) + '" impeller'
-        c = np.polyfit(self.flow, self.head, 3)
-        p = np.poly1d(c)
-        f = np.linspace(min(self.flow), max(self.flow), 100)
-        plt.plot(f, p(f))
+        for h in self.vfd_head:
+            plt.plot(self.flow, h)
+        if target_flow and tdh:
+            plt.plot(target_flow, tdh, "o")
         plt.grid(True)
         plt.title(title_str)
         plt.xlabel('flow (gpm)')
         plt.ylabel('head (ft)')
-        plt.legend('60Hz')
+        plt.legend(['60Hz', '50Hz', '40Hz', '30Hz', '20Hz', '10Hz'])
         plt.show()
 
 
 if __name__=="__main__":
-    print 'test script:'
+    print('test script:')
 
     pump = Pump()
+    pump2 = Pump()
     pump.load_pump('Goulds 3657')
-    for obs in pump.vfd_flow:
+    pump2.load_pump('Grunfos CM1')
+
+    for obs in pump.vfd_eff:
         for data in obs:
-            print data
+            print(data)
     
     
-    #pump.plot_curve()
+    pump.plot_curve(60, 50)
