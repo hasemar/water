@@ -3,7 +3,8 @@
 from Water.tanks import Tank
 from Water.fittings import Fitting
 from Water.pumps import Pump
+import Water.tools as tools
 
 
 
-__all__ = ['Tank', 'Fitting', 'Pump']
+__all__ = ['Tank', 'Fitting', 'Pump', 'tools']
