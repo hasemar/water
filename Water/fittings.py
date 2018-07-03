@@ -97,7 +97,7 @@ class Fitting:
         self.nominal = (size, sch)
         self.Kfactors = fitting[kind][con_type]
         self.size = pipe_dims[sch][size]
-        self.Kvalue = 0.0
+        self.Kvalue = 0
 
     @property
     def outer_diameter(self):
@@ -105,9 +105,9 @@ class Fitting:
     @property
     def inner_diameter(self):
         return self.outer_diameter - 2 * self.size[1]
-
-    def set_Kvalue(self, Re=2000):
-       self.Kvalue = self.Kfactors[1]/Re+self.Kfactors[2]*(1+1/self.inner_diameter)
+    
+    def set_Kvalue(self, Re=2300):
+        self.Kvalue = self.Kfactors[1]/Re+self.Kfactors[2]*(1+1/self.inner_diameter)
 
     def getInfo(self, detail=False):
         info = '''

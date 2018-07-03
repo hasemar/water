@@ -4,7 +4,6 @@ design aspects
 '''
 
 from __future__ import print_function, division
-import numpy as np
 from math import pi
 
 def coeffs(num_ERUs):
@@ -80,16 +79,20 @@ def pipeDiameter(flow, velocity):
 
     return pipe_diam
 
-def reynolds(velocity, pipe_diam, nu=14.1e-6):
+def reynolds(pipe_diam, flow=None, velocity=None, viscocity=1.3081):
     '''
     Reynolds Number Calculation:
-    Enter velocity(fps), pipe diameter(inches)
-        nu = 14.1e-6 (default)
+    Enter flow (gpm), pipe diameter(inches)
+        viscosity in cSt = 1.3081 (default)
     '''
-    d = pipe_diam/12
-    re = velocity*d / nu
+    if flow:
+        re = 3165*flow/(pipe_diam*viscocity)
+    elif velocity:
+        re = 7741*pipe_diam*velocity/viscocity
+    else:
+        print('Must enter flow or velocity')
 
-    if re >= 2300:
+    if re > 2300:
         laminar = False
     else:
         laminar = True
@@ -107,6 +110,11 @@ def volume_box(length, width, height):
 def ft2gal(cubic_feet):
     ''' cubic feet to gallon conversion'''
     return cubic_feet*7.481
+
+def minor_loss(vel, k_val ):
+    ''' minor head loss using FPS '''
+    g = 32.2
+    return k_val * vel**2/(2*g)
 
 
 ########## Test Script ############
@@ -131,7 +139,7 @@ if __name__=="__main__":
     d_func = pipeDiameter(Q,v)
 
     # Reynolds Number
-    Re, Lam = reynolds(v, d)
+    Re, Lam = reynolds(d, velocity=v)
     if Lam:
         condition = 'Laminar'
     else:

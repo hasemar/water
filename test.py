@@ -1,22 +1,29 @@
 from Water import *
 
-# Tank1 info
-tank1_data = {          
+system_name = 'Test System'
+station_name = 'Test Station'
+MDD = 500                # gpd/ERU
+N = 1000
+PHD = tools.PHD(MDD, N)  # gpm
+
+# Define tank data 
+tank_data = {          
         'name' : 'Tank 1',
-        'diameter' : 10,
-        'height' : 40,
-        'freeboard' : 5,
-        'deadstorage' : 1,
-        'elevation' : 150
+        'diameter' : 30,
+        'height' : 45,
+        'freeboard' : 1,
+        'deadstorage' : 2,
+        'elevation' : 150,
+        'shape' : 'vertical'
         }
 
+# Instatiate tank object
 tank = Tank(**tank1_data)
-tank1 = Tank(name='sunny', diameter=100, height=400)
-tank2 = Tank(name='shady', diameter=10, height=4000, deadstorage= 499)
 
-tank.getInfo()
-tank1.getInfo()
-tank2.getInfo()
+# from pump to suction header
+pump2suc = Pipe(length=5, size=3, kind='STAINLESS STEEL', sch=40)
+elbow = Fitting('elbow_90', 'standard_flanged', pump2suc.size, pump2suc.sch)
+
 
 
 fitting1 = Fitting('elbow_90', 'standard_threaded', 2)
