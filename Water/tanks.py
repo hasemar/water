@@ -90,7 +90,7 @@ class Tank:
             h = v/self.area
             return h
         
-    def getInfo(self, SB=0, ES=0, OS=0, total_vol=0, details=False):
+    def getInfo(self, SB=0, ES=0, OS=0, FFS=0, total_vol=0, details=False):
         if self.shape == 'horizontal':
             info = '''
             {3:} \r\n
