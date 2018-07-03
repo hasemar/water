@@ -94,13 +94,13 @@ class Tank:
         if self.shape == 'horizontal':
             info = '''
             {3:} \r\n
-            Base Elevation: {4:} ft \r\n
-            Orientation: {5:} \r\n
-            Tank Length: {6:} ft \r\n
-            Tank Diameter: {7:} ft \r\n
-            Tank Cross-Sectional Area: {0:.1f} ft^2 \r\n
-            Total Volume: {1:.1f} gal \r\n
-            Effective Volume: {2:.1f} gal \r\n
+            Base Elevation:------------- {4:} ft
+            Orientation:---------------- {5:}
+            Tank Length:---------------- {6:} ft
+            Tank Diameter:-------------- {7:} ft
+            Tank Cross-Sectional Area:-- {0:.1f} ft^2 
+            Total Volume:--------------- {1:.1f} gal
+            Effective Volume:----------- {2:.1f} gal
             '''.format(
                     self.area,
                     self.vol,
@@ -114,13 +114,13 @@ class Tank:
         else:
              info = '''
             {3:} \r\n
-            Base Elevation: {4:} ft \r\n
-            Orientation: {5:} \r\n
-            Tank Height: {6:} ft \r\n
-            Tank Diameter: {7:} ft \r\n
-            Tank cross-sectional area: {0:.1f} ft^2 \r\n
-            Total volume: {1:.1f} gal \r\n
-            Effective volume: {2:.1f} gal \r\n
+            Base Elevation:------------- {4:} ft
+            Orientation:---------------- {5:}
+            Tank Height:---------------- {6:} ft
+            Tank Diameter:-------------- {7:} ft
+            Tank cross-sectional area:-- {0:.1f} ft^2
+            Total volume:--------------- {1:.1f} gal
+            Effective volume:----------- {2:.1f} gal
             '''.format(
                     self.area,
                     self.vol,
@@ -133,29 +133,47 @@ class Tank:
                     )
 
         if details:
-            perc = self.getPercent(self.useable, total_vol) 
-            SB_height = self.getHeight(SB*perc) + self.deadstorage
-            ES_height = self.getHeight((ES+SB)*perc) + self.deadstorage
-            OS_height = self.getHeight((OS+ES+SB)*perc) + self.deadstorage
+            perc = self.getPercent(self.useable, total_vol)
+            vols = [vo * perc for vo in [FFS, SB, ES, OS]]
+        
+            # height referenced from base of tank
+            total_h = self.getHeight(sum(vols)) + self.deadstorage + self.freeboard
+            ds_vol = get_gals(self.deadstorage*self.area)
+            fb_vol = get_gals(self.freeboard*self.area)
+            total_calc_vol = ds_vol + fb_vol + sum(vols)
+            vols.insert(0,ds_vol)
+            vols.append(fb_vol)
+            vols.append(total_calc_vol)
+            
             info +='''
-            Standby volume: {0:.1f} gal --> Equivalent height: {1:.1f} ft from base \n\r
-            Equalizing volume: {2:.1f} gal --> Equivalent height: {3:.1f} ft from base \n\r
-            Operational volume: {4:.1f} gal --> Equivalent height: {5:.1f} ft from base \n\r
-            From the bottom of Equalizing Storage, the height is: {6:.1f} ft from base \n\r
-            Operational Storage operates in a {7:.2f} ft range \n\r
+            Storage Partition    |    Vol (gal)    |    Height(ft)
+            ------------------------------------------------------
+            Dead Storage              {0:.1f}           {1:.1f}  
+            Fire-Flow                 {2:.1f}           {3:.1f}
+            Standby                   {4:.1f}           {5:.1f}
+            Equalizing                {6:.1f}           {7:.1f}
+            Operational               {8:.1f}           {9:.1f}
+            Freeboard                 {10:.1f}          {11:.1f}
+            ------------------------------------------------------
+            TOTALS                    {12:.1f}            {13:.1f} 
             '''.format(
+                ds_vol,
+                self.deadstorage,
+                FFS * perc,
+                self.getHeight(FFS*perc),
                 SB * perc,
-                SB_height,
+                self.getHeight(SB*perc),
                 ES * perc,
-                ES_height,
+                self.getHeight(ES*perc),
                 OS * perc,
-                OS_height,
-                SB_height,
-                self.getHeight(OS*perc)
+                self.getHeight(OS*perc),
+                fb_vol,
+                self.freeboard,
+                total_calc_vol,
+                total_h
                 )
 
         print(info)
-
 
 if __name__=='__main__':
     print("Test Script")
