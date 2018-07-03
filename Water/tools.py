@@ -107,7 +107,7 @@ def volume_box(length, width, height):
     ''' volume of a box '''
     return length*width*height
 
-def ft2gal(cubic_feet):
+def cuft2gal(cubic_feet):
     ''' cubic feet to gallon conversion'''
     return cubic_feet*7.481
 
@@ -150,7 +150,7 @@ if __name__=="__main__":
     vol2 = volume_box(5, 10, 20)
 
     # cubic feet to gallon conversion
-    gals = ft2gal(1000)
+    gals = cuft2gal(1000)
     
     # output string
     out = '''
