@@ -121,6 +121,17 @@ def minor_loss(vel, k_val ):
     g = 32.2
     return k_val * vel**2/(2*g)
 
+def report_losses(losses, flow, name):
+    '''prints high and low flow head loss for given inputs
+        report_losses(list, list, str)
+    '''
+    output = '{}: {:.2f} ft @ {:.1f} gpm -- {:.2f} ft @ {:.1f} gpm'.format(name,
+                                                                           losses[0],
+                                                                           flow[0], 
+                                                                           losses[-1],
+                                                                           flow[-1])
+    return output
+
 def ft2psi(ft_of_head):
     ''' convert feet of head to psi '''
     return ft_of_head * 0.43333

@@ -18,6 +18,9 @@ available_pumps = {
     }
 
 def affinitize(pump_data, pwr):
+    ''' takes pump data and creates affinitized curves
+        based on motor speed
+    '''
     percent_speed = (np.linspace(60,10,6)/60)**pwr
     affinity_data = []
     for percent in percent_speed:
@@ -39,7 +42,6 @@ class Pump:
         'Goulds 3657' : '3657_1-5X2_GOULDS_3500.csv',
         'Goulds 3642' : '3642_1x1-25_GOULDS_3500.csv'
         'Grunfos CM1' : 'CM1-2-A-GRUNFOS.csv'
-        
         }
         '''
         file_path = pumps_dir + '/' + available_pumps[selection]
