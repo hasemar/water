@@ -13,6 +13,7 @@ pumps_dir = path.join(path.dirname(__file__), 'pumps')
 
 available_pumps = {
     'Goulds 3657' : '3657_1-5x2_GOULDS_3500.csv',
+    'Goulds 3642' : '3642_1x1-25_GOULDS_3500.csv',
     'Grunfos CM1' : 'CM1-2-A-GRUNFOS.csv'
     }
 
@@ -36,7 +37,9 @@ class Pump:
         '''
         available_pumps = {
         'Goulds 3657' : '3657_1-5X2_GOULDS_3500.csv',
+        'Goulds 3642' : '3642_1x1-25_GOULDS_3500.csv'
         'Grunfos CM1' : 'CM1-2-A-GRUNFOS.csv'
+        
         }
         '''
         file_path = pumps_dir + '/' + available_pumps[selection]
@@ -69,7 +72,7 @@ class Pump:
         title_str = 'Pump: ' + self.model + ' - ' + str(self.rpm) + ' RPM - ' + str(self.impeller) + '" impeller'
         for h in self.vfd_head:
             plt.plot(self.flow, h)
-        if target_flow and tdh:
+        if np.any(target_flow) and np.any(tdh):
             plt.plot(target_flow, tdh, "o")
         plt.grid(True)
         plt.title(title_str)
@@ -78,6 +81,20 @@ class Pump:
         plt.legend(['60Hz', '50Hz', '40Hz', '30Hz', '20Hz', '10Hz'])
         plt.show()
 
+    def find_head(self, flow):
+        ''' Returns head value from pump curve based on flow input.
+            if flow is not a known value it will interprolate between the
+            two closest points on the curve.
+        '''
+        try:
+            if flow in self.flow:
+                head = self.head[self.flow.index(flow)]
+            else:
+                head = np.interp(flow, self.flow, self.head)
+        except ValueError:
+            print(" Value not found, check you numbers")
+
+        return head
 
 if __name__=="__main__":
     print('test script:')
