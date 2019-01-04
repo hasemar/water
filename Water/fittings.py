@@ -1,15 +1,16 @@
 '''
-Fittings module:
+Fittings :
     This module holds the data for a variety of fittings and pipe sizes.
     It holds a class called Fitting that allows you to create fitting objects
     and calculate K-values for minor losses.
 '''
-from __future__ import print_function
+from __future__ import division, print_function
 
 # fittings and pipe dictionaries
 fitting = {
     'elbow_90' : {
         'standard_threaded' : [1, 800, 0.4],
+        'standard_glued' : [1, 800, 0.3],
         'standard_flanged' : [1, 800, 0.25],
         'long_radius' : [1.5, 800, 0.2],
         'mitered_1' : [1.5, 1000, 1.15,],
@@ -26,17 +27,20 @@ fitting = {
     },
     'elbow_180' : {
         'standard_threaded' : [1, 1000, 0.60],
+        'standard_glued' : [1, 800, 0.4],
         'standard_flanged' : [1, 1000, 0.35],
         'long_radius' : [1.5, 1000, 0.30]
     },
     'tee_branch' : {
         'standard_threaded' : [None, 500, 0.70],
+        'standard_glued' : [1, 800, 0.75],
         'standard_flanged' : [None, 800, 0.80],
         'long_radius' : [None, 800, 0.40],
         'stub_in' : [None, 1000, 1.00]
     },
     'tee_through' : {
         'standard_threaded' : [1, 200, 0.10],
+        'standard_glued' : [1, 800, 0.25],
         'standard_flanged' : [1, 150, 0.50],
         'stub_in' : [None, 100, 0]
     },
@@ -55,37 +59,37 @@ fitting = {
 }
 
 pipe_dims = {
-    40 : {
-        1 : [1.315, 0.133],
-        1.25 : [1.66, 0.140],
-        1.5 : [1.9, 0.145],
-        2 : [2.375, 0.154],
-        2.5 : [2.875, 0.203],
-        3 : [3.5, 0.216],
-        4 : [4.5, 0.237],
-        6 : [6.625, 0.28],
-        8 : [8.625, 0.322],
-        10 : [10.75, 0.365]
-    },
-    80 : {
-        1 : [1.315, 0.179],
-        1.25 : [1.66, 0.191],
-        1.5 : [1.9, 0.2],
-        2 : [2.375, 0.218],
-        2.5 : [2.875, 0.276],
-        3 : [3.5, 0.3],
-        4 : [4.5, 0.337],
-        6 : [6.625, 0.432],
-        8 : [8.625, 0.5],
-        10 : [10.75, 0.5]
-    },
-    'C-900 DR-18' : {
-        4 : [4.80, 0.267],
-        6 : [6.90, 0.383],
-        8 : [9.05, 0.503],
-        10 : [11.10, 0.617],
-        12 : [13.20, 0.733]
-    }
+   40 : {
+       1 : [1.315, 0.133],
+       1.25 : [1.66, 0.140],
+       1.5 : [1.9, 0.145],
+       2 : [2.375, 0.154],
+       2.5 : [2.875, 0.203],
+       3 : [3.5, 0.216],
+       4 : [4.5, 0.237],
+       6 : [6.625, 0.28],
+       8 : [8.625, 0.322],
+       10 : [10.75, 0.365]
+   },
+   80 : {
+       1 : [1.315, 0.179],
+       1.25 : [1.66, 0.191],
+       1.5 : [1.9, 0.2],
+       2 : [2.375, 0.218],
+       2.5 : [2.875, 0.276],
+       3 : [3.5, 0.3],
+       4 : [4.5, 0.337],
+       6 : [6.625, 0.432],
+       8 : [8.625, 0.5],
+       10 : [10.75, 0.5]
+   },
+   'C-900 DR-18' : {
+       4 : [4.80, 0.267],
+       6 : [6.90, 0.383],
+       8 : [9.05, 0.503],
+       10 : [11.10, 0.617],
+       12 : [13.20, 0.733]
+   }
 }
 
 # fittings class
