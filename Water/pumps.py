@@ -10,7 +10,6 @@ from os import path
 
 pumps_dir = path.join(path.dirname(__file__), 'pumps')
 
-
 available_pumps = {
     'Goulds 3657' : '3657_1-5x2_GOULDS_3500.csv',
     'Goulds 3642' : '3642_1x1-25_GOULDS_3500.csv',

@@ -29,3 +29,7 @@ fitting2.getInfo(detail=True)
 pump = Pump()
 pump.load_pump('Goulds 3657')
 pump.plot_curve()
+
+rad = tools.wellhead_CFR(500000, 20)
+
+print(rad)
