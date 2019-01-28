@@ -74,7 +74,7 @@ class Pipe:
         return h
 
     def minor_loss(self, flow, fittings):
-        g = 9.8
+        g = 32.2
         vel = tools.velocity(flow, self.inner_diameter)
         # fittings is a list of tuples, first tuple is fitting object, 2nd tuple is quanity
         minor_loss = 0

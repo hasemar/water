@@ -281,12 +281,11 @@ def resistance(velocity=None, headloss=None, K=None):
         depending on what is given
 
         Enter velociy in FPS
-        Enter flow in GPM
         Enter headloss in feet
         OR
         Enter K
     '''
-    g = 9.81
+    g = 32.2
     
     if headloss and not K:
         K = (2*g*headloss)/velocity**2
