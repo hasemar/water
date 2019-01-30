@@ -94,6 +94,20 @@ pipe_dims = {
 
 # fittings class
 class Fitting:
+    '''Fitting Class:
+        object defined to add resistance to pipe section
+        attributes:
+            - kind: fitting type (elbow, tee, etc.)
+            - con_type: connection type (flanged, threaded, etc.)
+            - size: nominal pipe diameter (in inches)
+            - sch: pipe schedule, default=40, can also put PVC AWWA sizes
+        properties:
+            - inner diameter
+            - outer diameter
+        methods:
+            - set_Kvalue: assignes K value based on Reynolds number (default Re=2000)
+            - get_info: prints string of fitting data
+    '''
  
     def __init__(self, kind, con_type, size, sch=40):
         self.kind = kind
@@ -105,15 +119,19 @@ class Fitting:
 
     @property
     def outer_diameter(self):
+        ''' returns outer diamter of fitting in inches'''
         return self.size[0]
     @property
     def inner_diameter(self):
+        ''' returns inner diamter of fitting in inches'''
         return self.outer_diameter - 2 * self.size[1]
 
     def set_Kvalue(self, Re=2000):
-       self.Kvalue = self.Kfactors[1]/Re+self.Kfactors[2]*(1+1/self.inner_diameter)
+        ''' sets Kvalue atribute for fitting based on Reynolds number '''
+        self.Kvalue = self.Kfactors[1]/Re+self.Kfactors[2]*(1+1/self.inner_diameter)
 
     def getInfo(self, detail=False):
+        '''returns string of fitting data'''
         info = '''
             Fitting: {} {}  Size: {} sch {} OD = {} ID = {}
             '''.format(
@@ -136,8 +154,9 @@ class Fitting:
                 self.Kfactors[2],
                 self.Kfactors[0]
             )
-        print(info)
+        return info
 
+# test script to test functionallity
 if __name__=='__main__':
     print("Test Script")
     
@@ -147,8 +166,12 @@ if __name__=='__main__':
 
     b = Fitting('tee_through','stub_in',size=6,sch='C-900 DR-18')
 
-    a.getInfo()
-    a.getInfo(detail=True)
-    
-    b.getInfo()
-    b.getInfo(detail=True)
+    info = a.getInfo()
+    details = a.getInfo(detail=True)
+    print(info)
+    print(details)
+
+    more_info = b.getInfo()
+    more_details = b.getInfo(detail=True)
+    print(more_info)
+    print(more_details)

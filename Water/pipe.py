@@ -50,7 +50,22 @@ pipe_dims = {
 }
 
 class Pipe:
-
+    '''Pipe Class:
+        object defined to add pipe section
+        attributes:
+            - length: straight pipe length (in ft)
+            - size: nominal pipe diameter (in inches)
+            - kind: pipe material (PVC, steel, etc.)
+            - sch: pipe schedule, default=40, can also put PVC AWWA sizes
+        properties:
+            - inner diameter
+            - outer diameter
+            - c factor for hazen-williams equation
+        methods:
+            - major_loss: uses hazen-williams equation to find head loss in straight pipe
+            - minor_loss: uses Darcy-Wiesbach equation to find head loss in fittings
+            - get_losses: returns total losses in the pipe section
+    '''
     def __init__(self,length, size, kind='PVC', sch='C900 DR-18'):
         self.kind = kind
         self.sch = sch
@@ -60,20 +75,24 @@ class Pipe:
 
     @property
     def outer_diameter(self):
+        ''' returns outer diameter'''
         return self.dims[0]
     @property
     def inner_diameter(self):
+        ''' returns inner diamter'''
         return self.outer_diameter - 2 * self.dims[1]
     @property
     def c_factor(self):
+        ''' returns C factor for Hazen-Williams equation'''
         return c_dict[self.kind]
 
     def major_loss(self, flow):
-        # uses Hazen-Williams equation
+        ''' returns major head loss by using Hazen-Williams equation '''
         h = (10.67 * self.length * flow**1.852)/(self.c_factor**1.852 * self.inner_diameter**4.8704)
         return h
 
     def minor_loss(self, flow, fittings):
+        ''' returns minor head loss by using Darcy Wiesbach equation '''
         g = 32.2
         vel = tools.velocity(flow, self.inner_diameter)
         # fittings is a list of tuples, first tuple is fitting object, 2nd tuple is quanity
@@ -85,10 +104,11 @@ class Pipe:
         return minor_loss
 
     def get_losses(self, flow, fittings):
+        ''' returns total head loss (major + minor)'''
         total_loss = self.major_loss(flow) + self.minor_loss(flow, fittings)
         return total_loss
         
-
+#### test script to test functionality
 if __name__=="__main__":
     print('test script:')
     length = 1000
@@ -102,8 +122,3 @@ if __name__=="__main__":
           'ft \nHead Loss = ',
           pipe_1.major_loss(flow),
           'ft') 
-
-    '''
-    Notes:  Make this class a super class for fittings to inherit pipe size and type
-    This class will also be a subclass of losses class... maybe
-    '''

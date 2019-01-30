@@ -7,3 +7,7 @@ from Water.pipe import Pipe
 import Water.tools as tools
 
 __all__ = ['Tank', 'Fitting', 'Pump', 'Pipe', 'tools']
+
+
+## turn fittings class into subclass of Pipe, then you can inherently add fittings to sections
+## in a standard format like you did in ftw_injection
