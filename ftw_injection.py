@@ -45,10 +45,8 @@ s2p = Pipe(s2p_len, s2p_size, 'PVC', sch=80)
 
 # fittings for suction pipe section
 # listed as fitting object(type, params, etc..), and number of fittings
-s2p_fittings = [
-                 (Fitting('elbow_90', 'standard_glued', s2p_size, sch=80), 3), 
-                 (Fitting('valve', 'ball', s2p_size, sch=80), 2)
-]
+s2p.fitting('elbow_90', 'standard_glued', 3)
+s2p.fitting('valve', 'ball',2)
 
 '''
 ################# DISCHARGE SIDE LOSSES ####################
@@ -65,14 +63,9 @@ p2r_len = 2
 p2r = Pipe(p2r_len, p2r_size, 'PVC',sch=80)
 
 # fittings for pump to reducer section
-p2r_fittings = [
-               (Fitting('elbow_90', 'standard_glued', p2r_size, sch=80), 1),
-               (Fitting('tee_through', 'standard_glued', p2r_size, sch=80), 1)
-]
-
-# reducer k-value and loss calculation
-reducer_Kval = 0.8
-reducer_losses = [tools.minor_loss(tools.velocity(x, p2r.inner_diameter), reducer_Kval) for x in Q_vec]
+p2r.fitting('elbow_90', 'standard_glued', 1)
+p2r.fitting('tee_through', 'standard_glued', 1)
+p2r.fitting('reducer', 'standard_glued', 1, 0.8)
 
 ### reducer to injection point ###
 # pipe parameters
@@ -82,12 +75,10 @@ r2ip = Pipe(r2ip_length, r2ip_size, 'PVC', sch=40)
 
 # fittings for reducer to injection point section
 # (assuming control valve wide open)
-r2ip_fittings = [
-               (Fitting('elbow_90', 'standard_glued', r2ip_size, sch=80), 2),
-               (Fitting('tee_branch', 'standard_glued', r2ip_size, sch=80), 1),
-               (Fitting('valve', 'ball', r2ip_size, sch=80),2),
-               (Fitting('valve', 'swing_check', r2ip_size, sch=80), 1)
-]
+r2ip.fitting('elbow_90', 'standard_glued', 2)
+r2ip.fitting('tee_branch', 'standard_glued')
+r2ip.fitting('valve', 'ball', 2)
+r2ip.fitting('valve', 'swing_check')
 
 ### injection point to DAF ###
 # pipe paramters
@@ -96,12 +87,12 @@ ip2DAF_length = 180
 ip2DAF = Pipe(ip2DAF_length, ip2DAF_size, 'PVC', sch=80)
 
 # fittings for injection point to DAF
-ip2DAF_fittings = [
-               (Fitting('elbow_90', 'standard_glued', ip2DAF_size, sch=80), 20),
-               (Fitting('tee_branch', 'standard_glued', ip2DAF_size, sch=80), 2),
-               (Fitting('valve', 'butterfly', ip2DAF_size, sch=80),2),
-               (Fitting('valve', 'swing_check', r2ip_size, sch=80), 1)
-]
+ip2DAF.fitting('elbow_90', 'standard_glued', 20)
+ip2DAF.fitting('tee_branch', 'standard_glued',2)
+ip2DAF.fitting('valve', 'butterfly', 2)
+ip2DAF.fitting('valve', 'swing_check')
+ip2DAF.fitting('static_mixer', 'standard_threaded', 1, 2)
+ip2DAF.fitting('flow_meter', 'standard_threaded', 1, 4)
 
 #### 2 inch bypass in feed line ###
 # pipe parameters
@@ -110,42 +101,25 @@ bypass_length = 5
 bypass = Pipe(bypass_length, bypass_size, kind='PVC', sch=80)
 
 # fittings in bypass
-bypass_fittings = [
-                (Fitting('valve', 'gate', bypass_size, sch=80), 1),
-                (Fitting('tee_branch', 'standard_glued', bypass_size, sch=80), 2)
-]
-
-# static mixer minor losses
-smixer_Kval = 2
-smixer_losses = [tools.minor_loss(tools.velocity(x,ip2DAF.inner_diameter), smixer_Kval) for x in Q_vec]
-
-# flowmeter minor losses
-flmeter_Kval = 4
-flmeter_losses = [tools.minor_loss(tools.velocity(x,ip2DAF.inner_diameter), flmeter_Kval) for x in Q_vec]
+bypass.fitting('valve', 'gate')
+bypass.fitting('tee_branch', 'standard_glued', 2)
 
 # Calculating losses with flow vector
 pipes = [s2p, p2r, r2ip, ip2DAF, bypass] 
-fittings = [s2p_fittings, p2r_fittings, r2ip_fittings, ip2DAF_fittings, bypass_fittings]
 
 losses = []
-q_list = []
 
-# calculating losses for all pipes and fittings
-for P, F in zip(pipes, fittings):
-    for Q in Q_vec:
-        q_list.append(P.get_losses(Q,F))
-        losses.append(q_list)
+# calculating losses for all pipes sections for each flow
+for each_pipe in pipes:
+    q_list = []
+    for each_flow in Q_vec:
+        q_list.append(each_pipe.get_losses(each_flow))
+    losses.append(q_list)
 
 # define suction side losses
 suc_losses = losses[0]
 # define discharge side losses
-dis_losses = [sum(x) for x in zip(losses[1],
-                                  losses[2],
-                                  reducer_losses,
-                                  smixer_losses,
-                                  flmeter_losses
-                                  )
-]
+dis_losses = sum(np.array(losses[1:]))
 
 ############ Pumping Head Calculations #############
 
@@ -155,6 +129,9 @@ suc_head = [x - storage.deadstorage for x in suc_losses]
 dis_head = [x + outlet_height for x in dis_losses] 
 # total dynamic head condition for each flow in Q_vec
 tdh = [sum(x) for x in zip(dis_head, suc_head)]
+
+print(tools.report_losses(suc_losses, Q_vec, 'suction losses'))
+print(tools.report_losses(dis_losses, Q_vec, 'discharge losses'))
 
 ########## Pump Specification ############
 
