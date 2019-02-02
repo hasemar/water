@@ -33,3 +33,6 @@ pump.plot_curve()
 rad = tools.wellhead_CFR(500000, 20)
 
 print(rad)
+
+pipe = Pipe(1000, 8, 'DI', sch=80)
+
