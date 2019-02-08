@@ -124,12 +124,21 @@ def minor_loss(vel, k_val ):
 def report_losses(losses, flow, name):
     '''prints high and low flow head loss for given inputs
         report_losses(list, list, str)
+       if only one value is passed for both losses and flow
+       it will only report one losses value
+
     '''
-    output = '{}: {:.2f} ft @ {:.1f} gpm -- {:.2f} ft @ {:.1f} gpm'.format(name,
+    if losses is list and flow is list:
+        output = '{}: {:.2f} ft @ {:.1f} gpm -- {:.2f} ft @ {:.1f} gpm'.format(name,
                                                                            losses[0],
                                                                            flow[0], 
                                                                            losses[-1],
                                                                            flow[-1])
+    else:
+        output = '{}: {:.2f} ft @ {:.1f} gpm'.format(name,
+                                                     losses,
+                                                     flow)
+
     return output
 
 def ft2psi(ft_of_head):
