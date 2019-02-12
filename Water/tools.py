@@ -64,6 +64,13 @@ def flow(velocity, pipe_diam):
 
     return Q
 
+def gpm2cuftps(gpm):
+    ''' gpm to cuft per sec conversion '''
+    return gpm * 0.002228
+def cuftps2gpm(cuftps):
+    ''' cuft per sec to gpm conversion'''
+    return cuftps * 448.831169
+
 def pipeDiameter(flow, velocity):
     '''pipe diameter calculation:
         Enter velocity in fps and flow in gpm
@@ -107,6 +114,10 @@ def volume_box(length, width, height):
 def cuft2gal(cubic_feet):
     ''' cubic feet to gallon conversion'''
     return cubic_feet*7.481
+
+def gal2cuft(gal):
+    ''' gallon to cubic feet conversion'''
+    return gal/7.481
 
 def gal2acft(gal):
     ''' convert gallons to acre-feet '''

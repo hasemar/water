@@ -143,6 +143,14 @@ class Pipe:
         ''' returns inner diamter'''
         return self.outer_diameter - 2 * self.dims[1]
     @property
+    def volume(self):
+        ''' returns volume inside of the pipe in cuft'''
+        return tools.volume_cyl(self.inner_diameter/12, self.length)
+    @property
+    def area(self):
+        ''' returns pipe area'''
+        return self.volume/self.length
+    @property
     def c_factor(self):
         ''' returns C factor for Hazen-Williams equation'''
         return c_dict[self.kind]

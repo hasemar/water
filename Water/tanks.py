@@ -173,7 +173,7 @@ class Tank:
                 total_h
                 )
 
-        print(info)
+        return info
 
 if __name__=='__main__':
     print("Test Script")
