@@ -113,19 +113,27 @@ def volume_box(length, width, height):
 
 def cuft2gal(cubic_feet):
     ''' cubic feet to gallon conversion'''
-    return cubic_feet*7.481
+    return cubic_feet*7.4805
 
-def gal2cuft(gal):
+def gal2cuft(gallons):
     ''' gallon to cubic feet conversion'''
-    return gal/7.481
+    return gallons/7.4805
 
-def gal2acft(gal):
+def gal2acft(gallons):
     ''' convert gallons to acre-feet '''
-    return gal * (1/325851)
+    return gallons/325851
 
 def acft2gal(acft):
     ''' convert acre-feet to gallons '''
-    return acft (325851)
+    return acft * 325851
+
+def cuin2gal(cubic_inches):
+    ''' convert cubic inches to gallons '''
+    return cubic_inches/231
+
+def gal2cuin(gallons):
+    ''' converts gallons to cubic inches '''
+    return gallons * 231
 
 def minor_loss(vel, k_val ):
     ''' minor head loss using FPS '''
@@ -337,6 +345,15 @@ def leakage(pipe_diam, test_pressure, linear_feet, hydrants=0, interties=0, valv
     L_gpm = L_gph/60
 
     return L_gph, L_gpm
+
+def makeup_water(diam_before, diam_after, depth_before, depth_after):
+    ''' Returns volume of a frustrum. Used to estimate the volume of
+    water in a trash can. Units must be uniform.'''
+    r_before = diam_before
+    r_after = diam_after
+    h = depth_before - depth_after
+    V = (pi*h/3) * (r_before**2 + r_before*r_after + r_after**2)
+    return V
 
 def wellhead_CFR(Q, H, n=0.22, t_list=[1,5,10]):
     ''' Returns fixed radius wellhead contribution zones (CFR):
