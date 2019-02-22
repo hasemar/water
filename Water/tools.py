@@ -349,10 +349,8 @@ def leakage(pipe_diam, test_pressure, linear_feet, hydrants=0, interties=0, valv
 def makeup_water(diam_before, diam_after, depth_before, depth_after):
     ''' Returns volume of a frustrum. Used to estimate the volume of
     water in a trash can. Units must be uniform.'''
-    r_before = diam_before
-    r_after = diam_after
-    h = depth_before - depth_after
-    V = (pi*h/3) * (r_before**2 + r_before*r_after + r_after**2)
+    h = abs(depth_before - depth_after)
+    V = (pi * h * (diam_before**2 + diam_before*diam_after + diam_after**2)) / 12
     return V
 
 def wellhead_CFR(Q, H, n=0.22, t_list=[1,5,10]):
@@ -406,6 +404,9 @@ if __name__=="__main__":
     # allowable leakage calc
     leak_gph, leak_gpm = leakage(8, 245, 1460, 1, 2, 3)
     
+    # makeup water volume (volume of a frustrum)
+    mw = makeup_water(18, 17.5, 19, 18)
+
     # output string
     out = '''
         PHD = {0:.2f} gmp
@@ -427,10 +428,11 @@ if __name__=="__main__":
         vol2 = {14:.2f}
         gallons = {17:.2f}
         allowable leakage = {18:.2f} gph or {19:.3f} gpm
+        makeup water = {20:.3f} cubic inches or {21:.3f} gals
         '''.format(
             phd, phd2, water_p, break_p, input_p,
             water2_p, Q, d, v, q_func, d_func, Re,
-            condition, vol1, vol2, ahd, lhd, gals, leak_gph, leak_gpm)
+            condition, vol1, vol2, ahd, lhd, gals, leak_gph, leak_gpm, mw, cuin2gal(mw))
 
     print(out)
     pressure_relief_valve_size(95, 500, info=True)
