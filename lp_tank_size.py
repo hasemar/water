@@ -47,19 +47,26 @@ project_number = '00118233'
 gen_model = 'GGHG-5709325'
 
 # Generator Loads
+pumps = {
+         'S01': 3,
+         'S02': 2,
+         'S03': 7.5,
+         'S04': 15
+        }
+resistive = {
+            'lights': 200,
+            'heater and controls': 13000
+            }
 
-electrical = Genset()
-electrical.add_load(3, '3ph inductive')    
-electrical.add_load(2, '3ph inductive')       
-electrical.add_load(7.5, '3ph inductive')
-electrical.add_load(15, '3ph inductive')
-electrical.add_load(200, 'resistive')
-electrical.add_load(13000, 'resistive')
+electrical = Genset(voltage=480, phase=3, capacity=85)
 
-gen_capacity = 85
+for pump in pumps.values():
+    electrical.add_load(pump, '3ph reactive')    
+for res in resistive.values():
+    electrical.add_load(res, 'resistive')
 
-full_load = int((electrical.total_load/gen_capacity)*100)   # percent of generator capacity
-norm_load =  int((electrical.total_load/gen_capacity)*100)   # percent of generator capacity
+full_load = int((electrical.total_load/electrical.capacity)*100)   # percent of generator capacity
+norm_load =  int((electrical.total_load/electrical.capacity)*100)   # percent of generator capacity
 fire_flow_time = 0  # hrs
 safety_factor = 1
 
