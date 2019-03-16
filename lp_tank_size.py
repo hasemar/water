@@ -8,7 +8,7 @@ import numpy as np
 from scipy.stats import linregress
 import csv
 from os import path
-from Water import tools, Genset
+from Water import Genset
 
 # csv fieldnames header
 header_list = [
@@ -40,35 +40,43 @@ header_list = [
                 'q_total']
 
 # PROJECT INFORMATION                
-water_system = 'Evergreen Shores'
+water_system = 'Test System'
 project_name = 'Wellsite Propane Tank Sizing'
 eng_file = '2373'
 project_number = '00118233'
 gen_model = 'GGHG-5709325'
 
 # Generator Loads
-pumps = {
-         'S01': 3,
-         'S02': 2,
-         'S03': 7.5,
-         'S04': 15
+dom_pumps = {
+        'S01': 3,
+        'S02': 2,
+        'bp1': 7.5,
+        'bp2': 15
         }
+highQ_pumps = {
+        'bp3': 25,
+        'bp4': 25
+}
 resistive = {
             'lights': 200,
             'heater and controls': 13000
             }
 
-electrical = Genset(voltage=480, phase=3, capacity=85)
+gen = Genset(voltage=480, phase=3, capacity=100)
 
-for pump in pumps.values():
-    electrical.add_load(pump, '3ph reactive')    
+for pump in dom_pumps.values():
+    gen.add_motor_load(pump)
+
+for pump in highQ_pumps.values():
+    gen.add_motor_load(pump, fire=True)
+
 for res in resistive.values():
-    electrical.add_load(res, 'resistive')
+    gen.add_resistive_load(res, units='watts')
 
-full_load = int((electrical.total_load/electrical.capacity)*100)   # percent of generator capacity
-norm_load =  int((electrical.total_load/electrical.capacity)*100)   # percent of generator capacity
-fire_flow_time = 0  # hrs
-safety_factor = 1
+full_load = int((gen.total_load/gen.capacity)*100)   # percent of generator capacity
+norm_load =  int(((gen.dom_load+gen.res_load)/gen.capacity)*100)   # percent of generator capacity
+fire_flow_time = 2  # hrs
+safety_factor = 4
 
 # PROPANE PROPERTIES
 v_prop = 36.39      # cu. ft
@@ -200,6 +208,6 @@ plt.ylabel('Flow (scfh)')
 plt.grid()
 plt.savefig(path.join(path.dirname(__file__), figure_name))
 print('days until empty: ', t_empty_day, '\nnumber of bottles:', num_bottles, '\nbottle size: ', v_bottle)
-print('total load: ', electrical.total_load)
-print(electrical.load_list)
+print('total load: ', gen.total_load)
+print(gen.load_dict)
 print('All done!')

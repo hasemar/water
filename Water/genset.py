@@ -3,10 +3,7 @@ Genset:
     This module helps size auxiliary power for a pumping system based on 
     electrical loads.
 '''
-from __future__ import print_function
-import Water.tools as tools
-
-load_kinds = {'3ph inductive': 0.89, '1ph inductive': 0.85, 'resistive': 1}
+from __future__ import print_function, division
 
 class Genset:
     '''Genset Class:
@@ -15,6 +12,9 @@ class Genset:
             - voltage: generator voltage (V)
             - phase: generator phase
             - capacity: the power capacity of the generator (kW) defaults to None
+            - fire_list: list of fire flow motor loads
+            - dom_list : list of domestic flow motor loads
+            - pf: dict of power factors for 3ph and 1ph motor
         methods:
             - add_load: appends load to self.load_list and sums list to 
                 calculate self.total_load
@@ -22,17 +22,26 @@ class Genset:
                 self.total_load
     '''
     def __init__(self, voltage, phase, capacity=None):
-        self.load_list = []
+        self.load_dict = {'domestic':[], 'fire':[], 'resistive':[]}
         self.voltage = voltage
         self.phase = phase
         self.capacity = capacity
         self.pf = {3 : 0.89, 1 : 0.85}
 
     @property
+    def fire_load(self):
+        return sum(self.load_dict['fire'])
+    @property
+    def dom_load(self):
+        return sum(self.load_dict['domestic'])
+    @property
+    def res_load(self):
+        return sum(self.load_dict['resistive'])
+    @property
     def total_load(self):
-        return sum(self.load_list)
+        return sum(sum(self.load_dict.values(),[]))
 
-    def add_motor_load(self, power, units='hp'):
+    def add_motor_load(self, power, units='hp', fire=False):
         '''adds motor load to self.load_list uses kVA calculation
             based on power factors.
             
@@ -48,7 +57,10 @@ class Genset:
             kVA = (power * 745.7 * .001/self.pf[self.phase])
         else:
             print('units not recognized: use "hp" or "kw"')
-        self.load_list.append(kVA)
+        if fire:
+            self.load_dict['fire'].append(kVA)
+        else:
+            self.load_dict['domestic'].append(kVA)
     
     def add_resistive_load(self, power, units='kw'):
         '''adds resistive load to self.load_list
@@ -61,19 +73,52 @@ class Genset:
         '''
         units = units.lower()
         if units == 'watts':
-            self.load_list.append(power * 0.001)
+            self.load_dict['resistive'].append(power * 0.001)
         elif units == 'kw':
-            self.load_list.append(power)
+            self.load_dict['resistive'].append(power)
         else:
             print('units not recognized: use "kw" or "watts"')
 
-    def delete_load(self, index):
-        '''deletes specific load from self.load_list
-            enter list index. prints verification when removed
+    def delete_load(self, load_type, index=-1):
+        '''deletes specific load from self.load_dict
+            enter load_type, list index. 
+            prints verification when removed
+            default index is last item in list (-1)
+            load_types = 'fire', 'domestic', 'resistive'
         '''
-        print(self.load_list.pop(index), 'has been removed')
+        print(self.load_dict[load_type].pop(index), ' has been removed')
 
     def set_pf(self, phase, power_factor):
+        '''change the default power factors
+            power factor object is a python dictionary
+            default pf --> self.pf = {3 : 0.89, 1 : 0.85}
+        '''
         self.pf[phase] = power_factor
         print("power factor set to", self.pf[phase])
-   
+
+if __name__ == "__main__":
+    gen = Genset(480, 3, 100)
+    gen.add_motor_load(10)
+    gen.add_motor_load(7.5)
+    gen.add_resistive_load(500, units='watts')
+    gen.add_motor_load(25, fire=True)
+    gen.add_motor_load(30, fire=True)
+
+    load_report = '''
+    fire-flow load = {0:.2f} kVA
+    domestic load = {1:.2f} kVA
+    resistive load = {3:.2f} kVA
+    total load = {2:.2f} kVA
+    '''.format(gen.fire_load, gen.dom_load, gen.total_load, gen.res_load)
+    print(load_report)
+
+    gen.delete_load('fire', index=1)
+    gen.delete_load('resistive')
+
+    load_report = '''
+    fire-flow load = {0:.2f} kVA
+    domestic load = {1:.2f} kVA
+    resistive load = {3:.2f} kVA
+    total load = {2:.2f} kVA
+    '''.format(gen.fire_load, gen.dom_load, gen.total_load, gen.res_load)
+    print(load_report)
