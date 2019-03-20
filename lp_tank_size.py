@@ -1,6 +1,6 @@
 '''
 Fuel bottle sizing
-Evergreen Shores Water system
+Test Script for propane bottle size
 '''
 from __future__ import division, print_function
 import matplotlib.pyplot as plt

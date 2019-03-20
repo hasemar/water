@@ -21,12 +21,13 @@ class Genset:
             - delete_load: deletes load fro self.load_list and decreases 
                 self.total_load
     '''
-    def __init__(self, voltage, phase, capacity=None):
+    def __init__(self, voltage, phase, capacity=None, model=None):
         self.load_dict = {'domestic':[], 'fire':[], 'resistive':[]}
         self.voltage = voltage
         self.phase = phase
         self.capacity = capacity
-        self.pf = {3 : 0.89, 1 : 0.85}
+        self.model = model
+        self._power_factors = {3 : 0.89, 1 : 0.85}
 
     @property
     def fire_load(self):
@@ -40,6 +41,12 @@ class Genset:
     @property
     def total_load(self):
         return sum(sum(self.load_dict.values(),[]))
+    @property
+    def power_factors(self):
+        return self._power_factors
+    @power_factors.setter
+    def power_factors(self, pwr_factor):
+        self._power_factors[self.phase] = pwr_factor
 
     def add_motor_load(self, power, units='hp', fire=False):
         '''adds motor load to self.load_list uses kVA calculation
@@ -52,9 +59,9 @@ class Genset:
         '''
         units = units.lower()
         if units == 'kw':
-            kVA = power/self.pf[self.phase]
+            kVA = power/self.power_factors[self.phase]
         elif units == 'hp':
-            kVA = (power * 745.7 * .001/self.pf[self.phase])
+            kVA = (power * 745.7 * .001/self.power_factors[self.phase])
         else:
             print('units not recognized: use "hp" or "kw"')
         if fire:
@@ -88,14 +95,6 @@ class Genset:
         '''
         print(self.load_dict[load_type].pop(index), ' has been removed')
 
-    def set_pf(self, phase, power_factor):
-        '''change the default power factors
-            power factor object is a python dictionary
-            default pf --> self.pf = {3 : 0.89, 1 : 0.85}
-        '''
-        self.pf[phase] = power_factor
-        print("power factor set to", self.pf[phase])
-
 if __name__ == "__main__":
     gen = Genset(480, 3, 100)
     gen.add_motor_load(10)
@@ -114,7 +113,6 @@ if __name__ == "__main__":
 
     gen.delete_load('fire', index=1)
     gen.delete_load('resistive')
-
     load_report = '''
     fire-flow load = {0:.2f} kVA
     domestic load = {1:.2f} kVA
@@ -122,3 +120,5 @@ if __name__ == "__main__":
     total load = {2:.2f} kVA
     '''.format(gen.fire_load, gen.dom_load, gen.total_load, gen.res_load)
     print(load_report)
+
+    print(gen.power_factors)
