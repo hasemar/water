@@ -4,7 +4,7 @@ design aspects
 '''
 
 from __future__ import print_function, division
-from math import pi, acos, sqrt
+from math import pi, acos, sqrt, ceil
 
 def coeffs(num_ERUs):
     '''assigns C and F coefficients from DOH manual'''
@@ -170,10 +170,11 @@ def psi2ft(psi):
 
 def hpn_size(cut_out, cut_in, num_cycles, max_flow, tank_diam):
     ''' Hydro Pneumatic Tank Sizing
-        cut_out = nominal pump off pressure in psi
-        cut_in = nominal pump on pressure in psi
+
+        cut_out = nominal pump-off pressure in psi
+        cut_in = nominal pump-on pressure in psi
         num_cycles = max number of cycles/hour/pump
-        max_flow = estimated max flow from 1 well pump
+        max_flow = estimated max flow from 1 pump
         tank_diam = diameter of tank in inches
     '''
     
@@ -184,6 +185,19 @@ def hpn_size(cut_out, cut_in, num_cycles, max_flow, tank_diam):
     
     V = ((cut_out + 14.7)*15*max_flow*MF)/((cut_out-cut_in)*num_cycles)
     return V
+
+def bladder_size(cut_out, cut_in, num_cycles, max_flow, bladder_vol):
+    ''' Bladder Tank sizing
+
+        cut_out = nominal pump-off pressure in psi
+        cut_in = nominal pump-on pressure in psi
+        num_cycles = max number of cycles/hour/pump
+        max_flow = estimated max flow from 1 pump
+        bladder_vol = volume of bladder tank in gallons
+        '''
+    R = 15*(cut_out+14.7)*(cut_in+14.7) / ((cut_out-cut_in)*(cut_in+9.7))
+    T = R*max_flow / (num_cycles * bladder_vol)
+    return ceil(T)
 
 def air_dump_valve_size(cut_out, cut_in, tank_vol, evac_time=5, info=False):
     ''' Air Dump Valve Sizing :
@@ -347,8 +361,16 @@ def leakage(pipe_diam, test_pressure, linear_feet, hydrants=0, interties=0, valv
     return L_gph, L_gpm
 
 def makeup_water(diam_before, diam_after, depth_before, depth_after):
-    ''' Returns volume of a frustrum. Used to estimate the volume of
-    water in a trash can. Units must be uniform.'''
+    ''' Enter dimensions of frustrum or cylynder to return volume
+        
+        Used to estimate the volume of water in a trash can. 
+        Units must be uniform.
+        Arguments:
+            diam_before = can diameter before pumping
+            diam_after = can diameter after pumping
+            depth_before = water level before pumping
+            depth_after - water level after pumping
+        '''
     h = abs(depth_before - depth_after)
     V = (pi * h * (diam_before**2 + diam_before*diam_after + diam_after**2)) / 12
     return V
@@ -407,6 +429,9 @@ if __name__=="__main__":
     # makeup water volume (volume of a frustrum)
     mw = makeup_water(18, 17.5, 19, 18)
 
+    # bladder tank sizing
+    bt = bladder_size(86, 67, 6, 90, 34)
+
     # output string
     out = '''
         PHD = {0:.2f} gmp
@@ -429,10 +454,12 @@ if __name__=="__main__":
         gallons = {17:.2f}
         allowable leakage = {18:.2f} gph or {19:.3f} gpm
         makeup water = {20:.3f} cubic inches or {21:.3f} gals
+        number of bladder tanks = {22:.1f} tanks
         '''.format(
             phd, phd2, water_p, break_p, input_p,
             water2_p, Q, d, v, q_func, d_func, Re,
-            condition, vol1, vol2, ahd, lhd, gals, leak_gph, leak_gpm, mw, cuin2gal(mw))
+            condition, vol1, vol2, ahd, lhd, gals,
+            leak_gph, leak_gpm, mw, cuin2gal(mw), bt)
 
     print(out)
     pressure_relief_valve_size(95, 500, info=True)
