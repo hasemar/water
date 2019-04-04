@@ -28,6 +28,7 @@ class Genset:
         self.capacity = capacity
         self.model = model
         self._power_factors = {3 : 0.89, 1 : 0.85}
+        self.consumption = []
 
     @property
     def fire_load(self):
@@ -47,6 +48,13 @@ class Genset:
     @power_factors.setter
     def power_factors(self, pwr_factor):
         self._power_factors[self.phase] = pwr_factor
+    @property
+    def full_load(self):
+        return int((self.total_load/self.capacity)*100)
+    @property
+    def normal_load(self):
+        norm = self.total_load - self.fire_load
+        return int((norm/self.capacity)*100)
 
     def add_motor_load(self, power, units='hp', fire=False):
         '''adds motor load to self.load_list uses kVA calculation
@@ -95,6 +103,18 @@ class Genset:
         '''
         print(self.load_dict[load_type].pop(index), ' has been removed')
 
+    def add_consumption(self, consumption_list):
+        '''Enter list of consumption rates
+
+            Consumtion rates are entered as a 4 item list
+            consumption values are in scfm and represent consumption
+            at 25%, 50%, 75% and 100% loads.
+
+            example: consumption_list=[100, 200, 300 400]
+            '''
+        self.consumption = consumption_list
+
+
 if __name__ == "__main__":
     gen = Genset(480, 3, 100)
     gen.add_motor_load(10)
@@ -120,5 +140,8 @@ if __name__ == "__main__":
     total load = {2:.2f} kVA
     '''.format(gen.fire_load, gen.dom_load, gen.total_load, gen.res_load)
     print(load_report)
+
+    gen.add_consumption([100, 150, 200, 250])
+    print(gen.full_load, gen.normal_load)
 
     print(gen.power_factors)
