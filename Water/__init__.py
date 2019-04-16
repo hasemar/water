@@ -8,6 +8,5 @@ import Water.tools as tools
 
 __all__ = ['Tank', 'Pump', 'Pipe', 'Genset', 'tools']
 
-# TODO eliminate the need for numpy in the Tanks class
-#      integrate Water.tools into the tank class
+# TODO 
 #      add storage calcs into tools or tanks (havent decided yet)

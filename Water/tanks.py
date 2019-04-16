@@ -1,26 +1,6 @@
 from __future__ import print_function, division
 from math import pi, acos, sqrt
-from numpy import linspace
-
-c = 7.48052  # gal per cuft conversion
-
-def get_gals(vol):
-    gals = c * vol
-    return gals
-
-def horizontal_vol(L, R, height=None):
-    if height:
-        h = float(height) 
-        v = L*(R**2 * acos((R-h)/R) - (R-h) * sqrt(2*R*h - h**2))
-        return v
-    else: # create a height lookup dictionary
-        h_arr = linspace(0, 2*R, 1001)
-        vol = []
-        for h in h_arr:
-            vol.append(L*(R**2 * acos((R-h)/R) - (R-h) * sqrt(2*R*h - h**2)))
-            
-        vol_lookup = dict(zip(vol, h_arr))
-        return vol_lookup
+from Water import tools
 
 class Tank:
     '''
@@ -56,34 +36,58 @@ class Tank:
 
     @property
     def area(self):
+        '''returns cross-sectional area of tank'''
         r = self.diameter / 2
-        return pi * r*r
-    
+        return pi * r*r 
     @property
     def vol(self):
+        '''returns dry volume of tank'''
         if self.shape == 'horizontal':
-            return get_gals(horizontal_vol(self.length, self.diameter/2, self.diameter))
+            return tools.cuft2gal(self.horizontal_vol(self.diameter))
         else:
-            return get_gals(self.area * self.height)
-        
+            return tools.cuft2gal(self.area * self.height)   
     @property
     def useable(self):
+        '''returns max filled volume of tank'''
         if self.shape == 'horizontal':
-            r = self.diameter/2
-            v_dead = get_gals(horizontal_vol(self.length, r, self.deadstorage))
-            v_free = get_gals(horizontal_vol(self.length, r, self.freeboard))
+            v_dead = tools.cuft2gal(self.horizontal_vol(self.deadstorage))
+            v_free = tools.cuft2gal(self.horizontal_vol(self.freeboard))
             return self.vol - v_dead - v_free
         else:
-            return get_gals((self.height - self.deadstorage - self.freeboard) * self.area)
+            return tools.cuft2gal((self.height - self.deadstorage - self.freeboard) * self.area)
    
+    def horizontal_vol(self, height):
+        '''returns filled volume of horizontal tank at height'''
+        L = self.length
+        R = self.diameter/2
+        h = height 
+        v = L*(R**2 * acos((R-h)/R) - (R-h) * sqrt(2*R*h - h**2))
+        
+        return v
+
+    def horizontal_vol_dict(self):
+        '''returns a dict of volumes at heights ranging from 0 to self.diameter'''
+        L = self.length
+        R = self.diameter/2
+        l = self.diameter/1001
+        h_arr = [l* x for x in range(1001)]  # create an array much like np.linspace
+        vol = []
+        for h in h_arr:
+            vol.append(L*(R**2 * acos((R-h)/R) - (R-h) * sqrt(2*R*h - h**2)))    
+        vol_lookup = dict(zip(vol, h_arr))
+        
+        return vol_lookup
+    
     def getPercent(self, vol, of_vol):
-         return vol/of_vol
+        '''percentage volume of total system volume'''
+        return vol/of_vol
 
     def getHeight(self, vol):
-        v = vol/c  # change back to cu.ft
+        '''returns water level in ft at given volume'''
+        v = tools.gal2cuft(vol) # change back to cu.ft
 
         if self.shape == 'horizontal':
-            v_dict = horizontal_vol(self.length, self.diameter/2)
+            v_dict = self.horizontal_vol_dict()
             h = v_dict[vol] if vol in v_dict else v_dict[min(v_dict.keys(), key=lambda k: abs(k-vol))]
             return h
         else:
@@ -91,6 +95,7 @@ class Tank:
             return h
         
     def getInfo(self, SB=0, ES=0, OS=0, FFS=0, total_vol=0, details=False):
+        '''returns string of tank properties'''
         if self.shape == 'horizontal':
             info = '''
             {3:} \r\n
@@ -138,8 +143,8 @@ class Tank:
         
             # height referenced from base of tank
             total_h = self.getHeight(sum(vols)) + self.deadstorage + self.freeboard
-            ds_vol = get_gals(self.deadstorage*self.area)
-            fb_vol = get_gals(self.freeboard*self.area)
+            ds_vol = tools.cuft2gal(self.deadstorage*self.area)
+            fb_vol = tools.cuft2gal(self.freeboard*self.area)
             total_calc_vol = ds_vol + fb_vol + sum(vols)
             vols.insert(0,ds_vol)
             vols.append(fb_vol)
@@ -180,7 +185,7 @@ if __name__=='__main__':
     
     horiz_tank_data = {      
         'name' : 'horizontal tank',
-        'diameter' : 7.83,
+        'diameter' : 8,
         'length' : 22,
         'freeboard' : 1,
         'deadstorage' : .1,
@@ -191,7 +196,7 @@ if __name__=='__main__':
     vert_tank_data = {      
         'name' : 'vertical tank',
         'diameter' : 8,
-        'height' : 10,
+        'height' : 22,
         'freeboard' : 1,
         'deadstorage' : .1,
         'elevation' : 100,
@@ -203,7 +208,13 @@ if __name__=='__main__':
 
     total = v_tank.vol + h_tank.vol
 
-    h_tank.getInfo()
-    v_tank.getInfo()
-    h_tank.getInfo(SB=1000, ES=1000, OS=1000, total_vol=total, details=True)
-    v_tank.getInfo(SB=1000, ES=1000, OS=1000, total_vol=total, details=True)
+    rep1 = h_tank.getInfo()
+    print(rep1)
+
+    rep2 = v_tank.getInfo()
+    print(rep2)
+
+    rep3 = h_tank.getInfo(SB=1000, ES=1000, OS=1000, total_vol=total, details=True)
+    rep4 = v_tank.getInfo(SB=1000, ES=1000, OS=1000, total_vol=total, details=True)
+    print(rep3)
+    print(rep4)
