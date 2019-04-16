@@ -32,15 +32,20 @@ class Genset:
 
     @property
     def fire_load(self):
+        '''returns total fire pump motor loads'''
+
         return sum(self.load_dict['fire'])
     @property
     def dom_load(self):
+        '''returns total domestic pump motor loads'''
         return sum(self.load_dict['domestic'])
     @property
     def res_load(self):
+        '''returns total resistive loads'''
         return sum(self.load_dict['resistive'])
     @property
     def total_load(self):
+        '''returns total of domestic, fire and resistive loads'''
         return sum(sum(self.load_dict.values(),[]))
     @property
     def power_factors(self):
@@ -50,9 +55,11 @@ class Genset:
         self._power_factors[self.phase] = pwr_factor
     @property
     def full_load(self):
+        '''returns percent genset is loaded under fire flow conditions'''
         return int((self.total_load/self.capacity)*100)
     @property
     def normal_load(self):
+        '''returns percent genset is loaded under normal conditions'''
         norm = self.total_load - self.fire_load
         return int((norm/self.capacity)*100)
 
@@ -63,7 +70,9 @@ class Genset:
             attributes: 
                 power: motor power
                 units: power units(default hp)
-                    unit options-> 'hp', 'kw'
+                    unit options --> 'hp', 'kw'
+                fire: fire-flow flag (default False)
+                    if True load is added to self.fire_load
         '''
         units = units.lower()
         if units == 'kw':
@@ -84,7 +93,7 @@ class Genset:
             attributes: 
                 power: power
                 units: power units(default kw)
-                    unit options-> 'kw', 'watts'
+                    unit options --> 'kw', 'watts'
         '''
         units = units.lower()
         if units == 'watts':
@@ -114,15 +123,16 @@ class Genset:
             '''
         self.consumption = consumption_list
 
-
+# test script
 if __name__ == "__main__":
-    gen = Genset(480, 3, 100)
-    gen.add_motor_load(10)
-    gen.add_motor_load(7.5)
-    gen.add_resistive_load(500, units='watts')
-    gen.add_motor_load(25, fire=True)
-    gen.add_motor_load(30, fire=True)
+    gen = Genset(480, 3, 100)   # instantiate 480 volt 3 phase, 100 kw genset
+    gen.add_motor_load(10)      # add 10 hp domestic pump motor
+    gen.add_motor_load(power=7.5, units='hp', fire=False)  # add 7.5 hp domestic pump motor
+    gen.add_resistive_load(500, units='watts') # add resistive load
+    gen.add_motor_load(25, fire=True) # add 25 hp fire pump motor
+    gen.add_motor_load(30, fire=True) # add 30 hp fire pump motor
 
+    # example of printing out loads that have been entered
     load_report = '''
     fire-flow load = {0:.2f} kVA
     domestic load = {1:.2f} kVA
@@ -131,6 +141,7 @@ if __name__ == "__main__":
     '''.format(gen.fire_load, gen.dom_load, gen.total_load, gen.res_load)
     print(load_report)
 
+    # deleting a load
     gen.delete_load('fire', index=1)
     gen.delete_load('resistive')
     load_report = '''
@@ -141,6 +152,7 @@ if __name__ == "__main__":
     '''.format(gen.fire_load, gen.dom_load, gen.total_load, gen.res_load)
     print(load_report)
 
+    # add the fuel consumption rates of the genset
     gen.add_consumption([100, 150, 200, 250])
     print(gen.full_load, gen.normal_load)
 

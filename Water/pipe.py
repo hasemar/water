@@ -167,7 +167,7 @@ class Pipe:
     def fitting_info(self):
         info = 'Fittings list: \n'
         for fitting in self.fitting_list:
-            info += '{}, {}: Kvalue = {}, qty = {} \n'.format(fitting[0],
+            info += '{}, {}: Kvalue = {:.3f}, qty = {} \n'.format(fitting[0],
                                                      fitting[1],
                                                      fitting[2],
                                                      fitting[3]
@@ -179,11 +179,10 @@ class Pipe:
         h = (10.67 * self.length * flow**1.852)/(self.c_factor**1.852 * self.inner_diameter**4.8704)
         return h
 
-    def minor_loss(self, flow, fittings):
+    def minor_loss(self, flow):
         ''' returns minor head loss by using Darcy Wiesbach equation '''
         g = 32.2
         vel = tools.velocity(flow, self.inner_diameter)
-        # fittings is a list of tuples, first tuple is fitting object, 2nd tuple is quanity
         minor_loss = 0
         if len(self.fitting_list) > 0:
             for fitting in self.fitting_list:
@@ -193,25 +192,26 @@ class Pipe:
 
     def get_losses(self, flow):
         ''' returns total head loss (major + minor)'''
-        total_loss = self.major_loss(flow) + self.minor_loss(flow, self.fitting_list)
+        total_loss = self.major_loss(flow) + self.minor_loss(flow)
         return total_loss
         
 #### test script to test functionality
 if __name__=="__main__":
-    print('test script:')
-    length = 1000
-    size = 6
-    flow = 300
-    nom_size = 8
+    print('test script:\n')
+    length = 1000    # pipe length in ft
+    size = 6         # nominal pipe diameter in inches
+    flow = 300       # flow in gpm
     pipe_1 = Pipe(length, size)
 
-    print('Pipe Length = ',
+    print('Pipe 1 info:\n',
+          'Pipe Length = ',
           pipe_1.length,
           'ft \nHead Loss = ',
-          pipe_1.major_loss(flow),
+          round(pipe_1.major_loss(flow),2),
           'ft \nTotal Loss = ',
-          pipe_1.get_losses(flow),
-          'ft') 
+          round(pipe_1.get_losses(flow),2),
+          'ft'
+          ) 
 
     pipe_2 = Pipe(length, size, kind='STEEL', sch=40)
 
@@ -219,5 +219,6 @@ if __name__=="__main__":
     pipe_2.fitting('tee_branch', 'standard_threaded', qty=3)
 
     losses = pipe_2.get_losses(flow)
+    print('\nPipe 2 info:')
     print(pipe_2.fitting_info())
-    print('total head loss: ', losses, 'ft')
+    print('total head loss: ', round(losses,2), 'ft')

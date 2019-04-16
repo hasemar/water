@@ -47,7 +47,7 @@ dims = {      #[tank1, tank2]
 tanks = []
 total_vol = 0.0
 
-# creating 3 tank objects with above stated dimensions
+# creating 2 tank objects with above stated dimensions
 for n, d, h, l, fb, ds, el, s in zip(
                                dims['name'],
                                dims['diameter'],
