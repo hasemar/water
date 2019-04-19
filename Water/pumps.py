@@ -33,7 +33,7 @@ class Pump:
         self.eff = []
         self.model = ''
         self.rmp = 0
-        impeller = 0.0
+        self.impeller = 0.0
 
     def load_pump(self, selection):
         '''

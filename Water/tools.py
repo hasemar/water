@@ -34,6 +34,10 @@ def PHD(MDD, num_ERUs):
 
     return (phd, ahd, lhd)
 
+def equalizing_storage(PHD, Qs):
+    '''Equalizing Storage Calc from DOH design manual'''
+    return (PHD-Qs)*150
+
 def calc_hp(flow_rate, head, pump_eff=0.6, motor_eff=0.9):
     '''Horsepower Calculations:
         Returns Water HP, Break HP and Total HP

@@ -64,15 +64,11 @@ for tank in tanks:
     total_vol += tank.useable
     
 ### DEMAND ###
-
-PHD = (MDD/1440)*(C*N + F) + 18     # gpm  peak
-AHD = PHD/1.74                      # gpm  average
-LHD = AHD * 0.22                    # gpm  lowest
+PHD, ADH, LHD = tools.PHD(MDD, N)
 
 ### Capacity ###
-
 # equalizing storage
-ES = (PHD-Qs)*150                 # gal 
+ES = tools.equalizing_storage(PHD, Qs)              # gal 
 
 # standby storage
 SB_doh = 200*N                    # gal  DOH min recommended standby storage
@@ -107,23 +103,6 @@ if time_mdd < 18:
 else:
     info += "WARNING: SOURCE PRODUCTION IS NOT ADEQUATE FOR THIS NUMBER OF ERU'S \r\n"
 
-print info
-# Storage
-
-# print ':::::::::STORAGE REPORT:::::::::::'
-# info = '''
-#     Tanks available to system: {0}, {1} \r\n
-#     Total effective volume: {2:.1f} gal \r\n
-#     '''.format(tanks[0].name, tanks[1].name, total_vol)
-# print info
-
-# for tank in tanks:
-#     tank.getInfo(SB, ES, OS, total_vol, details=True)
-
-########### Booster Station ##################
-
-
-booster_elevation = 150
-
-### p1/gamma + v1^2/2g + z1 + hpump = p2/gamma + v2^2/2g + z2 + hmajor + hminor
+print(info)
+[print(tank.getInfo(SB, ES, OS, FFS, total_vol, details=True)) for tank in tanks]
 
