@@ -14,7 +14,9 @@ available_pumps = {
     'Goulds 3657' : '3657_1-5x2_GOULDS_3500.csv',
     'Goulds 3642' : '3642_1x1-25_GOULDS_3500.csv',
     'Grunfos CM1' : 'CM1-2-A-GRUNFOS.csv',
-    'Goulds 25GS50' : '25GS50-GOULDS_3500.csv'
+    'Goulds 25GS50' : '25GS50-GOULDS_3500.csv',
+    'Goulds 35GS50' : '35GS50-GOULDS_3500.csv',
+    'Goulds 75GS100CB' : '75GS100CB-GOULDS_3500.csv'
     }
 
 def affinitize(pump_data, pwr):
@@ -42,7 +44,9 @@ class Pump:
         'Goulds 3657' : '3657_1-5X2_GOULDS_3500.csv',
         'Goulds 3642' : '3642_1x1-25_GOULDS_3500.csv'
         'Grunfos CM1' : 'CM1-2-A-GRUNFOS.csv',
-        'Goulds 25GS50' : '25GS50-GOULDS_3500.csv'
+        'Goulds 25GS50' : '25GS50-GOULDS_3500.csv',
+        'Goulds 35GS50' : '35GS50-GOULDS_3500.csv',
+        'Goulds 75GS100CB' : '75GS100CB-GOULDS_3500.csv'
         }
         '''
         file_path = pumps_dir + '/' + available_pumps[selection]

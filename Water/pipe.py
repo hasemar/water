@@ -12,7 +12,8 @@ c_dict = {
     'DI' : 130,
     'STEEL' : 150,
     'HDPE' : 140,
-    'STAINLESS STEEL' : 140
+    'STAINLESS STEEL' : 140,
+    'GALVANIZED PIPE' : 120
 }
 
 pipe_dims = {
@@ -176,7 +177,7 @@ class Pipe:
 
     def major_loss(self, flow):
         ''' returns major head loss by using Hazen-Williams equation '''
-        h = (10.67 * self.length * flow**1.852)/(self.c_factor**1.852 * self.inner_diameter**4.8704)
+        h = (10.45 * self.length * flow**1.852)/(self.c_factor**1.852 * self.inner_diameter**4.8704)
         return h
 
     def minor_loss(self, flow):
