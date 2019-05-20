@@ -84,15 +84,16 @@ def pipeDiameter(flow, velocity):
 
     return pipe_diam
 
-def reynolds(pipe_diam, flow=None, velocity=None, viscocity=1.3081):
+def reynolds(pipe_diam, flow=None, vel=None, viscocity=1.3081):
     '''Reynolds Number Calculation:
         Enter flow (gpm), pipe diameter(inches)
         viscosity in cSt = 1.3081 (default)
     '''
+    q = velocity(flow, pipe_diam)
     if flow:
-        re = 3165*flow/(pipe_diam*viscocity)
+        re = q/(pipe_diam/12 * viscocity)
     elif velocity:
-        re = 7741*pipe_diam*velocity/viscocity
+        re = (pipe_diam/12)*velocity/viscocity
     else:
         print('Must enter flow or velocity')
 
