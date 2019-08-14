@@ -17,6 +17,8 @@ available_pumps = {
     'Goulds 25GS50' : '25GS50-GOULDS_3500.csv',
     'Goulds 35GS50' : '35GS50-GOULDS_3500.csv',
     'Goulds 75GS100CB' : '75GS100CB-GOULDS_3500.csv',
+    'Goulds 85GS100' : '85GS100-GOULDS_3500.csv',
+    'Grundfos CMBE 5-62' : 'CMBE_5-62-GRUNFOS.csv',
     'Grundfos 85S100-9': '85S100-9-Grundfos_3500.csv'
     }
 
@@ -48,6 +50,8 @@ class Pump:
         'Goulds 25GS50' : '25GS50-GOULDS_3500.csv',
         'Goulds 35GS50' : '35GS50-GOULDS_3500.csv',
         'Goulds 75GS100CB' : '75GS100CB-GOULDS_3500.csv',
+        'Goulds 85GS100' : '85GS100-GOULDS_3500.csv',
+        'Grundfos CMBE 5-62' : 'CMBE_5-62-GRUNFOS.csv',
         'Grundfos 85S100-9': '85S100-9-Grundfos_3500.csv'
         }
         '''
