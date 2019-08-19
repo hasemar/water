@@ -33,7 +33,6 @@ class Genset:
     @property
     def fire_load(self):
         '''returns total fire pump motor loads'''
-
         return sum(self.load_dict['fire'])
     @property
     def dom_load(self):
@@ -49,6 +48,7 @@ class Genset:
         return sum(sum(self.load_dict.values(),[]))
     @property
     def power_factors(self):
+        '''returns power factors for apparent power'''
         return self._power_factors
     @power_factors.setter
     def power_factors(self, pwr_factor):

@@ -1,0 +1,449 @@
+
+
+<!doctype html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Water Package Code &#8212; Water 1.0.0 documentation</title>
+    <link rel="stylesheet" href="_static/bizstyle.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Code Examples and Tutorials" href="tutorial.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="tutorial.html" title="Code Examples and Tutorials"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Water 1.0.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="tutorial.html"
+                        title="previous chapter">Code Examples and Tutorials</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/code_reference.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="water-package-code">
+<h1>Water Package Code<a class="headerlink" href="#water-package-code" title="Permalink to this headline">¶</a></h1>
+<p>This is the main code reference.</p>
+<span class="target" id="module-Water"></span><dl class="class">
+<dt id="Water.Tank">
+<em class="property">class </em><code class="descclassname">Water.</code><code class="descname">Tank</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Water/tanks.html#Tank"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Water.Tank" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Tank Object arugments can be passed as a dict:
+example:</p>
+<dl class="docutils">
+<dt>tank_data = {          </dt>
+<dd>‘name’ : ‘string’,
+‘diameter’ : int/float,
+‘height’ : int/float (default 0),
+‘length’ : int/float (default 0)
+‘freeboard’ : int/float (default 0),
+‘deadstorage’ : int/float (default 0),
+‘elevation’ : int/float (default 0)
+‘shape’ : ‘string’ (default vertical)
+}</dd>
+</dl>
+<p>tank_1 = Tank(<a href="#id1"><span class="problematic" id="id2">**</span></a>tank_data)</p>
+<p>or individually like so:</p>
+<p>tank_2 = Tank(name=’string’, diameter=int/float, height=int/float )</p>
+<dl class="attribute">
+<dt id="Water.Tank.area">
+<code class="descname">area</code><a class="headerlink" href="#Water.Tank.area" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns cross-sectional area of tank</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Water.Tank.getHeight">
+<code class="descname">getHeight</code><span class="sig-paren">(</span><em>vol</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Water/tanks.html#Tank.getHeight"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Water.Tank.getHeight" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns water level in ft at given volume</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Water.Tank.getInfo">
+<code class="descname">getInfo</code><span class="sig-paren">(</span><em>SB=0</em>, <em>ES=0</em>, <em>OS=0</em>, <em>FFS=0</em>, <em>total_vol=0</em>, <em>details=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Water/tanks.html#Tank.getInfo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Water.Tank.getInfo" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns string of tank properties</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Water.Tank.getPercent">
+<code class="descname">getPercent</code><span class="sig-paren">(</span><em>vol</em>, <em>of_vol</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Water/tanks.html#Tank.getPercent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Water.Tank.getPercent" title="Permalink to this definition">¶</a></dt>
+<dd><p>percentage volume of total system volume</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Water.Tank.horizontal_vol">
+<code class="descname">horizontal_vol</code><span class="sig-paren">(</span><em>height</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Water/tanks.html#Tank.horizontal_vol"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Water.Tank.horizontal_vol" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns filled volume of horizontal tank at height</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Water.Tank.horizontal_vol_dict">
+<code class="descname">horizontal_vol_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/Water/tanks.html#Tank.horizontal_vol_dict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Water.Tank.horizontal_vol_dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns a dict of volumes at heights ranging from 0 to self.diameter</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Water.Tank.useable">
+<code class="descname">useable</code><a class="headerlink" href="#Water.Tank.useable" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns max filled volume of tank</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Water.Tank.vol">
+<code class="descname">vol</code><a class="headerlink" href="#Water.Tank.vol" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns dry volume of tank</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="Water.Pump">
+<em class="property">class </em><code class="descclassname">Water.</code><code class="descname">Pump</code><a class="reference internal" href="_modules/Water/pumps.html#Pump"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Water.Pump" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="Water.Pump.find_head">
+<code class="descname">find_head</code><span class="sig-paren">(</span><em>flow</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Water/pumps.html#Pump.find_head"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Water.Pump.find_head" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns head value from pump curve based on flow input.
+if flow is not a known value it will interprolate between the
+two closest points on the curve.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Water.Pump.load_pump">
+<code class="descname">load_pump</code><span class="sig-paren">(</span><em>selection</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Water/pumps.html#Pump.load_pump"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Water.Pump.load_pump" title="Permalink to this definition">¶</a></dt>
+<dd><p>available_pumps = {
+‘Goulds 3657’ : ‘3657_1-5X2_GOULDS_3500.csv’,
+‘Goulds 3642’ : ‘3642_1x1-25_GOULDS_3500.csv’
+‘Grunfos CM1’ : ‘CM1-2-A-GRUNFOS.csv’,
+‘Goulds 25GS50’ : ‘25GS50-GOULDS_3500.csv’,
+‘Goulds 35GS50’ : ‘35GS50-GOULDS_3500.csv’,
+‘Goulds 75GS100CB’ : ‘75GS100CB-GOULDS_3500.csv’,
+‘Grundfos 85S100-9’: ‘85S100-9-Grundfos_3500.csv’
+}</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Water.Pump.plot_curve">
+<code class="descname">plot_curve</code><span class="sig-paren">(</span><em>target_flow=None</em>, <em>tdh=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Water/pumps.html#Pump.plot_curve"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Water.Pump.plot_curve" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="Water.Pump.vfd_eff">
+<code class="descname">vfd_eff</code><a class="headerlink" href="#Water.Pump.vfd_eff" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="Water.Pump.vfd_flow">
+<code class="descname">vfd_flow</code><a class="headerlink" href="#Water.Pump.vfd_flow" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="Water.Pump.vfd_head">
+<code class="descname">vfd_head</code><a class="headerlink" href="#Water.Pump.vfd_head" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="Water.Pipe">
+<em class="property">class </em><code class="descclassname">Water.</code><code class="descname">Pipe</code><span class="sig-paren">(</span><em>length</em>, <em>size</em>, <em>kind='PVC'</em>, <em>sch='C900 DR-18'</em>, <em>Re=2000</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Water/pipe.html#Pipe"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Water.Pipe" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Pipe Class:
+object defined to add pipe section and fittings
+attributes:</p>
+<blockquote>
+<div><ul class="simple">
+<li>length: straight pipe length (in ft)</li>
+<li>size: nominal pipe diameter (in inches)</li>
+<li>kind: pipe material (PVC, steel, etc.)</li>
+<li>sch: pipe schedule, default=40, can also put PVC AWWA sizes</li>
+<li>fitting_list: list of fittings for pipe section</li>
+<li>reynolds: reynolds number (default to 2000 - laminar)</li>
+</ul>
+</div></blockquote>
+<dl class="docutils">
+<dt>properties:</dt>
+<dd><ul class="first last simple">
+<li>inner diameter</li>
+<li>outer diameter</li>
+<li>c factor for hazen-williams equation</li>
+</ul>
+</dd>
+<dt>methods:</dt>
+<dd><ul class="first last simple">
+<li>major_loss: uses hazen-williams equation to find head loss in straight pipe</li>
+<li>minor_loss: uses Darcy-Wiesbach equation to find head loss in fittings</li>
+<li>fitting: appends a fitting to the fitting_list</li>
+<li>fitting_info: returns string of fitting info in fitting_list</li>
+<li>get_losses: returns total losses in the pipe section</li>
+</ul>
+</dd>
+</dl>
+<dl class="attribute">
+<dt id="Water.Pipe.area">
+<code class="descname">area</code><a class="headerlink" href="#Water.Pipe.area" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns pipe area</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Water.Pipe.c_factor">
+<code class="descname">c_factor</code><a class="headerlink" href="#Water.Pipe.c_factor" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns C factor for Hazen-Williams equation</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Water.Pipe.fitting">
+<code class="descname">fitting</code><span class="sig-paren">(</span><em>fitting_type=None</em>, <em>con_type=None</em>, <em>qty=1</em>, <em>Kvalue=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Water/pipe.html#Pipe.fitting"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Water.Pipe.fitting" title="Permalink to this definition">¶</a></dt>
+<dd><p>adds fitting to Pipe object’s fitting_list to add to head loss</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Water.Pipe.fitting_info">
+<code class="descname">fitting_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/Water/pipe.html#Pipe.fitting_info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Water.Pipe.fitting_info" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="Water.Pipe.get_losses">
+<code class="descname">get_losses</code><span class="sig-paren">(</span><em>flow</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Water/pipe.html#Pipe.get_losses"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Water.Pipe.get_losses" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns total head loss (major + minor)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Water.Pipe.inner_diameter">
+<code class="descname">inner_diameter</code><a class="headerlink" href="#Water.Pipe.inner_diameter" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns inner diamter</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Water.Pipe.major_loss">
+<code class="descname">major_loss</code><span class="sig-paren">(</span><em>flow</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Water/pipe.html#Pipe.major_loss"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Water.Pipe.major_loss" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns major head loss by using Hazen-Williams equation</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Water.Pipe.minor_loss">
+<code class="descname">minor_loss</code><span class="sig-paren">(</span><em>flow</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Water/pipe.html#Pipe.minor_loss"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Water.Pipe.minor_loss" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns minor head loss by using Darcy Wiesbach equation</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Water.Pipe.outer_diameter">
+<code class="descname">outer_diameter</code><a class="headerlink" href="#Water.Pipe.outer_diameter" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns outer diameter</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Water.Pipe.volume">
+<code class="descname">volume</code><a class="headerlink" href="#Water.Pipe.volume" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns volume inside of the pipe in cuft</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="Water.Genset">
+<em class="property">class </em><code class="descclassname">Water.</code><code class="descname">Genset</code><span class="sig-paren">(</span><em>voltage</em>, <em>phase</em>, <em>capacity=None</em>, <em>model=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Water/genset.html#Genset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Water.Genset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Genset Class:
+object defined to define generator loads
+attributes:</p>
+<blockquote>
+<div><ul class="simple">
+<li>voltage: generator voltage (V)</li>
+<li>phase: generator phase</li>
+<li>capacity: the power capacity of the generator (kW) defaults to None</li>
+<li>fire_list: list of fire flow motor loads</li>
+<li>dom_list : list of domestic flow motor loads</li>
+<li>pf: dict of power factors for 3ph and 1ph motor</li>
+</ul>
+</div></blockquote>
+<dl class="docutils">
+<dt>methods:</dt>
+<dd><ul class="first last simple">
+<li><dl class="first docutils">
+<dt>add_load: appends load to self.load_list and sums list to </dt>
+<dd>calculate self.total_load</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>delete_load: deletes load fro self.load_list and decreases </dt>
+<dd>self.total_load</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+<dl class="method">
+<dt id="Water.Genset.add_consumption">
+<code class="descname">add_consumption</code><span class="sig-paren">(</span><em>consumption_list</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Water/genset.html#Genset.add_consumption"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Water.Genset.add_consumption" title="Permalink to this definition">¶</a></dt>
+<dd><p>Enter list of consumption rates</p>
+<p>Consumtion rates are entered as a 4 item list
+consumption values are in scfm and represent consumption
+at 25%, 50%, 75% and 100% loads.</p>
+<p>example: consumption_list=[100, 200, 300 400]</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Water.Genset.add_motor_load">
+<code class="descname">add_motor_load</code><span class="sig-paren">(</span><em>power</em>, <em>units='hp'</em>, <em>fire=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Water/genset.html#Genset.add_motor_load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Water.Genset.add_motor_load" title="Permalink to this definition">¶</a></dt>
+<dd><p>adds motor load to self.load_list uses kVA calculation
+based on power factors.</p>
+<dl class="docutils">
+<dt>attributes: </dt>
+<dd><p class="first">power: motor power
+units: power units(default hp)</p>
+<blockquote>
+<div>unit options –&gt; ‘hp’, ‘kw’</div></blockquote>
+<dl class="last docutils">
+<dt>fire: fire-flow flag (default False)</dt>
+<dd>if True load is added to self.fire_load</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="Water.Genset.add_resistive_load">
+<code class="descname">add_resistive_load</code><span class="sig-paren">(</span><em>power</em>, <em>units='kw'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Water/genset.html#Genset.add_resistive_load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Water.Genset.add_resistive_load" title="Permalink to this definition">¶</a></dt>
+<dd><p>adds resistive load to self.load_list
+E.G. heaters, lights, controls…</p>
+<dl class="docutils">
+<dt>attributes: </dt>
+<dd><p class="first">power: power
+units: power units(default kw)</p>
+<blockquote class="last">
+<div>unit options –&gt; ‘kw’, ‘watts’</div></blockquote>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="Water.Genset.delete_load">
+<code class="descname">delete_load</code><span class="sig-paren">(</span><em>load_type</em>, <em>index=-1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Water/genset.html#Genset.delete_load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Water.Genset.delete_load" title="Permalink to this definition">¶</a></dt>
+<dd><p>deletes specific load from self.load_dict
+enter load_type, list index. 
+prints verification when removed
+default index is last item in list (-1)
+load_types = ‘fire’, ‘domestic’, ‘resistive’</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Water.Genset.dom_load">
+<code class="descname">dom_load</code><a class="headerlink" href="#Water.Genset.dom_load" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns total domestic pump motor loads</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Water.Genset.fire_load">
+<code class="descname">fire_load</code><a class="headerlink" href="#Water.Genset.fire_load" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns total fire pump motor loads</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Water.Genset.full_load">
+<code class="descname">full_load</code><a class="headerlink" href="#Water.Genset.full_load" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns percent genset is loaded under fire flow conditions</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Water.Genset.normal_load">
+<code class="descname">normal_load</code><a class="headerlink" href="#Water.Genset.normal_load" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns percent genset is loaded under normal conditions</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Water.Genset.power_factors">
+<code class="descname">power_factors</code><a class="headerlink" href="#Water.Genset.power_factors" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="Water.Genset.res_load">
+<code class="descname">res_load</code><a class="headerlink" href="#Water.Genset.res_load" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns total resistive loads</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Water.Genset.total_load">
+<code class="descname">total_load</code><a class="headerlink" href="#Water.Genset.total_load" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns total of domestic, fire and resistive loads</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="tutorial.html" title="Code Examples and Tutorials"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Water 1.0.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Ryan Haseman.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.2.
+    </div>
+  </body>
+</html>

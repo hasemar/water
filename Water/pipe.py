@@ -1,5 +1,4 @@
-'''
-Pipe :
+'''Pipe :
     This module holds the data for a variety of fittings and pipe sizes.
     It holds a class called Pipe that allows you to create Pipe objects
     and calculate losses.
@@ -7,6 +6,7 @@ Pipe :
 
 from __future__ import print_function
 import Water.tools as tools
+
 c_dict = {
     'PVC' : 150,
     'DI' : 130,
@@ -67,7 +67,7 @@ pipe_dims = {
     }
 }
 
-''' fitting dictionary:
+'''fitting dictionary:
     holds fitting shape and connection type. For each connection 
     type there is a kfactor list [geometry, k1, k_infinity]
 '''
@@ -141,6 +141,7 @@ class Pipe:
             - minor_loss: uses Darcy-Wiesbach equation to find head loss in fittings
             - fitting: appends a fitting to the fitting_list
             - fitting_info: returns string of fitting info in fitting_list
+            - print_fittings: prints fittings dictionary for reference
             - get_losses: returns total losses in the pipe section
     '''
     def __init__(self,length, size, kind='PVC', sch='C900 DR-18', Re=2000):
@@ -154,27 +155,27 @@ class Pipe:
 
     @property
     def outer_diameter(self):
-        ''' returns outer diameter'''
+        '''returns outer diameter'''
         return self.dims[0]
     @property
     def inner_diameter(self):
-        ''' returns inner diamter'''
+        '''returns inner diamter'''
         return self.outer_diameter - 2 * self.dims[1]
     @property
     def volume(self):
-        ''' returns volume inside of the pipe in cuft'''
+        '''returns volume inside of the pipe in cuft'''
         return tools.volume_cyl(self.inner_diameter/12, self.length)
     @property
     def area(self):
-        ''' returns pipe area'''
+        '''returns pipe area'''
         return self.volume/self.length
     @property
     def c_factor(self):
-        ''' returns C factor for Hazen-Williams equation'''
+        '''returns C factor for Hazen-Williams equation'''
         return c_dict[self.kind]
     
     def fitting(self, fitting_type=None, con_type=None, qty=1, Kvalue=None):
-        ''' adds fitting to Pipe object's fitting_list to add to head loss'''
+        '''adds fitting to Pipe object's fitting_list to add to head loss'''
         if fitting_type in fitting_dict and con_type in fitting_dict[fitting_type]:
             Kfactors = fitting_dict[fitting_type][con_type]
             if not Kvalue:
@@ -183,6 +184,7 @@ class Pipe:
         self.fitting_list.append((fitting_type, con_type, Kvalue,qty))
     
     def fitting_info(self):
+        '''returns string list of fittings currently defined in pipe object'''
         info = 'Fittings list: \n'
         for fitting in self.fitting_list:
             info += '{}, {}: Kvalue = {:.3f}, qty = {} \n'.format(fitting[0],
@@ -192,13 +194,20 @@ class Pipe:
                                                      )
         return info
 
+    def print_fitting(self):
+        '''prints out fittings dictionary for reference'''
+        for each_fitting in fitting_dict:
+            print(each_fitting)
+            for each_type in fitting_dict[each_fitting]:
+                print('\t', each_type)
+
     def major_loss(self, flow):
-        ''' returns major head loss by using Hazen-Williams equation '''
+        '''returns major head loss by using Hazen-Williams equation '''
         h = (10.45 * self.length * flow**1.852)/(self.c_factor**1.852 * self.inner_diameter**4.8704)
         return h
 
     def minor_loss(self, flow):
-        ''' returns minor head loss by using Darcy Wiesbach equation '''
+        '''returns minor head loss by using Darcy Wiesbach equation '''
         g = 32.2
         vel = tools.velocity(flow, self.inner_diameter)
         minor_loss = 0
@@ -209,7 +218,7 @@ class Pipe:
         return minor_loss
 
     def get_losses(self, flow):
-        ''' returns total head loss (major + minor)'''
+        '''returns total head loss (major + minor)'''
         total_loss = self.major_loss(flow) + self.minor_loss(flow)
         return total_loss
         
@@ -240,3 +249,5 @@ if __name__=="__main__":
     print('\nPipe 2 info:')
     print(pipe_2.fitting_info())
     print('total head loss: ', round(losses,2), 'ft')
+
+    pipe_1.print_fitting()
