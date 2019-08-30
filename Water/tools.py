@@ -89,11 +89,10 @@ def reynolds(pipe_diam, flow=None, vel=None, viscocity=1.3081):
         Enter flow (gpm), pipe diameter(inches)
         viscosity in cSt = 1.3081 (default)
     '''
-    q = velocity(flow, pipe_diam)
     if flow:
-        re = q/(pipe_diam/12 * viscocity)
-    elif velocity:
-        re = (pipe_diam/12)*velocity/viscocity
+        re = (flow*pipe_diam/12) / (viscocity * pi * pipe_diam**2/4)
+    elif vel:
+        re = (pipe_diam/12)*vel/viscocity
     else:
         print('Must enter flow or velocity')
 
@@ -159,7 +158,7 @@ def report_losses(losses, flow, name):
                                                                            losses[-1],
                                                                            flow[-1])
     else:
-        output = '{}: {:.2f} ft @ {:.1f} gpm'.format(name,
+        output = '{}: {:.2f} ft @ {:.2f} gpm'.format(name,
                                                      losses,
                                                      flow)
 
@@ -415,7 +414,7 @@ if __name__=="__main__":
     d_func = pipeDiameter(Q,v)
 
     # Reynolds Number
-    Re, Lam = reynolds(d, velocity=v)
+    Re, Lam = reynolds(d, vel=v)
     if Lam:
         condition = 'Laminar'
     else:

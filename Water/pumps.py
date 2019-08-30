@@ -190,8 +190,8 @@ class Pump:
         self.ax[0].set_ylabel('head (ft)')
         self.ax[0].legend()
         self.ax[1].legend()
-        self.fig.tight_layout()
-        plt.show()
+        self.fig.tight_layout()   
+        plt.draw()
 
     def find_head(self, flow):
         ''' Returns head value from pump curve based on flow input.
@@ -231,6 +231,7 @@ if __name__=="__main__":
 
     pump.plot_curve(system_flow, system_head, vfd=False, eff=True)
     pump2.plot_curve(design_x, design_y, eff=True)
-
+    
+    plt.show()
     # TODO  Program halts after plt.show. 
     # Need to figure out howto show plots while running program.
