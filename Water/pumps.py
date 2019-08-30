@@ -10,12 +10,15 @@ from os import path
 pumps_dir = path.join(path.dirname(__file__), 'pumps')
 
 available_pumps = {
-    'Goulds 3657' : '3657_1-5x2_GOULDS_3500.csv',
+    'Goulds 3657' : '3657_1-5X2_GOULDS_3500.csv',
     'Goulds 3642' : '3642_1x1-25_GOULDS_3500.csv',
     'Grunfos CM1' : 'CM1-2-A-GRUNFOS.csv',
     'Goulds 25GS50' : '25GS50-GOULDS_3500.csv',
     'Goulds 35GS50' : '35GS50-GOULDS_3500.csv',
     'Goulds 75GS100CB' : '75GS100CB-GOULDS_3500.csv',
+    'Goulds 85GS100' : '85GS100-GOULDS_3500.csv',
+    'Grundfos CMBE 5-62' : 'CMBE_5-62-GRUNFOS.csv',
+    'Goulds 85GS75' : '85GS75-GOULDS_3500.csv',
     'Grundfos 85S100-9': '85S100-9-Grundfos_3500.csv'
     }
 class Pump:
@@ -84,6 +87,20 @@ class Pump:
         f = []
         h = []
         ef = []
+        available_pumps = {
+        'Goulds 3657' : '3657_1-5X2_GOULDS_3500.csv',
+        'Goulds 3642' : '3642_1x1-25_GOULDS_3500.csv',
+        'Grunfos CM1' : 'CM1-2-A-GRUNFOS.csv',
+        'Goulds 25GS50' : '25GS50-GOULDS_3500.csv',
+        'Goulds 35GS50' : '35GS50-GOULDS_3500.csv',
+        'Goulds 75GS100CB' : '75GS100CB-GOULDS_3500.csv',
+        'Goulds 85GS100' : '85GS100-GOULDS_3500.csv',
+        'Grundfos CMBE 5-62' : 'CMBE_5-62-GRUNFOS.csv',
+        'Goulds 85GS75' : '85GS75-GOULDS_3500.csv',
+        'Grundfos 85S100-9': '85S100-9-Grundfos_3500.csv'
+        }
+        
+        
         file_path = pumps_dir + '/' + available_pumps[selection]
         with open(file_path, 'r') as csv_file:
             csv_reader = csv.reader(csv_file)
