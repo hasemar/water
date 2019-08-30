@@ -3,10 +3,10 @@ from math import pi, acos, sqrt
 from Water import tools
 
 class Tank:
-    '''
-        Tank Object arugments can be passed as a dict:
-        example: 
-
+    '''Defines Tank object to calculate storage and other tank properties.\n
+    Tank object arugments can be passed as a dict:\n
+        *example:*\n 
+        
         tank_data = {          
             'name' : 'string',
             'diameter' : int/float,
@@ -17,11 +17,13 @@ class Tank:
             'elevation' : int/float (default 0)
             'shape' : 'string' (default vertical)
             }
-        tank_1 = Tank(**tank_data)
 
-        or individually like so:
+        tank_1 = Tank(\**tank_data)
+
+        *or individually like so:*
 
         tank_2 = Tank(name='string', diameter=int/float, height=int/float )
+    
     '''
     
     def __init__(self, **kwargs):
@@ -48,7 +50,7 @@ class Tank:
             return tools.cuft2gal(self.area * self.height)   
     @property
     def useable(self):
-        '''returns max filled volume of tank'''
+        '''returns useable volume of tank'''
         if self.shape == 'horizontal':
             v_dead = tools.cuft2gal(self.horizontal_vol(self.deadstorage))
             v_free = tools.cuft2gal(self.horizontal_vol(self.freeboard))

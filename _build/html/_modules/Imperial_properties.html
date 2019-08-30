@@ -1,0 +1,148 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Imperial_properties &#8212; Water 1.0.0 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for Imperial_properties</h1><div class="highlight"><pre>
+<span></span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">Imperial Properties:</span>
+<span class="sd">    Module to assign and access the most common properties of water</span>
+<span class="sd">    used in fluid mechanics in english units</span>
+<span class="sd">&#39;&#39;&#39;</span>
+
+<span class="c1"># H20 properties in imperial units @ 50 deg celcius</span>
+
+<span class="n">density</span> <span class="o">=</span> <span class="mf">1.94</span>                  <span class="c1"># slugs/ft^3</span>
+<span class="n">specific_weight</span> <span class="o">=</span> <span class="mf">62.41</span>         <span class="c1"># lb/ft^3</span>
+<span class="n">dynamic_viscosity</span> <span class="o">=</span> <span class="mf">2.73e-5</span>     <span class="c1"># lb*s/ft^2</span>
+<span class="n">kinematic_viscosity</span> <span class="o">=</span> <span class="mf">1.407e-5</span>  <span class="c1"># ft^2/s</span>
+<span class="n">boiling_point</span> <span class="o">=</span> <span class="mi">212</span>             <span class="c1"># F </span>
+<span class="n">melting_point</span> <span class="o">=</span> <span class="mi">32</span>              <span class="c1"># F</span>
+<span class="n">vapor_pressure</span> <span class="o">=</span> <span class="mf">1.781e-1</span>       <span class="c1"># psi (absolute)</span>
+<span class="n">speed_of_sound</span> <span class="o">=</span> <span class="mi">4748</span>           <span class="c1"># ft/s</span>
+
+<div class="viewcode-block" id="unit_info"><a class="viewcode-back" href="../code_reference.html#Imperial_properties.unit_info">[docs]</a><span class="k">def</span> <span class="nf">unit_info</span><span class="p">():</span>
+    <span class="sd">&#39;&#39;&#39;Displays default unit information.\n</span>
+<span class="sd">    - density = 1.94 slugs/ft^3</span>
+<span class="sd">    - specific_weight = 62.41 lb/ft^3</span>
+<span class="sd">    - dynamic_viscosity = 2.73e-5 lb*s/ft^2</span>
+<span class="sd">    - kinematic_viscosity = 1.407e-5 ft^2/s</span>
+<span class="sd">    - boiling_point = 212 F </span>
+<span class="sd">    - melting_point = 32 F</span>
+<span class="sd">    - vapor_pressure = 1.781e-1 psia</span>
+<span class="sd">    - speed_of_sound = 4748 ft/s</span>
+
+<span class="sd">    &#39;&#39;&#39;</span>
+    
+    <span class="n">info</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39;</span>
+<span class="s1">            density = 1.94 slugs/ft^3</span>
+<span class="s1">            specific_weight = 62.41 lb/ft^3</span>
+<span class="s1">            dynamic_viscosity = 2.73e-5 lb*s/ft^2</span>
+<span class="s1">            kinematic_viscosity = 1.407e-5 ft^2/s</span>
+<span class="s1">            boiling_point = 212 F </span>
+<span class="s1">            melting_point = 32 F</span>
+<span class="s1">            vapor_pressure = 1.781e-1 psia</span>
+<span class="s1">            speed_of_sound = 4748 ft/s</span>
+<span class="s1">        &#39;&#39;&#39;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">info</span><span class="p">)</span>
+    <span class="k">return</span></div>
+    
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">Water</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial.html">Code Examples and Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../code_reference.html">Water Package Code Reference</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2019, Ryan Haseman.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

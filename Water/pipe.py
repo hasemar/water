@@ -1,11 +1,13 @@
 '''Pipe :
-    This module holds the data for a variety of fittings and pipe sizes.
-    It holds a class called Pipe that allows you to create Pipe objects
-    and calculate losses.
+This module holds the data for a variety of fittings and pipe sizes.
+It holds a class called Pipe that allows you to create Pipe objects
+and calculate losses.
+
 '''
 
 from __future__ import print_function
 import Water.tools as tools
+
 
 c_dict = {
     'PVC' : 150,
@@ -123,27 +125,30 @@ fitting_dict = {
 }
 
 class Pipe:
-    '''Pipe Class:
-        object defined to add pipe section and fittings
-        attributes:
-            - length: straight pipe length (in ft)
-            - size: nominal pipe diameter (in inches)
-            - kind: pipe material (PVC, steel, etc.)
-            - sch: pipe schedule, default=40, can also put PVC AWWA sizes
-            - fitting_list: list of fittings for pipe section
-            - reynolds: reynolds number (default to 2000 - laminar)
-        properties:
-            - inner diameter
-            - outer diameter
-            - c factor for hazen-williams equation
-        methods:
-            - major_loss: uses hazen-williams equation to find head loss in straight pipe
-            - minor_loss: uses Darcy-Wiesbach equation to find head loss in fittings
-            - fitting: appends a fitting to the fitting_list
-            - fitting_info: returns string of fitting info in fitting_list
-            - print_fittings: prints fittings dictionary for reference
-            - get_losses: returns total losses in the pipe section
+    '''Defines Pipe object to add pipe section and fittings for head loss calculations.\n
+        attributes:\n  
+        - length: straight pipe length (in ft)   
+        - size: nominal pipe diameter (in inches)  
+        - kind: pipe material (PVC, steel, etc.)  
+        - sch: pipe schedule, default=40, can also put PVC AWWA sizes  
+        - fitting_list: list of fittings for pipe section  
+        - reynolds: reynolds number (default to 2000 - laminar)  
+
+        properties:\n
+        - inner diameter  
+        - outer diameter  
+        - c factor for hazen-williams equation
+
+        methods:\n  
+        - major_loss: uses hazen-williams equation to find head loss in straight pipe  
+        - minor_loss: uses Darcy-Wiesbach equation to find head loss in fittings  
+        - fitting: appends a fitting to the fitting_list  
+        - fitting_info: returns string of fitting info in fitting_list  
+        - print_fittings: prints fittings dictionary for reference  
+        - get_losses: returns total losses in the pipe section  
+    
     '''
+
     def __init__(self,length, size, kind='PVC', sch='C900 DR-18', Re=2000):
         self.kind = kind
         self.sch = sch

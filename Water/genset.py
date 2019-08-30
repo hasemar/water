@@ -6,20 +6,21 @@ Genset:
 from __future__ import print_function, division
 
 class Genset:
-    '''Genset Class:
-        object defined to define generator loads
-        attributes:
-            - voltage: generator voltage (V)
-            - phase: generator phase
-            - capacity: the power capacity of the generator (kW) defaults to None
-            - fire_list: list of fire flow motor loads
-            - dom_list : list of domestic flow motor loads
-            - pf: dict of power factors for 3ph and 1ph motor
-        methods:
-            - add_load: appends load to self.load_list and sums list to 
-                calculate self.total_load
-            - delete_load: deletes load fro self.load_list and decreases 
-                self.total_load
+    '''Defines Genset object to calculate generator loads.\n
+    attributes:\n
+    - voltage: generator voltage (V)
+    - phase: generator phase
+    - capacity: the power capacity of the generator (kW) defaults to None
+    - fire_list: list of fire flow motor loads
+    - dom_list : list of domestic flow motor loads
+    - pf: dict of power factors for 3ph and 1ph motor
+    
+    methods:\n
+    - add_load: appends load to self.load_list and sums list to 
+        calculate self.total_load
+    - delete_load: deletes load fro self.load_list and decreases 
+        self.total_load
+
     '''
     def __init__(self, voltage, phase, capacity=None, model=None):
         self.load_dict = {'domestic':[], 'fire':[], 'resistive':[]}
@@ -65,14 +66,15 @@ class Genset:
 
     def add_motor_load(self, power, units='hp', fire=False):
         '''adds motor load to self.load_list uses kVA calculation
-            based on power factors.
+            based on power factors.\n
             
-            attributes: 
-                power: motor power
-                units: power units(default hp)
-                    unit options --> 'hp', 'kw'
-                fire: fire-flow flag (default False)
-                    if True load is added to self.fire_load
+        attributes:\n 
+            power: motor power\n
+            units: power units(default hp)\n
+                unit options --> 'hp', 'kw'\n
+            fire: fire-flow flag (default False)\n
+                if True load is added to self.fire_load\n
+
         '''
         units = units.lower()
         if units == 'kw':
@@ -87,13 +89,14 @@ class Genset:
             self.load_dict['domestic'].append(kVA)
     
     def add_resistive_load(self, power, units='kw'):
-        '''adds resistive load to self.load_list
-            E.G. heaters, lights, controls...
+        '''adds resistive load to self.load_list\n
+            *for example heaters, lights, controls...*
             
-            attributes: 
-                power: power
-                units: power units(default kw)
-                    unit options --> 'kw', 'watts'
+        attributes:\n
+            power: power\n
+            units: power units(default kw)\n
+                unit options --> 'kw', 'watts'\n
+
         '''
         units = units.lower()
         if units == 'watts':
@@ -104,23 +107,25 @@ class Genset:
             print('units not recognized: use "kw" or "watts"')
 
     def delete_load(self, load_type, index=-1):
-        '''deletes specific load from self.load_dict
+        '''deletes specific load from self.load_dict\n
             enter load_type, list index. 
-            prints verification when removed
-            default index is last item in list (-1)
-            load_types = 'fire', 'domestic', 'resistive'
+            Prints verification when removed.\n
+            default index is last item in list (-1)\n
+                load_types = 'fire', 'domestic', 'resistive'
+
         '''
         print(self.load_dict[load_type].pop(index), ' has been removed')
 
     def add_consumption(self, consumption_list):
-        '''Enter list of consumption rates
+        '''Enter list of consumption rates\n
 
-            Consumtion rates are entered as a 4 item list
-            consumption values are in scfm and represent consumption
-            at 25%, 50%, 75% and 100% loads.
+        Consumtion rates are entered as a 4 item list
+        consumption values are in scfm and represent consumption
+        at 25%, 50%, 75% and 100% loads.
 
-            example: consumption_list=[100, 200, 300 400]
-            '''
+            *example: consumption_list=[100, 200, 300 400]*
+    
+        '''
         self.consumption = consumption_list
 
 # test script

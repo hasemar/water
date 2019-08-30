@@ -1,86 +1,153 @@
 
-
-<!doctype html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Water Package Code &#8212; Water 1.0.0 documentation</title>
-    <link rel="stylesheet" href="_static/bizstyle.css" type="text/css" />
+    <title>Water Package Code Reference &#8212; Water 1.0.0 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="_static/bizstyle.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="prev" title="Code Examples and Tutorials" href="tutorial.html" />
-    <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <!--[if lt IE 9]>
-    <script type="text/javascript" src="_static/css3-mediaqueries.js"></script>
-    <![endif]-->
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
   </head><body>
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="tutorial.html" title="Code Examples and Tutorials"
-             accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Water 1.0.0 documentation</a> &#187;</li> 
-      </ul>
-    </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
-        <div class="sphinxsidebarwrapper">
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="tutorial.html"
-                        title="previous chapter">Code Examples and Tutorials</a></p>
-  <div role="note" aria-label="source link">
-    <h3>This Page</h3>
-    <ul class="this-page-menu">
-      <li><a href="_sources/code_reference.rst.txt"
-            rel="nofollow">Show Source</a></li>
-    </ul>
-   </div>
-<div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
-    <div class="searchformwrapper">
-    <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
-    </form>
-    </div>
-</div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
-        </div>
-      </div>
+  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
+          
+
           <div class="body" role="main">
             
-  <div class="section" id="water-package-code">
-<h1>Water Package Code<a class="headerlink" href="#water-package-code" title="Permalink to this headline">¶</a></h1>
-<p>This is the main code reference.</p>
-<span class="target" id="module-Water"></span><dl class="class">
+  <div class="section" id="water-package-code-reference">
+<h1>Water Package Code Reference<a class="headerlink" href="#water-package-code-reference" title="Permalink to this headline">¶</a></h1>
+<p>This package contains several python classes that allow for the creation of common water system assets
+by using object-oriented programming. There are also modules containing useful functions for common
+calculations in water system desin. Currently Units are in industry standard ft, lb, s, gpm, psi, etc.</p>
+<p># TODO In future would like to make the units “user specifiable”.</p>
+<div class="section" id="module-Water">
+<span id="classes"></span><h2>Classes<a class="headerlink" href="#module-Water" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="Water.Pipe">
+<em class="property">class </em><code class="descclassname">Water.</code><code class="descname">Pipe</code><span class="sig-paren">(</span><em>length</em>, <em>size</em>, <em>kind='PVC'</em>, <em>sch='C900 DR-18'</em>, <em>Re=2000</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Water/pipe.html#Pipe"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Water.Pipe" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Defines Pipe object to add pipe section and fittings for head loss calculations.</p>
+<p>attributes:</p>
+<ul class="simple">
+<li>length: straight pipe length (in ft)</li>
+<li>size: nominal pipe diameter (in inches)</li>
+<li>kind: pipe material (PVC, steel, etc.)</li>
+<li>sch: pipe schedule, default=40, can also put PVC AWWA sizes</li>
+<li>fitting_list: list of fittings for pipe section</li>
+<li>reynolds: reynolds number (default to 2000 - laminar)</li>
+</ul>
+<p>properties:</p>
+<ul class="simple">
+<li>inner diameter</li>
+<li>outer diameter</li>
+<li>c factor for hazen-williams equation</li>
+</ul>
+<p>methods:</p>
+<ul class="simple">
+<li>major_loss: uses hazen-williams equation to find head loss in straight pipe</li>
+<li>minor_loss: uses Darcy-Wiesbach equation to find head loss in fittings</li>
+<li>fitting: appends a fitting to the fitting_list</li>
+<li>fitting_info: returns string of fitting info in fitting_list</li>
+<li>print_fittings: prints fittings dictionary for reference</li>
+<li>get_losses: returns total losses in the pipe section</li>
+</ul>
+<dl class="attribute">
+<dt id="Water.Pipe.area">
+<code class="descname">area</code><a class="headerlink" href="#Water.Pipe.area" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns pipe area</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Water.Pipe.c_factor">
+<code class="descname">c_factor</code><a class="headerlink" href="#Water.Pipe.c_factor" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns C factor for Hazen-Williams equation</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Water.Pipe.fitting">
+<code class="descname">fitting</code><span class="sig-paren">(</span><em>fitting_type=None</em>, <em>con_type=None</em>, <em>qty=1</em>, <em>Kvalue=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Water/pipe.html#Pipe.fitting"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Water.Pipe.fitting" title="Permalink to this definition">¶</a></dt>
+<dd><p>adds fitting to Pipe object’s fitting_list to add to head loss</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Water.Pipe.fitting_info">
+<code class="descname">fitting_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/Water/pipe.html#Pipe.fitting_info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Water.Pipe.fitting_info" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns string list of fittings currently defined in pipe object</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Water.Pipe.get_losses">
+<code class="descname">get_losses</code><span class="sig-paren">(</span><em>flow</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Water/pipe.html#Pipe.get_losses"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Water.Pipe.get_losses" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns total head loss (major + minor)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Water.Pipe.inner_diameter">
+<code class="descname">inner_diameter</code><a class="headerlink" href="#Water.Pipe.inner_diameter" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns inner diamter</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Water.Pipe.major_loss">
+<code class="descname">major_loss</code><span class="sig-paren">(</span><em>flow</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Water/pipe.html#Pipe.major_loss"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Water.Pipe.major_loss" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns major head loss by using Hazen-Williams equation</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Water.Pipe.minor_loss">
+<code class="descname">minor_loss</code><span class="sig-paren">(</span><em>flow</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Water/pipe.html#Pipe.minor_loss"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Water.Pipe.minor_loss" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns minor head loss by using Darcy Wiesbach equation</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Water.Pipe.outer_diameter">
+<code class="descname">outer_diameter</code><a class="headerlink" href="#Water.Pipe.outer_diameter" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns outer diameter</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Water.Pipe.print_fitting">
+<code class="descname">print_fitting</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/Water/pipe.html#Pipe.print_fitting"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Water.Pipe.print_fitting" title="Permalink to this definition">¶</a></dt>
+<dd><p>prints out fittings dictionary for reference</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Water.Pipe.volume">
+<code class="descname">volume</code><a class="headerlink" href="#Water.Pipe.volume" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns volume inside of the pipe in cuft</p>
+</dd></dl>
+
+</dd></dl>
+
+<hr class="docutils" />
+<dl class="class">
 <dt id="Water.Tank">
 <em class="property">class </em><code class="descclassname">Water.</code><code class="descname">Tank</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Water/tanks.html#Tank"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Water.Tank" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>Tank Object arugments can be passed as a dict:
-example:</p>
+<p>Defines Tank object to calculate storage and other tank properties.</p>
+<p>Tank object arugments can be passed as a dict:</p>
+<blockquote>
+<div><p><em>example:</em></p>
 <dl class="docutils">
-<dt>tank_data = {          </dt>
+<dt>tank_data = {</dt>
 <dd>‘name’ : ‘string’,
 ‘diameter’ : int/float,
 ‘height’ : int/float (default 0),
@@ -91,9 +158,10 @@ example:</p>
 ‘shape’ : ‘string’ (default vertical)
 }</dd>
 </dl>
-<p>tank_1 = Tank(<a href="#id1"><span class="problematic" id="id2">**</span></a>tank_data)</p>
-<p>or individually like so:</p>
+<p>tank_1 = Tank(**tank_data)</p>
+<p><em>or individually like so:</em></p>
 <p>tank_2 = Tank(name=’string’, diameter=int/float, height=int/float )</p>
+</div></blockquote>
 <dl class="attribute">
 <dt id="Water.Tank.area">
 <code class="descname">area</code><a class="headerlink" href="#Water.Tank.area" title="Permalink to this definition">¶</a></dt>
@@ -133,7 +201,7 @@ example:</p>
 <dl class="attribute">
 <dt id="Water.Tank.useable">
 <code class="descname">useable</code><a class="headerlink" href="#Water.Tank.useable" title="Permalink to this definition">¶</a></dt>
-<dd><p>returns max filled volume of tank</p>
+<dd><p>returns useable volume of tank</p>
 </dd></dl>
 
 <dl class="attribute">
@@ -144,159 +212,127 @@ example:</p>
 
 </dd></dl>
 
+<hr class="docutils" />
 <dl class="class">
 <dt id="Water.Pump">
-<em class="property">class </em><code class="descclassname">Water.</code><code class="descname">Pump</code><a class="reference internal" href="_modules/Water/pumps.html#Pump"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Water.Pump" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">Water.</code><code class="descname">Pump</code><span class="sig-paren">(</span><em>flow_list=[]</em>, <em>head_list=[]</em>, <em>eff_list=[]</em>, <em>model=''</em>, <em>rpm=None</em>, <em>imp=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Water/pumps.html#Pump"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Water.Pump" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Defines Tank object to plot and/or affinitized pump curve and performance</p>
+<p>attributes:</p>
+<ul class="simple">
+<li>flow_list: list of flows for pump curve (volumetric units) default=empty list</li>
+<li>head_list: list of head pressure for pump curve (pressure units) default=empty list</li>
+<li>eff_list: list of efficiencies for pump curve (float 0&gt;eff&lt;1 units) default=None</li>
+<li>model: pump model as string default=None</li>
+<li>rpm: pump motor rpm as int default=None</li>
+<li>imp: pump impeller size as float (distance units) default=None</li>
+</ul>
+<p>properties:</p>
+<ul class="simple">
+<li>vfd_flow: affinitized flow data</li>
+<li>vfd_head: affinitized head data</li>
+<li>vfd_eff: affinitized efficiencty data</li>
+</ul>
+<p>methods:</p>
+<ul class="simple">
+<li>load_pump: loads a saved pump curve from /pumps folder</li>
+<li><dl class="first docutils">
+<dt>affinitize: takes pump curve info and applies affinity laws to the curve</dt>
+<dd>params:<ul class="last">
+<li>pump_data: flow, head or efficiency list</li>
+<li>pwr: exponent for operation (1 for flow, 2 for head, 3 for eff)</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>plot_curve: plots pump curve with affinitized data, also plot system curve if entered</dt>
+<dd>params:<ul class="last">
+<li>target_flow: system curve flow as list or point</li>
+<li>tdh: system curve head as list or point</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li>find_head: lookup head condition from flow input.</li>
+</ul>
+<dl class="method">
+<dt id="Water.Pump.affinitize">
+<code class="descname">affinitize</code><span class="sig-paren">(</span><em>pump_data</em>, <em>pwr</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Water/pumps.html#Pump.affinitize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Water.Pump.affinitize" title="Permalink to this definition">¶</a></dt>
+<dd><p>creates affinitized curves for flow, head and efficiency for motor speeds at:</p>
+<p>Frequency =</p>
+<ul class="simple">
+<li>60 hz</li>
+<li>50 hz</li>
+<li>40 hz</li>
+<li>30 hz</li>
+<li>20 hz</li>
+<li>10 hz</li>
+</ul>
+</dd></dl>
+
 <dl class="method">
 <dt id="Water.Pump.find_head">
 <code class="descname">find_head</code><span class="sig-paren">(</span><em>flow</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Water/pumps.html#Pump.find_head"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Water.Pump.find_head" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns head value from pump curve based on flow input.
-if flow is not a known value it will interprolate between the
+If flow is not a known value it will interprolate between the
 two closest points on the curve.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="Water.Pump.load_pump">
 <code class="descname">load_pump</code><span class="sig-paren">(</span><em>selection</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Water/pumps.html#Pump.load_pump"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Water.Pump.load_pump" title="Permalink to this definition">¶</a></dt>
-<dd><p>available_pumps = {
-‘Goulds 3657’ : ‘3657_1-5X2_GOULDS_3500.csv’,
-‘Goulds 3642’ : ‘3642_1x1-25_GOULDS_3500.csv’
-‘Grunfos CM1’ : ‘CM1-2-A-GRUNFOS.csv’,
-‘Goulds 25GS50’ : ‘25GS50-GOULDS_3500.csv’,
-‘Goulds 35GS50’ : ‘35GS50-GOULDS_3500.csv’,
-‘Goulds 75GS100CB’ : ‘75GS100CB-GOULDS_3500.csv’,
-‘Grundfos 85S100-9’: ‘85S100-9-Grundfos_3500.csv’
-}</p>
+<dd><p>loads pump data from /pump folder included in package directory. Pump data
+is in .csv format and loaded from a dictionary in class (not ideal).</p>
+<p>available_pumps = {</p>
+<p>‘Goulds 3657’ : ‘3657_1-5X2_GOULDS_3500.csv’,</p>
+<p>‘Goulds 3642’ : ‘3642_1x1-25_GOULDS_3500.csv’</p>
+<p>‘Grunfos CM1’ : ‘CM1-2-A-GRUNFOS.csv’,</p>
+<p>‘Goulds 25GS50’ : ‘25GS50-GOULDS_3500.csv’,</p>
+<p>‘Goulds 35GS50’ : ‘35GS50-GOULDS_3500.csv’,</p>
+<p>‘Goulds 75GS100CB’ : ‘75GS100CB-GOULDS_3500.csv’,</p>
+<p>‘Grundfos 85S100-9’: ‘85S100-9-Grundfos_3500.csv’</p>
+<p>}</p>
+<p>#TODO make this more user friendly so the class source code does not have to be changed every
+time a pump is added to /pump folder.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="Water.Pump.plot_curve">
-<code class="descname">plot_curve</code><span class="sig-paren">(</span><em>target_flow=None</em>, <em>tdh=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Water/pumps.html#Pump.plot_curve"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Water.Pump.plot_curve" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<code class="descname">plot_curve</code><span class="sig-paren">(</span><em>target_flow=None</em>, <em>tdh=None</em>, <em>vfd=True</em>, <em>eff=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Water/pumps.html#Pump.plot_curve"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Water.Pump.plot_curve" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns a matplotlib plot of the pump curve.</p>
+<p>Default is to plot affinitized curves with full speed curve.
+User has option to add system curve and efficiency curve</p>
+</dd></dl>
 
 <dl class="attribute">
 <dt id="Water.Pump.vfd_eff">
 <code class="descname">vfd_eff</code><a class="headerlink" href="#Water.Pump.vfd_eff" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>returns a numpy array of affinitized efficiencies</p>
+</dd></dl>
 
 <dl class="attribute">
 <dt id="Water.Pump.vfd_flow">
 <code class="descname">vfd_flow</code><a class="headerlink" href="#Water.Pump.vfd_flow" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>returns a numpy array of affinitized flows</p>
+</dd></dl>
 
 <dl class="attribute">
 <dt id="Water.Pump.vfd_head">
 <code class="descname">vfd_head</code><a class="headerlink" href="#Water.Pump.vfd_head" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="Water.Pipe">
-<em class="property">class </em><code class="descclassname">Water.</code><code class="descname">Pipe</code><span class="sig-paren">(</span><em>length</em>, <em>size</em>, <em>kind='PVC'</em>, <em>sch='C900 DR-18'</em>, <em>Re=2000</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Water/pipe.html#Pipe"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Water.Pipe" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>Pipe Class:
-object defined to add pipe section and fittings
-attributes:</p>
-<blockquote>
-<div><ul class="simple">
-<li>length: straight pipe length (in ft)</li>
-<li>size: nominal pipe diameter (in inches)</li>
-<li>kind: pipe material (PVC, steel, etc.)</li>
-<li>sch: pipe schedule, default=40, can also put PVC AWWA sizes</li>
-<li>fitting_list: list of fittings for pipe section</li>
-<li>reynolds: reynolds number (default to 2000 - laminar)</li>
-</ul>
-</div></blockquote>
-<dl class="docutils">
-<dt>properties:</dt>
-<dd><ul class="first last simple">
-<li>inner diameter</li>
-<li>outer diameter</li>
-<li>c factor for hazen-williams equation</li>
-</ul>
-</dd>
-<dt>methods:</dt>
-<dd><ul class="first last simple">
-<li>major_loss: uses hazen-williams equation to find head loss in straight pipe</li>
-<li>minor_loss: uses Darcy-Wiesbach equation to find head loss in fittings</li>
-<li>fitting: appends a fitting to the fitting_list</li>
-<li>fitting_info: returns string of fitting info in fitting_list</li>
-<li>get_losses: returns total losses in the pipe section</li>
-</ul>
-</dd>
-</dl>
-<dl class="attribute">
-<dt id="Water.Pipe.area">
-<code class="descname">area</code><a class="headerlink" href="#Water.Pipe.area" title="Permalink to this definition">¶</a></dt>
-<dd><p>returns pipe area</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="Water.Pipe.c_factor">
-<code class="descname">c_factor</code><a class="headerlink" href="#Water.Pipe.c_factor" title="Permalink to this definition">¶</a></dt>
-<dd><p>returns C factor for Hazen-Williams equation</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="Water.Pipe.fitting">
-<code class="descname">fitting</code><span class="sig-paren">(</span><em>fitting_type=None</em>, <em>con_type=None</em>, <em>qty=1</em>, <em>Kvalue=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Water/pipe.html#Pipe.fitting"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Water.Pipe.fitting" title="Permalink to this definition">¶</a></dt>
-<dd><p>adds fitting to Pipe object’s fitting_list to add to head loss</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="Water.Pipe.fitting_info">
-<code class="descname">fitting_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/Water/pipe.html#Pipe.fitting_info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Water.Pipe.fitting_info" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="Water.Pipe.get_losses">
-<code class="descname">get_losses</code><span class="sig-paren">(</span><em>flow</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Water/pipe.html#Pipe.get_losses"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Water.Pipe.get_losses" title="Permalink to this definition">¶</a></dt>
-<dd><p>returns total head loss (major + minor)</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="Water.Pipe.inner_diameter">
-<code class="descname">inner_diameter</code><a class="headerlink" href="#Water.Pipe.inner_diameter" title="Permalink to this definition">¶</a></dt>
-<dd><p>returns inner diamter</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="Water.Pipe.major_loss">
-<code class="descname">major_loss</code><span class="sig-paren">(</span><em>flow</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Water/pipe.html#Pipe.major_loss"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Water.Pipe.major_loss" title="Permalink to this definition">¶</a></dt>
-<dd><p>returns major head loss by using Hazen-Williams equation</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="Water.Pipe.minor_loss">
-<code class="descname">minor_loss</code><span class="sig-paren">(</span><em>flow</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Water/pipe.html#Pipe.minor_loss"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Water.Pipe.minor_loss" title="Permalink to this definition">¶</a></dt>
-<dd><p>returns minor head loss by using Darcy Wiesbach equation</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="Water.Pipe.outer_diameter">
-<code class="descname">outer_diameter</code><a class="headerlink" href="#Water.Pipe.outer_diameter" title="Permalink to this definition">¶</a></dt>
-<dd><p>returns outer diameter</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="Water.Pipe.volume">
-<code class="descname">volume</code><a class="headerlink" href="#Water.Pipe.volume" title="Permalink to this definition">¶</a></dt>
-<dd><p>returns volume inside of the pipe in cuft</p>
+<dd><p>returns a numpy array of affinitized heads</p>
 </dd></dl>
 
 </dd></dl>
 
+<hr class="docutils" />
 <dl class="class">
 <dt id="Water.Genset">
 <em class="property">class </em><code class="descclassname">Water.</code><code class="descname">Genset</code><span class="sig-paren">(</span><em>voltage</em>, <em>phase</em>, <em>capacity=None</em>, <em>model=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Water/genset.html#Genset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Water.Genset" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>Genset Class:
-object defined to define generator loads
-attributes:</p>
-<blockquote>
-<div><ul class="simple">
+<p>Defines Genset object to calculate generator loads.</p>
+<p>attributes:</p>
+<ul class="simple">
 <li>voltage: generator voltage (V)</li>
 <li>phase: generator phase</li>
 <li>capacity: the power capacity of the generator (kW) defaults to None</li>
@@ -304,23 +340,19 @@ attributes:</p>
 <li>dom_list : list of domestic flow motor loads</li>
 <li>pf: dict of power factors for 3ph and 1ph motor</li>
 </ul>
-</div></blockquote>
-<dl class="docutils">
-<dt>methods:</dt>
-<dd><ul class="first last simple">
+<p>methods:</p>
+<ul class="simple">
 <li><dl class="first docutils">
-<dt>add_load: appends load to self.load_list and sums list to </dt>
+<dt>add_load: appends load to self.load_list and sums list to</dt>
 <dd>calculate self.total_load</dd>
 </dl>
 </li>
 <li><dl class="first docutils">
-<dt>delete_load: deletes load fro self.load_list and decreases </dt>
+<dt>delete_load: deletes load fro self.load_list and decreases</dt>
 <dd>self.total_load</dd>
 </dl>
 </li>
 </ul>
-</dd>
-</dl>
 <dl class="method">
 <dt id="Water.Genset.add_consumption">
 <code class="descname">add_consumption</code><span class="sig-paren">(</span><em>consumption_list</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Water/genset.html#Genset.add_consumption"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Water.Genset.add_consumption" title="Permalink to this definition">¶</a></dt>
@@ -328,51 +360,69 @@ attributes:</p>
 <p>Consumtion rates are entered as a 4 item list
 consumption values are in scfm and represent consumption
 at 25%, 50%, 75% and 100% loads.</p>
-<p>example: consumption_list=[100, 200, 300 400]</p>
+<blockquote>
+<div><em>example: consumption_list=[100, 200, 300 400]</em></div></blockquote>
 </dd></dl>
 
 <dl class="method">
 <dt id="Water.Genset.add_motor_load">
 <code class="descname">add_motor_load</code><span class="sig-paren">(</span><em>power</em>, <em>units='hp'</em>, <em>fire=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Water/genset.html#Genset.add_motor_load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Water.Genset.add_motor_load" title="Permalink to this definition">¶</a></dt>
-<dd><p>adds motor load to self.load_list uses kVA calculation
-based on power factors.</p>
-<dl class="docutils">
-<dt>attributes: </dt>
-<dd><p class="first">power: motor power
-units: power units(default hp)</p>
-<blockquote>
-<div>unit options –&gt; ‘hp’, ‘kw’</div></blockquote>
-<dl class="last docutils">
-<dt>fire: fire-flow flag (default False)</dt>
-<dd>if True load is added to self.fire_load</dd>
+<dd><dl class="docutils">
+<dt>adds motor load to self.load_list uses kVA calculation</dt>
+<dd>based on power factors.</dd>
 </dl>
-</dd>
-</dl>
+<dl class="attribute">
+<dt id="Water.Genset.power">
+<code class="descname">power</code><a class="headerlink" href="#Water.Genset.power" title="Permalink to this definition">¶</a></dt>
+<dd><p>motor power</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Water.Genset.units">
+<code class="descname">units</code><a class="headerlink" href="#Water.Genset.units" title="Permalink to this definition">¶</a></dt>
+<dd><p>power units(default hp)</p>
+<p>unit options –&gt; ‘hp’, ‘kw’</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="Water.Genset.fire">
+<code class="descname">fire</code><a class="headerlink" href="#Water.Genset.fire" title="Permalink to this definition">¶</a></dt>
+<dd><p>fire-flow flag (default False)</p>
+<p>if True load is added to self.fire_load</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="method">
 <dt id="Water.Genset.add_resistive_load">
 <code class="descname">add_resistive_load</code><span class="sig-paren">(</span><em>power</em>, <em>units='kw'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Water/genset.html#Genset.add_resistive_load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Water.Genset.add_resistive_load" title="Permalink to this definition">¶</a></dt>
-<dd><p>adds resistive load to self.load_list
-E.G. heaters, lights, controls…</p>
-<dl class="docutils">
-<dt>attributes: </dt>
-<dd><p class="first">power: power
-units: power units(default kw)</p>
-<blockquote class="last">
-<div>unit options –&gt; ‘kw’, ‘watts’</div></blockquote>
-</dd>
-</dl>
+<dd><p>adds resistive load to self.load_list</p>
+<blockquote>
+<div><em>for example heaters, lights, controls…</em></div></blockquote>
+<dl class="attribute">
+<dt>
+<code class="descname">power</code></dt>
+<dd><p>power</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt>
+<code class="descname">units</code></dt>
+<dd><p>power units(default kw)</p>
+<p>unit options –&gt; ‘kw’, ‘watts’</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="method">
 <dt id="Water.Genset.delete_load">
 <code class="descname">delete_load</code><span class="sig-paren">(</span><em>load_type</em>, <em>index=-1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Water/genset.html#Genset.delete_load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Water.Genset.delete_load" title="Permalink to this definition">¶</a></dt>
-<dd><p>deletes specific load from self.load_dict
-enter load_type, list index. 
-prints verification when removed
-default index is last item in list (-1)
-load_types = ‘fire’, ‘domestic’, ‘resistive’</p>
+<dd><p>deletes specific load from self.load_dict</p>
+<p>enter load_type, list index.
+Prints verification when removed.</p>
+<p>default index is last item in list (-1)</p>
+<blockquote>
+<div>load_types = ‘fire’, ‘domestic’, ‘resistive’</div></blockquote>
 </dd></dl>
 
 <dl class="attribute">
@@ -402,7 +452,8 @@ load_types = ‘fire’, ‘domestic’, ‘resistive’</p>
 <dl class="attribute">
 <dt id="Water.Genset.power_factors">
 <code class="descname">power_factors</code><a class="headerlink" href="#Water.Genset.power_factors" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>returns power factors for apparent power</p>
+</dd></dl>
 
 <dl class="attribute">
 <dt id="Water.Genset.res_load">
@@ -419,31 +470,391 @@ load_types = ‘fire’, ‘domestic’, ‘resistive’</p>
 </dd></dl>
 
 </div>
+<div class="section" id="functions-and-properties">
+<h2>Functions and Properties<a class="headerlink" href="#functions-and-properties" title="Permalink to this headline">¶</a></h2>
+<p>Modules that contain functions and properties useful in water system design.</p>
+<p><strong>Tools</strong></p>
+<span class="target" id="module-tools"></span><p>Tools to calculate water system
+design aspects</p>
+<dl class="function">
+<dt id="tools.PHD">
+<code class="descclassname">tools.</code><code class="descname">PHD</code><span class="sig-paren">(</span><em>MDD</em>, <em>num_ERUs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tools.html#PHD"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tools.PHD" title="Permalink to this definition">¶</a></dt>
+<dd><p>Peak Hour Demand:
+Enter Max Day Demand and Number of ERU’s
+Also Returns Average Hour and Lowest Hour Demand</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="tools.acft2gal">
+<code class="descclassname">tools.</code><code class="descname">acft2gal</code><span class="sig-paren">(</span><em>acft</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tools.html#acft2gal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tools.acft2gal" title="Permalink to this definition">¶</a></dt>
+<dd><p>convert acre-feet to gallons</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="tools.air_dump_valve_size">
+<code class="descclassname">tools.</code><code class="descname">air_dump_valve_size</code><span class="sig-paren">(</span><em>cut_out</em>, <em>cut_in</em>, <em>tank_vol</em>, <em>evac_time=5</em>, <em>info=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tools.html#air_dump_valve_size"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tools.air_dump_valve_size" title="Permalink to this definition">¶</a></dt>
+<dd><p>Air Dump Valve Sizing :
+cut_out = nominal pump off pressure in psi
+cut_in = nominal pump on pressure in psi
+tank_vol = volume of H-PN tank in gallons
+evac_time = time to empty entire tank in minutes (default 5)
+info = print report (default false)</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="tools.bladder_size">
+<code class="descclassname">tools.</code><code class="descname">bladder_size</code><span class="sig-paren">(</span><em>cut_out</em>, <em>cut_in</em>, <em>num_cycles</em>, <em>max_flow</em>, <em>bladder_vol</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tools.html#bladder_size"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tools.bladder_size" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bladder Tank sizing</p>
+<p>cut_out = nominal pump-off pressure in psi
+cut_in = nominal pump-on pressure in psi
+num_cycles = max number of cycles/hour/pump
+max_flow = estimated max flow from 1 pump
+bladder_vol = volume of bladder tank in gallons</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="tools.calc_hp">
+<code class="descclassname">tools.</code><code class="descname">calc_hp</code><span class="sig-paren">(</span><em>flow_rate</em>, <em>head</em>, <em>pump_eff=0.6</em>, <em>motor_eff=0.9</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tools.html#calc_hp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tools.calc_hp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Horsepower Calculations:
+Returns Water HP, Break HP and Total HP
+Enter flow and head in gpm and feet H20, and efficiencies
+Power units in horsepower</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="tools.coeffs">
+<code class="descclassname">tools.</code><code class="descname">coeffs</code><span class="sig-paren">(</span><em>num_ERUs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tools.html#coeffs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tools.coeffs" title="Permalink to this definition">¶</a></dt>
+<dd><p>assigns C and F coefficients from DOH manual</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="tools.cuft2gal">
+<code class="descclassname">tools.</code><code class="descname">cuft2gal</code><span class="sig-paren">(</span><em>cubic_feet</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tools.html#cuft2gal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tools.cuft2gal" title="Permalink to this definition">¶</a></dt>
+<dd><p>cubic feet to gallon conversion</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="tools.cuftps2gpm">
+<code class="descclassname">tools.</code><code class="descname">cuftps2gpm</code><span class="sig-paren">(</span><em>cuftps</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tools.html#cuftps2gpm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tools.cuftps2gpm" title="Permalink to this definition">¶</a></dt>
+<dd><p>cuft per sec to gpm conversion</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="tools.cuin2gal">
+<code class="descclassname">tools.</code><code class="descname">cuin2gal</code><span class="sig-paren">(</span><em>cubic_inches</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tools.html#cuin2gal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tools.cuin2gal" title="Permalink to this definition">¶</a></dt>
+<dd><p>convert cubic inches to gallons</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="tools.equalizing_storage">
+<code class="descclassname">tools.</code><code class="descname">equalizing_storage</code><span class="sig-paren">(</span><em>PHD</em>, <em>Qs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tools.html#equalizing_storage"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tools.equalizing_storage" title="Permalink to this definition">¶</a></dt>
+<dd><p>Equalizing Storage Calc from DOH design manual</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="tools.flow">
+<code class="descclassname">tools.</code><code class="descname">flow</code><span class="sig-paren">(</span><em>velocity</em>, <em>pipe_diam</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tools.html#flow"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tools.flow" title="Permalink to this definition">¶</a></dt>
+<dd><p>Flow Calculation:
+Enter velocity in fps and pipe_diam in inches
+Returns Flow in gpm</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="tools.ft2psi">
+<code class="descclassname">tools.</code><code class="descname">ft2psi</code><span class="sig-paren">(</span><em>ft_of_head</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tools.html#ft2psi"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tools.ft2psi" title="Permalink to this definition">¶</a></dt>
+<dd><p>convert feet of head to psi</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="tools.gal2acft">
+<code class="descclassname">tools.</code><code class="descname">gal2acft</code><span class="sig-paren">(</span><em>gallons</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tools.html#gal2acft"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tools.gal2acft" title="Permalink to this definition">¶</a></dt>
+<dd><p>convert gallons to acre-feet</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="tools.gal2cuft">
+<code class="descclassname">tools.</code><code class="descname">gal2cuft</code><span class="sig-paren">(</span><em>gallons</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tools.html#gal2cuft"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tools.gal2cuft" title="Permalink to this definition">¶</a></dt>
+<dd><p>gallon to cubic feet conversion</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="tools.gal2cuin">
+<code class="descclassname">tools.</code><code class="descname">gal2cuin</code><span class="sig-paren">(</span><em>gallons</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tools.html#gal2cuin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tools.gal2cuin" title="Permalink to this definition">¶</a></dt>
+<dd><p>converts gallons to cubic inches</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="tools.gpm2cuftps">
+<code class="descclassname">tools.</code><code class="descname">gpm2cuftps</code><span class="sig-paren">(</span><em>gpm</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tools.html#gpm2cuftps"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tools.gpm2cuftps" title="Permalink to this definition">¶</a></dt>
+<dd><p>gpm to cuft per sec conversion</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="tools.hpn_size">
+<code class="descclassname">tools.</code><code class="descname">hpn_size</code><span class="sig-paren">(</span><em>cut_out</em>, <em>cut_in</em>, <em>num_cycles</em>, <em>max_flow</em>, <em>tank_diam</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tools.html#hpn_size"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tools.hpn_size" title="Permalink to this definition">¶</a></dt>
+<dd><p>Hydro Pneumatic Tank Sizing</p>
+<p>cut_out = nominal pump-off pressure in psi
+cut_in = nominal pump-on pressure in psi
+num_cycles = max number of cycles/hour/pump
+max_flow = estimated max flow from 1 pump
+tank_diam = diameter of tank in inches</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="tools.leakage">
+<code class="descclassname">tools.</code><code class="descname">leakage</code><span class="sig-paren">(</span><em>pipe_diam</em>, <em>test_pressure</em>, <em>linear_feet</em>, <em>hydrants=0</em>, <em>interties=0</em>, <em>valves=0</em>, <em>end_caps=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tools.html#leakage"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tools.leakage" title="Permalink to this definition">¶</a></dt>
+<dd><p>calculates allowable leakage for a pressure test:</p>
+<dl class="docutils">
+<dt>Enter:</dt>
+<dd>pipe diameter in inches
+test pressure in psi
+linear_feet of pipe run
+number of hydrants
+number of interties
+number of valves
+number of end caps</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="tools.makeup_water">
+<code class="descclassname">tools.</code><code class="descname">makeup_water</code><span class="sig-paren">(</span><em>diam_before</em>, <em>diam_after</em>, <em>depth_before</em>, <em>depth_after</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tools.html#makeup_water"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tools.makeup_water" title="Permalink to this definition">¶</a></dt>
+<dd><p>Enter dimensions of frustrum or cylynder to return volume</p>
+<p>Used to estimate the volume of water in a trash can.
+Units must be uniform.
+:param diam_before = can diameter before pumping:
+:param diam_after = can diameter after pumping:
+:param depth_before = water level before pumping:
+:param depth_after - water level after pumping:</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="tools.minor_loss">
+<code class="descclassname">tools.</code><code class="descname">minor_loss</code><span class="sig-paren">(</span><em>vel</em>, <em>k_val</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tools.html#minor_loss"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tools.minor_loss" title="Permalink to this definition">¶</a></dt>
+<dd><p>minor head loss using FPS</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="tools.pipeDiameter">
+<code class="descclassname">tools.</code><code class="descname">pipeDiameter</code><span class="sig-paren">(</span><em>flow</em>, <em>velocity</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tools.html#pipeDiameter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tools.pipeDiameter" title="Permalink to this definition">¶</a></dt>
+<dd><p>pipe diameter calculation:
+Enter velocity in fps and flow in gpm
+Reutrns diameter in inches</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="tools.pressure_relief_valve_size">
+<code class="descclassname">tools.</code><code class="descname">pressure_relief_valve_size</code><span class="sig-paren">(</span><em>cut_out</em>, <em>tank_vol</em>, <em>capacity=None</em>, <em>R=53.35</em>, <em>T=527.7</em>, <em>Z=1</em>, <em>C=356</em>, <em>K=0.878</em>, <em>k_b=1</em>, <em>M=28.97</em>, <em>info=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tools.html#pressure_relief_valve_size"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tools.pressure_relief_valve_size" title="Permalink to this definition">¶</a></dt>
+<dd><p>pressure Relief Valve Sizing :
+cut_out = nominal pump off pressure in psi
+tank_vol = volume of H-PN tank in gallons
+capacity = required relieving capacity in SCFM</p>
+<blockquote>
+<div>if None then it will lenearly interpolate from cut_out press
+using WWS standard compressor</div></blockquote>
+<p># Constants (defauts)
+R = 53.35  # R constant in ftlb/Rankine
+T = 527.7  # Air temp  in Rankine
+Z = 1
+C = 356
+K = .878
+k_b = 1
+M = 28.97
+info = print report (default false)</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="tools.psi2ft">
+<code class="descclassname">tools.</code><code class="descname">psi2ft</code><span class="sig-paren">(</span><em>psi</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tools.html#psi2ft"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tools.psi2ft" title="Permalink to this definition">¶</a></dt>
+<dd><p>return psi to feet of head</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="tools.report_losses">
+<code class="descclassname">tools.</code><code class="descname">report_losses</code><span class="sig-paren">(</span><em>losses</em>, <em>flow</em>, <em>name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tools.html#report_losses"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tools.report_losses" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>prints high and low flow head loss for given inputs</dt>
+<dd>report_losses(list, list, str)</dd>
+</dl>
+<p>if only one value is passed for both losses and flow
+it will only report one losses value</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="tools.resistance">
+<code class="descclassname">tools.</code><code class="descname">resistance</code><span class="sig-paren">(</span><em>velocity=None</em>, <em>headloss=None</em>, <em>K=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tools.html#resistance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tools.resistance" title="Permalink to this definition">¶</a></dt>
+<dd><p>calculates resistance coefficient or headloss
+depending on what is given</p>
+<p>Enter velociy in FPS
+Enter headloss in feet
+OR
+Enter K</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="tools.reynolds">
+<code class="descclassname">tools.</code><code class="descname">reynolds</code><span class="sig-paren">(</span><em>pipe_diam</em>, <em>flow=None</em>, <em>vel=None</em>, <em>viscocity=1.3081</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tools.html#reynolds"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tools.reynolds" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reynolds Number Calculation:
+Enter flow (gpm), pipe diameter(inches)
+viscosity in cSt = 1.3081 (default)</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="tools.velocity">
+<code class="descclassname">tools.</code><code class="descname">velocity</code><span class="sig-paren">(</span><em>flow</em>, <em>pipe_diam</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tools.html#velocity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tools.velocity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Velocity Calculations:
+Enter flow in gpm and pipe_diameter in inches
+Returns velocity in FPS</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="tools.volume_box">
+<code class="descclassname">tools.</code><code class="descname">volume_box</code><span class="sig-paren">(</span><em>length</em>, <em>width</em>, <em>height</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tools.html#volume_box"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tools.volume_box" title="Permalink to this definition">¶</a></dt>
+<dd><p>volume of a box
+returns volume in units consistent with inputs</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="tools.volume_cyl">
+<code class="descclassname">tools.</code><code class="descname">volume_cyl</code><span class="sig-paren">(</span><em>d</em>, <em>h</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tools.html#volume_cyl"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tools.volume_cyl" title="Permalink to this definition">¶</a></dt>
+<dd><p>volume of a cylinder using diameter
+returns volume consistent with inputs</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="tools.wellhead_CFR">
+<code class="descclassname">tools.</code><code class="descname">wellhead_CFR</code><span class="sig-paren">(</span><em>Q, H, n=0.22, t_list=[1, 5, 10]</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tools.html#wellhead_CFR"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tools.wellhead_CFR" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns fixed radius wellhead contribution zones (CFR):
+Default is 1 year, 5 year, and 10 year radii
+Enter:</p>
+<blockquote>
+<div>Q = pumping rate in cubic ft/yr
+H = open interval in ft
+n = aquifer porosity (defaults to 0.22)
+t = time in years (default list [1,5,10])</div></blockquote>
+</dd></dl>
+
+<hr class="docutils" />
+<p><strong>Properties of Water in SI units</strong></p>
+<span class="target" id="module-SI_properties"></span><dl class="docutils">
+<dt>SI Properties:</dt>
+<dd>Module to assign and access the most common properties of water
+used in fluid mechanics in SI units</dd>
+</dl>
+<dl class="function">
+<dt id="SI_properties.unit_info">
+<code class="descclassname">SI_properties.</code><code class="descname">unit_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/SI_properties.html#unit_info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SI_properties.unit_info" title="Permalink to this definition">¶</a></dt>
+<dd><p>Displays default unit information.</p>
+<ul class="simple">
+<li>density = 1000 kg/m^3</li>
+<li>specific_weight = 9807 N/m*3</li>
+<li>dynamic_viscosity = 1.002e-3  N*sec/m^2</li>
+<li>kinematic_viscosity = 1.004e-6  m^2/s</li>
+<li>boiling_point = 100 C</li>
+<li>melting_point = 0 C</li>
+<li>vapor_pressure = 2.338e3 N/m*2 (absolute)</li>
+<li>speed_of_sound = 1481 m/s</li>
+</ul>
+</dd></dl>
+
+<p><strong>Properties of Water in Imperial units</strong></p>
+<span class="target" id="module-Imperial_properties"></span><dl class="docutils">
+<dt>Imperial Properties:</dt>
+<dd>Module to assign and access the most common properties of water
+used in fluid mechanics in english units</dd>
+</dl>
+<dl class="function">
+<dt id="Imperial_properties.unit_info">
+<code class="descclassname">Imperial_properties.</code><code class="descname">unit_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/Imperial_properties.html#unit_info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Imperial_properties.unit_info" title="Permalink to this definition">¶</a></dt>
+<dd><p>Displays default unit information.</p>
+<ul class="simple">
+<li>density = 1.94 slugs/ft^3</li>
+<li>specific_weight = 62.41 lb/ft^3</li>
+<li>dynamic_viscosity = 2.73e-5 lb*s/ft^2</li>
+<li>kinematic_viscosity = 1.407e-5 ft^2/s</li>
+<li>boiling_point = 212 F</li>
+<li>melting_point = 32 F</li>
+<li>vapor_pressure = 1.781e-1 psia</li>
+<li>speed_of_sound = 4748 ft/s</li>
+</ul>
+</dd></dl>
+
+</div>
+</div>
 
 
           </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Water</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html">Code Examples and Tutorials</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Water Package Code Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#module-Water">Classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#functions-and-properties">Functions and Properties</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="tutorial.html" title="previous chapter">Code Examples and Tutorials</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="tutorial.html" title="Code Examples and Tutorials"
-             >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Water 1.0.0 documentation</a> &#187;</li> 
-      </ul>
+    <div class="footer">
+      &copy;2019, Ryan Haseman.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/code_reference.rst.txt"
+          rel="nofollow">Page source</a>
     </div>
-    <div class="footer" role="contentinfo">
-        &#169; Copyright 2019, Ryan Haseman.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.2.
-    </div>
+
+    
+
+    
   </body>
 </html>
