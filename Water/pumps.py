@@ -19,6 +19,7 @@ available_pumps = {
     'Goulds 75GS100CB' : '75GS100CB-GOULDS_3500.csv',
     'Goulds 85GS100' : '85GS100-GOULDS_3500.csv',
     'Grundfos CMBE 5-62' : 'CMBE_5-62-GRUNFOS.csv',
+    'Goulds 85GS75' : '85GS75-GOULDS_3500.csv',
     'Grundfos 85S100-9': '85S100-9-Grundfos_3500.csv'
     }
 
@@ -52,9 +53,11 @@ class Pump:
         'Goulds 75GS100CB' : '75GS100CB-GOULDS_3500.csv',
         'Goulds 85GS100' : '85GS100-GOULDS_3500.csv',
         'Grundfos CMBE 5-62' : 'CMBE_5-62-GRUNFOS.csv',
+        'Goulds 85GS75' : '85GS75-GOULDS_3500.csv',
         'Grundfos 85S100-9': '85S100-9-Grundfos_3500.csv'
         }
         '''
+        
         file_path = pumps_dir + '/' + available_pumps[selection]
         with open(file_path, 'r') as csv_file:
             csv_reader = csv.reader(csv_file)
