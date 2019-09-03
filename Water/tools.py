@@ -392,6 +392,34 @@ def wellhead_CFR(Q, H, n=0.22, t_list=[1,5,10]):
 
     return r
 
+def max_pump_elevation(elevation, NPSHr, Losses, SF=1.5):
+    '''Returns maximum elevation pump suction can be above water level
+
+        Negative number indicates ft of head that must be supplied
+        to suction line.
+
+        Positive number indicates how far pump can be above water level.
+    '''
+
+    # Barometric Pressure Constants
+    Pb = 29.92126   # in. Hg
+    Tb = 288.15     # K
+    R = 8.9494596*10**4  # lb·ft^2
+    g = 32.17405    #ft/s^2
+    M = 28.9644   # lb/lb-mol
+    Pv = 0.75    # vapor pressure of water at 50F in ft
+    
+    # atm pressure at elevation
+    P = Pb*exp((-g*M*elevation)/(R*Tb))
+
+    # convert inches Hg to ft of head
+    P = P*1.132925
+
+    # max pump height
+    Z = P - NPSHr - Losses - Pv - SF
+
+    return Z 
+
 ########## Test Script ############
 if __name__=="__main__":
 
