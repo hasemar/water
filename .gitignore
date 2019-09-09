@@ -102,3 +102,6 @@ ENV/
 
 # VS code 
 .vscode
+
+# water config file
+water_config.py

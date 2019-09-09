@@ -2,25 +2,14 @@
     This module calculates and produces pump curves based on mfg's data points
 '''
 from __future__ import print_function, division
-import csv
 import matplotlib.pyplot as plt
 import numpy as np
+import sqlite3
 from os import path
 
-pumps_dir = path.join(path.dirname(__file__), 'pumps')
+BASE_DIR = path.dirname(path.abspath(__file__))
+db_path = path.join(BASE_DIR, "pumps.db")
 
-available_pumps = {
-    'Goulds 3657' : '3657_1-5X2_GOULDS_3500.csv',
-    'Goulds 3642' : '3642_1x1-25_GOULDS_3500.csv',
-    'Grunfos CM1' : 'CM1-2-A-GRUNFOS.csv',
-    'Goulds 25GS50' : '25GS50-GOULDS_3500.csv',
-    'Goulds 35GS50' : '35GS50-GOULDS_3500.csv',
-    'Goulds 75GS100CB' : '75GS100CB-GOULDS_3500.csv',
-    'Goulds 85GS100' : '85GS100-GOULDS_3500.csv',
-    'Grundfos CMBE 5-62' : 'CMBE_5-62-GRUNFOS.csv',
-    'Goulds 85GS75' : '85GS75-GOULDS_3500.csv',
-    'Grundfos 85S100-9': '85S100-9-Grundfos_3500.csv'
-    }
 class Pump:
     '''Defines Tank object to plot and/or affinitized pump curve and performance\n
 
@@ -38,7 +27,11 @@ class Pump:
     - vfd_eff: affinitized efficiencty data
 
     methods:\n
-    - load_pump: loads a saved pump curve from /pumps folder
+    - load_pump: loads a pump from the pumps database
+    - add_pump: adds a pump to the database
+    - delete_pump: deletes a pump from the database
+    - check_pump: check for a specific pump in the database
+    - available_pumps: see all pumps in the database
     - affinitize: takes pump curve info and applies affinity laws to the curve
         params:\n 
         - pump_data: flow, head or efficiency list
@@ -50,74 +43,211 @@ class Pump:
         - tdh: system curve head as list or point
         
     - find_head: lookup head condition from flow input.
-
     '''     
-    def __init__(self, flow_list=[], head_list=[], eff_list=[], model='', rpm=None, imp=None):
-        self.flow = flow_list
-        self.head = head_list
-        self.eff = eff_list
-        self.model = model
-        self.rpm = rpm
-        self.impeller = imp
+    def __init__(self):
+        self.flow = []
+        self.head = []
+        self.eff = []
+        self.bep = [None, None]
+        self.model = None
+        self.mfg = None
+        self.rpm = None
+        self.impeller = None
         self.fig = None
+        self.ax = None
         self.affinity_data = []
-        self.ax1 = None
-        self.ax2 = None
 
+    def check_pump(self, pump_model, impeller=None):
+        '''Checks database for existing pump
+            pump_model: dtype=string
+            impeller: dtype=string (default=None)'''
 
-    def load_pump(self, selection):
-        '''loads pump data from /pump folder included in package directory. Pump data
-        is in .csv format and loaded from a dictionary in class (not ideal).\n
-
-        available_pumps = {\n
-        'Goulds 3657' : '3657_1-5X2_GOULDS_3500.csv',\n
-        'Goulds 3642' : '3642_1x1-25_GOULDS_3500.csv'\n
-        'Grunfos CM1' : 'CM1-2-A-GRUNFOS.csv',\n
-        'Goulds 25GS50' : '25GS50-GOULDS_3500.csv',\n
-        'Goulds 35GS50' : '35GS50-GOULDS_3500.csv',\n
-        'Goulds 75GS100CB' : '75GS100CB-GOULDS_3500.csv',\n
-        'Grundfos 85S100-9': '85S100-9-Grundfos_3500.csv'\n
-        }0
+        conn = sqlite3.connect(db_path)
+        c = conn.cursor()
+        existing_params = {'model' : pump_model, 'impeller' : impeller}
         
-
-        #TODO make this more user friendly so the class source code does not have to be changed every
-        time a pump is added to /pump folder.
-
-        '''
-        f = []
-        h = []
-        ef = []
-        available_pumps = {
-        'Goulds 3657' : '3657_1-5X2_GOULDS_3500.csv',
-        'Goulds 3642' : '3642_1x1-25_GOULDS_3500.csv',
-        'Grunfos CM1' : 'CM1-2-A-GRUNFOS.csv',
-        'Goulds 25GS50' : '25GS50-GOULDS_3500.csv',
-        'Goulds 35GS50' : '35GS50-GOULDS_3500.csv',
-        'Goulds 75GS100CB' : '75GS100CB-GOULDS_3500.csv',
-        'Goulds 85GS100' : '85GS100-GOULDS_3500.csv',
-        'Grundfos CMBE 5-62' : 'CMBE_5-62-GRUNFOS.csv',
-        'Goulds 85GS75' : '85GS75-GOULDS_3500.csv',
-        'Grundfos 85S100-9': '85S100-9-Grundfos_3500.csv'
-        }
-        
-        
-        file_path = pumps_dir + '/' + available_pumps[selection]
-        with open(file_path, 'r') as csv_file:
-            csv_reader = csv.reader(csv_file)
-            next(csv_reader)
+        if impeller:
+            sqlquery='''SELECT * 
+                        FROM 
+                            pumps 
+                        WHERE model=:model AND impeller=:impeller'''   
+        else:
+            sqlquery='''SELECT * 
+                        FROM 
+                            pumps 
+                        WHERE model=:model''' 
     
-            for line in csv_reader:
-                if line[0]:
-                    self.model = line[0]
-                    self.rpm = int(line[1])
-                    self.impeller = line[2]
-                f.append(int(line[3]))
-                h.append(int(line[4]))
-                ef.append(float(line[5]))
-            self.flow = f
-            self.head = h
-            self.eff = ef
+        c.execute(sqlquery, existing_params)
+        exists = c.fetchall()        
+        conn.commit()
+        conn.close()
+    
+        return exists
 
+    def add_pump(self, **kwargs):
+        '''Adds pump to pumps.db
+            Use dictionary to specify parameters
+            kwargs = 
+                    {'model' : dtype=string model name,
+                     'mfg' : dtype=string manufacturer,
+                     'flow' : dtype=list length=8,
+                     'head' : dtype=list length=8,
+                     'eff' : dtype=list length=8,
+                     'bep' : dtype=list [flow, head] of best efficiency point,
+                     'rpm' : dtype=int motor rpm,
+                     'impeller' : dtype=float impeller diameter} 
+        '''
+        self.flow = kwargs.get('flow', [])
+        self.head = kwargs.get('head', [])
+        self.eff = kwargs.get('eff', [])
+        self.bep = kwargs.get('bep', [None, None])
+        self.model = kwargs.get('model', None)
+        self.mfg = kwargs.get('mfg', None)
+        self.rpm = kwargs.get('rpm', None)
+        self.impeller = kwargs.get('impeller', None)
+
+        conn = sqlite3.connect(db_path)
+        c = conn.cursor()
+        # check if pump currently exists in database
+        exists = self.check_pump(self.model, self.impeller)
+        
+        if len(exists) == 0:
+            sqlinsert = '''INSERT INTO 
+                            pumps(
+                                manufacturer,
+                                model,
+                                maxFlow,
+                                minFlow,
+                                bestFlow,
+                                maxHead,
+                                minHead,
+                                bestHead,
+                                bestEff,
+                                rmp,
+                                impeller,
+                                flowArray,
+                                headArray,
+                                effArray) 
+                            values(
+                                :mfg,
+                                :model,
+                                :maxFlow,
+                                :minFlow,
+                                :bestFlow,
+                                :maxHead,
+                                :minHead,
+                                :bestHead,
+                                :bestEff,
+                                :rpm,
+                                :impeller,
+                                :flowArray,
+                                :headArray,
+                                :effArray)'''
+
+            params = {'mfg' : self.mfg,
+                    'model': self.model,
+                    'maxFlow' : max(self.flow),
+                    'minFlow' : min(self.flow),
+                    'bestFlow' : self.bep[0],
+                    'maxHead' : max(self.head),
+                    'minHead' : min(self.head),
+                    'bestHead' : self.bep[1],
+                    'bestEff': max(self.eff),    
+                    'rpm' : self.rpm,
+                    'impeller': self.impeller,
+                    'flowArray' : str(self.flow),
+                    'headArray' : str(self.head),
+                    'effArray' : str(self.eff)}
+            print('Pump added to database')
+            c.execute(sqlinsert, params)
+            conn.commit()
+            conn.close()
+        else:
+            print('Pump Model exists in the database, check below for specific parameters:')
+            for each_pump in exists:
+                print(each_pump[:12])
+        
+    def available_pumps(self):
+        '''returns pump table from pumps.db'''
+        conn = sqlite3.connect(db_path)
+        c = conn.cursor()
+        c.execute('''SELECT
+                        pumpID,
+                        manufacturer,
+                        model,
+                        bestFlow,
+                        bestHead
+                     FROM
+                        pumps''')
+        for eachPump in c.fetchall():
+            print(eachPump)
+        conn.commit()
+        conn.close()
+        
+    def load_pump(self, mfg, model, impeller=None):
+        '''loads pump from pumps.db
+            Parameters
+            ----------
+            
+            mfg: pump manufacturer dtype=string
+            model: pump model dtype=string
+            impeller: pump impeller size dtype=string (default=None)'''
+        multiples = self.check_pump(model, impeller)
+        print(multiples)
+        if len(multiples) == 0:
+            print('Pump does not exist in database.')
+        elif len(multiples) > 1:
+            print('Multiple pump models found in database, please include impeller diameter to select pump.')
+        else:
+            conn = sqlite3.connect(db_path)
+            c = conn.cursor()
+            params = {'mfg' : mfg, 'model' : model, 'impeller' : impeller}
+            if impeller == None:
+                sqlquery = '''SELECT * FROM pumps
+                              WHERE manufacturer=:mfg AND model=:model;
+                           '''
+            else:
+                sqlquery = '''SELECT * FROM pumps
+                              WHERE manufacturer=:mfg AND model=:model AND impeller=:impeller
+                            '''
+            c.execute(sqlquery, params)
+
+            pump = c.fetchall()
+            if len(pump) > 0:
+                pump = pump[0]
+                self.mfg = pump[1]
+                self.model = pump[2]
+                self.bep = (pump[5], pump[8])
+                self.rpm = pump[10]
+                self.impeller = pump[11]
+                fstring = pump[12].strip('[]').split(',')
+                hstring = pump[13].strip('[]').split(',')
+                estring = pump[14].strip('[]').split(',')
+
+                for f,h,e in zip(fstring, hstring, estring):
+                    self.flow.append(int(f))
+                    self.head.append(int(h))
+                    self.eff.append(float(e))
+                print('Pump loaded from database')
+
+    def delete_pump(self, pump_id):
+        '''deletes a pump record from the database
+            enter pump_id of pump to be deleted '''
+
+        conn = sqlite3.connect(db_path)
+        c = conn.cursor()
+        params = {'pumpID' : pump_id}
+        c.execute('''SELECT * FROM pumps
+                     WHERE pumpID=:pumpID''',params)
+        if len(c.fetchall()) > 0:
+            c.execute('''DELETE FROM pumps
+                         WHERE pumpID=:pumpID''',params)
+            print('pumpID', pump_id, 'was deleted from the database.')
+        else:
+            print('No pumps with pumpID', pump_id, 'was found in the database')
+        conn.commit()
+        conn.close()
+        
     @property
     def vfd_flow(self):
         ''' returns a numpy array of affinitized flows'''
@@ -142,7 +272,6 @@ class Pump:
         - 30 hz
         - 20 hz
         - 10 hz
-
         '''
         percent_speed = (np.linspace(60,10,6)/60)**pwr
         
@@ -151,13 +280,17 @@ class Pump:
         return self.affinity_data
 
     def plot_curve(self, target_flow=None, tdh=None, vfd=True, eff=False):
-        '''returns a matplotlib plot of the pump curve.\n
-        Default is to plot affinitized curves with full speed curve. 
-        User has option to add system curve and efficiency curve
+        '''returns a matplotlib plot of the pump curve.
+            Default is to plot affinitized curves with full speed curve. 
+            User has option to add system curve and efficiency curve
         '''
-        title_str = 'Pump: ' + self.model + ' - ' + str(self.rpm) + ' RPM - ' + str(self.impeller) + '" impeller'
-        self.fig, self.ax = plt.subplots(2,1)
+        if self.impeller:
+            title_str = 'Pump: ' + self.model + ' - ' + str(self.rpm) + ' RPM - ' + str(self.impeller) + '" impeller'
+        else:
+            title_str = 'Pump: ' + self.model + ' - ' + str(self.rpm) + ' RPM'
 
+        self.fig, self.ax = plt.subplots(2,1,figsize=(8,4.95))
+        plt.style.use('seaborn-whitegrid')
         if eff:
             self.ax[0] = plt.subplot2grid((3,1), (0,0), rowspan=2)
             self.ax[1] = plt.subplot2grid((3,1), (2,0))
@@ -208,19 +341,15 @@ class Pump:
 
         return head
 
-
+########################################
 if __name__=="__main__":
     print('test script:')
 
     pump = Pump()
     pump2 = Pump()
-    pump.load_pump('Goulds 3657')
-    pump2.load_pump('Grunfos CM1')
-    '''
-    for obs in pump.vfd_eff:
-        for data in obs:
-            print(data)
-    '''
+    pump.load_pump('Goulds', '3657 1.5x2 -6: 3SS')
+    pump2.load_pump('Grundfos', 'CM10-2-A-S-G-V-AQQV')
+    
     system_flow = np.linspace(1, 150, 30)
     system_head = []
     for flow in system_flow:
@@ -233,5 +362,34 @@ if __name__=="__main__":
     pump2.plot_curve(design_x, design_y, eff=True)
     
     plt.show()
-    # TODO  Program halts after plt.show. 
-    # Need to figure out howto show plots while running program.
+     
+    ## example of pump database use
+
+    new_pump_data = {
+                    'model' : 'test pump',
+                    'mfg' : 'Acme',
+                    'flow' : [1,2,3,4,5,6,7,8],
+                    'head' : [8,7,6,5,4,3,2,1],
+                    'eff' : [.1,.2,.3,.4,.5,.6,.7,.8],
+                    'bep' : [5,5],
+                    'rpm' : 1800,
+                    'impeller' : '5.5'
+                    }
+
+    pump.add_pump(**new_pump_data)
+    pump.available_pumps()
+
+    conn = sqlite3.connect(db_path)
+    c = conn.cursor()
+    c.execute('''Select pumpID
+                 From
+                    pumps
+                 Where
+                    model='test pump'
+             ''')
+    pump_id = c.fetchall()    
+    pump.delete_pump(pump_id=pump_id[0][0])
+    pump.available_pumps()
+
+    conn.commit()
+    conn.close()
