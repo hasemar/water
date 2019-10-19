@@ -123,11 +123,10 @@
 <span class="sd">        Enter flow (gpm), pipe diameter(inches)</span>
 <span class="sd">        viscosity in cSt = 1.3081 (default)</span>
 <span class="sd">    &#39;&#39;&#39;</span>
-    <span class="n">q</span> <span class="o">=</span> <span class="n">velocity</span><span class="p">(</span><span class="n">flow</span><span class="p">,</span> <span class="n">pipe_diam</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">flow</span><span class="p">:</span>
-        <span class="n">re</span> <span class="o">=</span> <span class="n">q</span><span class="o">/</span><span class="p">(</span><span class="n">pipe_diam</span><span class="o">/</span><span class="mi">12</span> <span class="o">*</span> <span class="n">viscocity</span><span class="p">)</span>
-    <span class="k">elif</span> <span class="n">velocity</span><span class="p">:</span>
-        <span class="n">re</span> <span class="o">=</span> <span class="p">(</span><span class="n">pipe_diam</span><span class="o">/</span><span class="mi">12</span><span class="p">)</span><span class="o">*</span><span class="n">velocity</span><span class="o">/</span><span class="n">viscocity</span>
+        <span class="n">re</span> <span class="o">=</span> <span class="p">(</span><span class="n">flow</span><span class="o">*</span><span class="n">pipe_diam</span><span class="o">/</span><span class="mi">12</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">viscocity</span> <span class="o">*</span> <span class="n">pi</span> <span class="o">*</span> <span class="n">pipe_diam</span><span class="o">**</span><span class="mi">2</span><span class="o">/</span><span class="mi">4</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">vel</span><span class="p">:</span>
+        <span class="n">re</span> <span class="o">=</span> <span class="p">(</span><span class="n">pipe_diam</span><span class="o">/</span><span class="mi">12</span><span class="p">)</span><span class="o">*</span><span class="n">vel</span><span class="o">/</span><span class="n">viscocity</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Must enter flow or velocity&#39;</span><span class="p">)</span>
 
@@ -193,7 +192,7 @@
                                                                            <span class="n">losses</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
                                                                            <span class="n">flow</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">output</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">: </span><span class="si">{:.2f}</span><span class="s1"> ft @ </span><span class="si">{:.1f}</span><span class="s1"> gpm&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">,</span>
+        <span class="n">output</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">: </span><span class="si">{:.2f}</span><span class="s1"> ft @ </span><span class="si">{:.2f}</span><span class="s1"> gpm&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">,</span>
                                                      <span class="n">losses</span><span class="p">,</span>
                                                      <span class="n">flow</span><span class="p">)</span>
 
@@ -449,7 +448,7 @@
     <span class="n">d_func</span> <span class="o">=</span> <span class="n">pipeDiameter</span><span class="p">(</span><span class="n">Q</span><span class="p">,</span><span class="n">v</span><span class="p">)</span>
 
     <span class="c1"># Reynolds Number</span>
-    <span class="n">Re</span><span class="p">,</span> <span class="n">Lam</span> <span class="o">=</span> <span class="n">reynolds</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">velocity</span><span class="o">=</span><span class="n">v</span><span class="p">)</span>
+    <span class="n">Re</span><span class="p">,</span> <span class="n">Lam</span> <span class="o">=</span> <span class="n">reynolds</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">vel</span><span class="o">=</span><span class="n">v</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">Lam</span><span class="p">:</span>
         <span class="n">condition</span> <span class="o">=</span> <span class="s1">&#39;Laminar&#39;</span>
     <span class="k">else</span><span class="p">:</span>

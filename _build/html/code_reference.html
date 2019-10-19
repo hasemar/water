@@ -38,8 +38,11 @@
 by using object-oriented programming. There are also modules containing useful functions for common
 calculations in water system desin. Currently Units are in industry standard ft, lb, s, gpm, psi, etc.</p>
 <p># TODO In future would like to make the units “user specifiable”.</p>
-<div class="section" id="module-Water">
-<span id="classes"></span><h2>Classes<a class="headerlink" href="#module-Water" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+</div>
+<span class="target" id="module-Water"></span><div class="section" id="pipe-class">
+<h2>Pipe Class<a class="headerlink" href="#pipe-class" title="Permalink to this headline">¶</a></h2>
+<hr class="docutils" />
 <dl class="class">
 <dt id="Water.Pipe">
 <em class="property">class </em><code class="descclassname">Water.</code><code class="descname">Pipe</code><span class="sig-paren">(</span><em>length</em>, <em>size</em>, <em>kind='PVC'</em>, <em>sch='C900 DR-18'</em>, <em>Re=2000</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Water/pipe.html#Pipe"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Water.Pipe" title="Permalink to this definition">¶</a></dt>
@@ -137,6 +140,9 @@ calculations in water system desin. Currently Units are in industry standard ft,
 
 </dd></dl>
 
+</div>
+<div class="section" id="tank-class">
+<h2>Tank Class<a class="headerlink" href="#tank-class" title="Permalink to this headline">¶</a></h2>
 <hr class="docutils" />
 <dl class="class">
 <dt id="Water.Tank">
@@ -212,10 +218,13 @@ calculations in water system desin. Currently Units are in industry standard ft,
 
 </dd></dl>
 
+</div>
+<div class="section" id="pump-class">
+<h2>Pump Class<a class="headerlink" href="#pump-class" title="Permalink to this headline">¶</a></h2>
 <hr class="docutils" />
 <dl class="class">
 <dt id="Water.Pump">
-<em class="property">class </em><code class="descclassname">Water.</code><code class="descname">Pump</code><span class="sig-paren">(</span><em>flow_list=[]</em>, <em>head_list=[]</em>, <em>eff_list=[]</em>, <em>model=''</em>, <em>rpm=None</em>, <em>imp=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Water/pumps.html#Pump"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Water.Pump" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">Water.</code><code class="descname">Pump</code><a class="reference internal" href="_modules/Water/pumps.html#Pump"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Water.Pump" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Defines Tank object to plot and/or affinitized pump curve and performance</p>
 <p>attributes:</p>
@@ -235,7 +244,11 @@ calculations in water system desin. Currently Units are in industry standard ft,
 </ul>
 <p>methods:</p>
 <ul class="simple">
-<li>load_pump: loads a saved pump curve from /pumps folder</li>
+<li>load_pump: loads a pump from the pumps database</li>
+<li>add_pump: adds a pump to the database</li>
+<li>delete_pump: deletes a pump from the database</li>
+<li>check_pump: check for a specific pump in the database</li>
+<li>available_pumps: see all pumps in the database</li>
 <li><dl class="first docutils">
 <dt>affinitize: takes pump curve info and applies affinity laws to the curve</dt>
 <dd>params:<ul class="last">
@@ -257,6 +270,26 @@ calculations in water system desin. Currently Units are in industry standard ft,
 <li>find_head: lookup head condition from flow input.</li>
 </ul>
 <dl class="method">
+<dt id="Water.Pump.add_pump">
+<code class="descname">add_pump</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Water/pumps.html#Pump.add_pump"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Water.Pump.add_pump" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds pump to pumps.db
+Use dictionary to specify parameters
+kwargs =</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>{‘model’ <span class="classifier-delimiter">:</span> <span class="classifier">dtype=string model name,</span></dt>
+<dd>‘mfg’ : dtype=string manufacturer,
+‘flow’ : dtype=list length=8,
+‘head’ : dtype=list length=8,
+‘eff’ : dtype=list length=8,
+‘bep’ : dtype=list [flow, head] of best efficiency point,
+‘rpm’ : dtype=int motor rpm,
+‘impeller’ : dtype=float impeller diameter}</dd>
+</dl>
+</div></blockquote>
+</dd></dl>
+
+<dl class="method">
 <dt id="Water.Pump.affinitize">
 <code class="descname">affinitize</code><span class="sig-paren">(</span><em>pump_data</em>, <em>pwr</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Water/pumps.html#Pump.affinitize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Water.Pump.affinitize" title="Permalink to this definition">¶</a></dt>
 <dd><p>creates affinitized curves for flow, head and efficiency for motor speeds at:</p>
@@ -272,6 +305,27 @@ calculations in water system desin. Currently Units are in industry standard ft,
 </dd></dl>
 
 <dl class="method">
+<dt id="Water.Pump.available_pumps">
+<code class="descname">available_pumps</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/Water/pumps.html#Pump.available_pumps"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Water.Pump.available_pumps" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns pump table from pumps.db</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Water.Pump.check_pump">
+<code class="descname">check_pump</code><span class="sig-paren">(</span><em>pump_model</em>, <em>impeller=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Water/pumps.html#Pump.check_pump"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Water.Pump.check_pump" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks database for existing pump
+pump_model: dtype=string
+impeller: dtype=string (default=None)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Water.Pump.delete_pump">
+<code class="descname">delete_pump</code><span class="sig-paren">(</span><em>pump_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Water/pumps.html#Pump.delete_pump"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Water.Pump.delete_pump" title="Permalink to this definition">¶</a></dt>
+<dd><p>deletes a pump record from the database
+enter pump_id of pump to be deleted</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="Water.Pump.find_head">
 <code class="descname">find_head</code><span class="sig-paren">(</span><em>flow</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Water/pumps.html#Pump.find_head"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Water.Pump.find_head" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns head value from pump curve based on flow input.
@@ -281,27 +335,21 @@ two closest points on the curve.</p>
 
 <dl class="method">
 <dt id="Water.Pump.load_pump">
-<code class="descname">load_pump</code><span class="sig-paren">(</span><em>selection</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Water/pumps.html#Pump.load_pump"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Water.Pump.load_pump" title="Permalink to this definition">¶</a></dt>
-<dd><p>loads pump data from /pump folder included in package directory. Pump data
-is in .csv format and loaded from a dictionary in class (not ideal).</p>
-<p>available_pumps = {</p>
-<p>‘Goulds 3657’ : ‘3657_1-5X2_GOULDS_3500.csv’,</p>
-<p>‘Goulds 3642’ : ‘3642_1x1-25_GOULDS_3500.csv’</p>
-<p>‘Grunfos CM1’ : ‘CM1-2-A-GRUNFOS.csv’,</p>
-<p>‘Goulds 25GS50’ : ‘25GS50-GOULDS_3500.csv’,</p>
-<p>‘Goulds 35GS50’ : ‘35GS50-GOULDS_3500.csv’,</p>
-<p>‘Goulds 75GS100CB’ : ‘75GS100CB-GOULDS_3500.csv’,</p>
-<p>‘Grundfos 85S100-9’: ‘85S100-9-Grundfos_3500.csv’</p>
-<p>}</p>
-<p>#TODO make this more user friendly so the class source code does not have to be changed every
-time a pump is added to /pump folder.</p>
+<code class="descname">load_pump</code><span class="sig-paren">(</span><em>mfg</em>, <em>model</em>, <em>impeller=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Water/pumps.html#Pump.load_pump"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Water.Pump.load_pump" title="Permalink to this definition">¶</a></dt>
+<dd><p>loads pump from pumps.db
+:param mfg:
+:type mfg: pump manufacturer dtype=string
+:param model:
+:type model: pump model dtype=string
+:param impeller:
+:type impeller: pump impeller size dtype=string (default=None)</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="Water.Pump.plot_curve">
 <code class="descname">plot_curve</code><span class="sig-paren">(</span><em>target_flow=None</em>, <em>tdh=None</em>, <em>vfd=True</em>, <em>eff=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Water/pumps.html#Pump.plot_curve"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Water.Pump.plot_curve" title="Permalink to this definition">¶</a></dt>
-<dd><p>returns a matplotlib plot of the pump curve.</p>
-<p>Default is to plot affinitized curves with full speed curve.
+<dd><p>returns a matplotlib plot of the pump curve.
+Default is to plot affinitized curves with full speed curve.
 User has option to add system curve and efficiency curve</p>
 </dd></dl>
 
@@ -325,6 +373,9 @@ User has option to add system curve and efficiency curve</p>
 
 </dd></dl>
 
+</div>
+<div class="section" id="genset-class">
+<h2>Genset Class<a class="headerlink" href="#genset-class" title="Permalink to this headline">¶</a></h2>
 <hr class="docutils" />
 <dl class="class">
 <dt id="Water.Genset">
@@ -472,6 +523,7 @@ Prints verification when removed.</p>
 </div>
 <div class="section" id="functions-and-properties">
 <h2>Functions and Properties<a class="headerlink" href="#functions-and-properties" title="Permalink to this headline">¶</a></h2>
+<hr class="docutils" />
 <p>Modules that contain functions and properties useful in water system design.</p>
 <p><strong>Tools</strong></p>
 <span class="target" id="module-tools"></span><p>Tools to calculate water system
@@ -757,6 +809,7 @@ used in fluid mechanics in SI units</dd>
 </ul>
 </dd></dl>
 
+<hr class="docutils" />
 <p><strong>Properties of Water in Imperial units</strong></p>
 <span class="target" id="module-Imperial_properties"></span><dl class="docutils">
 <dt>Imperial Properties:</dt>
@@ -803,7 +856,10 @@ used in fluid mechanics in english units</dd>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="tutorial.html">Code Examples and Tutorials</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Water Package Code Reference</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#module-Water">Classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pipe-class">Pipe Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#tank-class">Tank Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pump-class">Pump Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#genset-class">Genset Class</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#functions-and-properties">Functions and Properties</a></li>
 </ul>
 </li>
