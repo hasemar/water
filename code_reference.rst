@@ -7,10 +7,15 @@ calculations in water system desin. Currently Units are in industry standard ft,
 
 # TODO In future would like to make the units "user specifiable".
 
-Classes
-_________
+.. toctree::
+   :maxdepth: 3
+   :caption: Contents:
 
 .. automodule:: Water
+
+Pipe Class
+==========
+----------------------------------
 
 .. autoclass:: Pipe
     :members:
@@ -18,6 +23,8 @@ _________
     :inherited-members:
     :show-inheritance:
 
+Tank Class
+==========
 -----------------------------------
 
 .. autoclass:: Tank
@@ -26,6 +33,8 @@ _________
     :inherited-members:
     :show-inheritance:
 
+Pump Class
+==========
 -----------------------------------
 
 .. autoclass:: Pump
@@ -34,7 +43,9 @@ _________
     :inherited-members:
     :show-inheritance:
 
------------------------------------
+Genset Class
+============
+------------------------------------
 
 .. autoclass:: Genset
     :members:
@@ -43,12 +54,11 @@ _________
     :show-inheritance:
 
 
-
 Functions and Properties
-_________________________
+========================
+-----------------------------------
+
 Modules that contain functions and properties useful in water system design.
-
-
 
 **Tools**
 
@@ -67,6 +77,8 @@ Modules that contain functions and properties useful in water system design.
     :undoc-members:
     :inherited-members:
     :show-inheritance:
+
+--------------------------------------
 
 **Properties of Water in Imperial units**
 

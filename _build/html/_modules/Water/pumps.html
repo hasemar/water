@@ -36,22 +36,14 @@
 <span class="sd">    This module calculates and produces pump curves based on mfg&#39;s data points</span>
 <span class="sd">&#39;&#39;&#39;</span>
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span><span class="p">,</span> <span class="n">division</span>
-<span class="kn">import</span> <span class="nn">csv</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">sqlite3</span>
 <span class="kn">from</span> <span class="nn">os</span> <span class="k">import</span> <span class="n">path</span>
 
-<span class="n">pumps_dir</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">),</span> <span class="s1">&#39;pumps&#39;</span><span class="p">)</span>
+<span class="n">BASE_DIR</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="vm">__file__</span><span class="p">))</span>
+<span class="n">db_path</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">BASE_DIR</span><span class="p">,</span> <span class="s2">&quot;pumps.db&quot;</span><span class="p">)</span>
 
-<span class="n">available_pumps</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s1">&#39;Goulds 3657&#39;</span> <span class="p">:</span> <span class="s1">&#39;3657_1-5x2_GOULDS_3500.csv&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;Goulds 3642&#39;</span> <span class="p">:</span> <span class="s1">&#39;3642_1x1-25_GOULDS_3500.csv&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;Grunfos CM1&#39;</span> <span class="p">:</span> <span class="s1">&#39;CM1-2-A-GRUNFOS.csv&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;Goulds 25GS50&#39;</span> <span class="p">:</span> <span class="s1">&#39;25GS50-GOULDS_3500.csv&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;Goulds 35GS50&#39;</span> <span class="p">:</span> <span class="s1">&#39;35GS50-GOULDS_3500.csv&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;Goulds 75GS100CB&#39;</span> <span class="p">:</span> <span class="s1">&#39;75GS100CB-GOULDS_3500.csv&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;Grundfos 85S100-9&#39;</span><span class="p">:</span> <span class="s1">&#39;85S100-9-Grundfos_3500.csv&#39;</span>
-    <span class="p">}</span>
 <div class="viewcode-block" id="Pump"><a class="viewcode-back" href="../../code_reference.html#Water.Pump">[docs]</a><span class="k">class</span> <span class="nc">Pump</span><span class="p">:</span>
     <span class="sd">&#39;&#39;&#39;Defines Tank object to plot and/or affinitized pump curve and performance\n</span>
 
@@ -69,7 +61,11 @@
 <span class="sd">    - vfd_eff: affinitized efficiencty data</span>
 
 <span class="sd">    methods:\n</span>
-<span class="sd">    - load_pump: loads a saved pump curve from /pumps folder</span>
+<span class="sd">    - load_pump: loads a pump from the pumps database</span>
+<span class="sd">    - add_pump: adds a pump to the database</span>
+<span class="sd">    - delete_pump: deletes a pump from the database</span>
+<span class="sd">    - check_pump: check for a specific pump in the database</span>
+<span class="sd">    - available_pumps: see all pumps in the database</span>
 <span class="sd">    - affinitize: takes pump curve info and applies affinity laws to the curve</span>
 <span class="sd">        params:\n </span>
 <span class="sd">        - pump_data: flow, head or efficiency list</span>
@@ -81,59 +77,211 @@
 <span class="sd">        - tdh: system curve head as list or point</span>
 <span class="sd">        </span>
 <span class="sd">    - find_head: lookup head condition from flow input.</span>
-
 <span class="sd">    &#39;&#39;&#39;</span>     
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">flow_list</span><span class="o">=</span><span class="p">[],</span> <span class="n">head_list</span><span class="o">=</span><span class="p">[],</span> <span class="n">eff_list</span><span class="o">=</span><span class="p">[],</span> <span class="n">model</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">rpm</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">imp</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">flow</span> <span class="o">=</span> <span class="n">flow_list</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">head</span> <span class="o">=</span> <span class="n">head_list</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">eff</span> <span class="o">=</span> <span class="n">eff_list</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">model</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">rpm</span> <span class="o">=</span> <span class="n">rpm</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">impeller</span> <span class="o">=</span> <span class="n">imp</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">flow</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">head</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">eff</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bep</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mfg</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rpm</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">impeller</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fig</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ax</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">affinity_data</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">ax1</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">ax2</span> <span class="o">=</span> <span class="kc">None</span>
 
+<div class="viewcode-block" id="Pump.check_pump"><a class="viewcode-back" href="../../code_reference.html#Water.Pump.check_pump">[docs]</a>    <span class="k">def</span> <span class="nf">check_pump</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pump_model</span><span class="p">,</span> <span class="n">impeller</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;Checks database for existing pump</span>
+<span class="sd">            pump_model: dtype=string</span>
+<span class="sd">            impeller: dtype=string (default=None)&#39;&#39;&#39;</span>
 
-<div class="viewcode-block" id="Pump.load_pump"><a class="viewcode-back" href="../../code_reference.html#Water.Pump.load_pump">[docs]</a>    <span class="k">def</span> <span class="nf">load_pump</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">selection</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39;loads pump data from /pump folder included in package directory. Pump data</span>
-<span class="sd">        is in .csv format and loaded from a dictionary in class (not ideal).\n</span>
-
-<span class="sd">        available_pumps = {\n</span>
-<span class="sd">        &#39;Goulds 3657&#39; : &#39;3657_1-5X2_GOULDS_3500.csv&#39;,\n</span>
-<span class="sd">        &#39;Goulds 3642&#39; : &#39;3642_1x1-25_GOULDS_3500.csv&#39;\n</span>
-<span class="sd">        &#39;Grunfos CM1&#39; : &#39;CM1-2-A-GRUNFOS.csv&#39;,\n</span>
-<span class="sd">        &#39;Goulds 25GS50&#39; : &#39;25GS50-GOULDS_3500.csv&#39;,\n</span>
-<span class="sd">        &#39;Goulds 35GS50&#39; : &#39;35GS50-GOULDS_3500.csv&#39;,\n</span>
-<span class="sd">        &#39;Goulds 75GS100CB&#39; : &#39;75GS100CB-GOULDS_3500.csv&#39;,\n</span>
-<span class="sd">        &#39;Grundfos 85S100-9&#39;: &#39;85S100-9-Grundfos_3500.csv&#39;\n</span>
-<span class="sd">        }</span>
-
-<span class="sd">        #TODO make this more user friendly so the class source code does not have to be changed every</span>
-<span class="sd">        time a pump is added to /pump folder.</span>
-
-<span class="sd">        &#39;&#39;&#39;</span>
-        <span class="n">f</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="n">h</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="n">ef</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="n">file_path</span> <span class="o">=</span> <span class="n">pumps_dir</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="n">available_pumps</span><span class="p">[</span><span class="n">selection</span><span class="p">]</span>
-        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">csv_file</span><span class="p">:</span>
-            <span class="n">csv_reader</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">reader</span><span class="p">(</span><span class="n">csv_file</span><span class="p">)</span>
-            <span class="nb">next</span><span class="p">(</span><span class="n">csv_reader</span><span class="p">)</span>
+        <span class="n">conn</span> <span class="o">=</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">db_path</span><span class="p">)</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+        <span class="n">existing_params</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;model&#39;</span> <span class="p">:</span> <span class="n">pump_model</span><span class="p">,</span> <span class="s1">&#39;impeller&#39;</span> <span class="p">:</span> <span class="n">impeller</span><span class="p">}</span>
+        
+        <span class="k">if</span> <span class="n">impeller</span><span class="p">:</span>
+            <span class="n">sqlquery</span><span class="o">=</span><span class="s1">&#39;&#39;&#39;SELECT * </span>
+<span class="s1">                        FROM </span>
+<span class="s1">                            pumps </span>
+<span class="s1">                        WHERE model=:model AND impeller=:impeller&#39;&#39;&#39;</span>   
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">sqlquery</span><span class="o">=</span><span class="s1">&#39;&#39;&#39;SELECT * </span>
+<span class="s1">                        FROM </span>
+<span class="s1">                            pumps </span>
+<span class="s1">                        WHERE model=:model&#39;&#39;&#39;</span> 
     
-            <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">csv_reader</span><span class="p">:</span>
-                <span class="k">if</span> <span class="n">line</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">line</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">rpm</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">impeller</span> <span class="o">=</span> <span class="n">line</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
-                <span class="n">f</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">3</span><span class="p">]))</span>
-                <span class="n">h</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">4</span><span class="p">]))</span>
-                <span class="n">ef</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">5</span><span class="p">]))</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">flow</span> <span class="o">=</span> <span class="n">f</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">head</span> <span class="o">=</span> <span class="n">h</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">eff</span> <span class="o">=</span> <span class="n">ef</span></div>
+        <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">sqlquery</span><span class="p">,</span> <span class="n">existing_params</span><span class="p">)</span>
+        <span class="n">exists</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()</span>        
+        <span class="n">conn</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+        <span class="n">conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    
+        <span class="k">return</span> <span class="n">exists</span></div>
 
+<div class="viewcode-block" id="Pump.add_pump"><a class="viewcode-back" href="../../code_reference.html#Water.Pump.add_pump">[docs]</a>    <span class="k">def</span> <span class="nf">add_pump</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;Adds pump to pumps.db</span>
+<span class="sd">            Use dictionary to specify parameters</span>
+<span class="sd">            kwargs = </span>
+<span class="sd">                    {&#39;model&#39; : dtype=string model name,</span>
+<span class="sd">                     &#39;mfg&#39; : dtype=string manufacturer,</span>
+<span class="sd">                     &#39;flow&#39; : dtype=list length=8,</span>
+<span class="sd">                     &#39;head&#39; : dtype=list length=8,</span>
+<span class="sd">                     &#39;eff&#39; : dtype=list length=8,</span>
+<span class="sd">                     &#39;bep&#39; : dtype=list [flow, head] of best efficiency point,</span>
+<span class="sd">                     &#39;rpm&#39; : dtype=int motor rpm,</span>
+<span class="sd">                     &#39;impeller&#39; : dtype=float impeller diameter} </span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">flow</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;flow&#39;</span><span class="p">,</span> <span class="p">[])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">head</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;head&#39;</span><span class="p">,</span> <span class="p">[])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">eff</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;eff&#39;</span><span class="p">,</span> <span class="p">[])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bep</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;bep&#39;</span><span class="p">,</span> <span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;model&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mfg</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;mfg&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rpm</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;rpm&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">impeller</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;impeller&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+        <span class="n">conn</span> <span class="o">=</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">db_path</span><span class="p">)</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+        <span class="c1"># check if pump currently exists in database</span>
+        <span class="n">exists</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_pump</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">impeller</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">exists</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">sqlinsert</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39;INSERT INTO </span>
+<span class="s1">                            pumps(</span>
+<span class="s1">                                manufacturer,</span>
+<span class="s1">                                model,</span>
+<span class="s1">                                maxFlow,</span>
+<span class="s1">                                minFlow,</span>
+<span class="s1">                                bestFlow,</span>
+<span class="s1">                                maxHead,</span>
+<span class="s1">                                minHead,</span>
+<span class="s1">                                bestHead,</span>
+<span class="s1">                                bestEff,</span>
+<span class="s1">                                rmp,</span>
+<span class="s1">                                impeller,</span>
+<span class="s1">                                flowArray,</span>
+<span class="s1">                                headArray,</span>
+<span class="s1">                                effArray) </span>
+<span class="s1">                            values(</span>
+<span class="s1">                                :mfg,</span>
+<span class="s1">                                :model,</span>
+<span class="s1">                                :maxFlow,</span>
+<span class="s1">                                :minFlow,</span>
+<span class="s1">                                :bestFlow,</span>
+<span class="s1">                                :maxHead,</span>
+<span class="s1">                                :minHead,</span>
+<span class="s1">                                :bestHead,</span>
+<span class="s1">                                :bestEff,</span>
+<span class="s1">                                :rpm,</span>
+<span class="s1">                                :impeller,</span>
+<span class="s1">                                :flowArray,</span>
+<span class="s1">                                :headArray,</span>
+<span class="s1">                                :effArray)&#39;&#39;&#39;</span>
+
+            <span class="n">params</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;mfg&#39;</span> <span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">mfg</span><span class="p">,</span>
+                    <span class="s1">&#39;model&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span>
+                    <span class="s1">&#39;maxFlow&#39;</span> <span class="p">:</span> <span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">flow</span><span class="p">),</span>
+                    <span class="s1">&#39;minFlow&#39;</span> <span class="p">:</span> <span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">flow</span><span class="p">),</span>
+                    <span class="s1">&#39;bestFlow&#39;</span> <span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">bep</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                    <span class="s1">&#39;maxHead&#39;</span> <span class="p">:</span> <span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">head</span><span class="p">),</span>
+                    <span class="s1">&#39;minHead&#39;</span> <span class="p">:</span> <span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">head</span><span class="p">),</span>
+                    <span class="s1">&#39;bestHead&#39;</span> <span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">bep</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                    <span class="s1">&#39;bestEff&#39;</span><span class="p">:</span> <span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">eff</span><span class="p">),</span>    
+                    <span class="s1">&#39;rpm&#39;</span> <span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">rpm</span><span class="p">,</span>
+                    <span class="s1">&#39;impeller&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">impeller</span><span class="p">,</span>
+                    <span class="s1">&#39;flowArray&#39;</span> <span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">flow</span><span class="p">),</span>
+                    <span class="s1">&#39;headArray&#39;</span> <span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">head</span><span class="p">),</span>
+                    <span class="s1">&#39;effArray&#39;</span> <span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">eff</span><span class="p">)}</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Pump added to database&#39;</span><span class="p">)</span>
+            <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">sqlinsert</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
+            <span class="n">conn</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+            <span class="n">conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Pump Model exists in the database, check below for specific parameters:&#39;</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">each_pump</span> <span class="ow">in</span> <span class="n">exists</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">each_pump</span><span class="p">[:</span><span class="mi">12</span><span class="p">])</span></div>
+        
+<div class="viewcode-block" id="Pump.available_pumps"><a class="viewcode-back" href="../../code_reference.html#Water.Pump.available_pumps">[docs]</a>    <span class="k">def</span> <span class="nf">available_pumps</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;returns pump table from pumps.db&#39;&#39;&#39;</span>
+        <span class="n">conn</span> <span class="o">=</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">db_path</span><span class="p">)</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+        <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s1">&#39;&#39;&#39;SELECT</span>
+<span class="s1">                        pumpID,</span>
+<span class="s1">                        manufacturer,</span>
+<span class="s1">                        model,</span>
+<span class="s1">                        bestFlow,</span>
+<span class="s1">                        bestHead</span>
+<span class="s1">                     FROM</span>
+<span class="s1">                        pumps&#39;&#39;&#39;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">eachPump</span> <span class="ow">in</span> <span class="n">c</span><span class="o">.</span><span class="n">fetchall</span><span class="p">():</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">eachPump</span><span class="p">)</span>
+        <span class="n">conn</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+        <span class="n">conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+        
+<div class="viewcode-block" id="Pump.load_pump"><a class="viewcode-back" href="../../code_reference.html#Water.Pump.load_pump">[docs]</a>    <span class="k">def</span> <span class="nf">load_pump</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mfg</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">impeller</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;loads pump from pumps.db</span>
+<span class="sd">            Parameters</span>
+<span class="sd">            ----------</span>
+<span class="sd">            </span>
+<span class="sd">            mfg: pump manufacturer dtype=string</span>
+<span class="sd">            model: pump model dtype=string</span>
+<span class="sd">            impeller: pump impeller size dtype=string (default=None)&#39;&#39;&#39;</span>
+        <span class="n">multiples</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_pump</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">impeller</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">multiples</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">multiples</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Pump does not exist in database.&#39;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">multiples</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Multiple pump models found in database, please include impeller diameter to select pump.&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">conn</span> <span class="o">=</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">db_path</span><span class="p">)</span>
+            <span class="n">c</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+            <span class="n">params</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;mfg&#39;</span> <span class="p">:</span> <span class="n">mfg</span><span class="p">,</span> <span class="s1">&#39;model&#39;</span> <span class="p">:</span> <span class="n">model</span><span class="p">,</span> <span class="s1">&#39;impeller&#39;</span> <span class="p">:</span> <span class="n">impeller</span><span class="p">}</span>
+            <span class="k">if</span> <span class="n">impeller</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">sqlquery</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39;SELECT * FROM pumps</span>
+<span class="s1">                              WHERE manufacturer=:mfg AND model=:model;</span>
+<span class="s1">                           &#39;&#39;&#39;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">sqlquery</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39;SELECT * FROM pumps</span>
+<span class="s1">                              WHERE manufacturer=:mfg AND model=:model AND impeller=:impeller</span>
+<span class="s1">                            &#39;&#39;&#39;</span>
+            <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">sqlquery</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
+
+            <span class="n">pump</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">pump</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">pump</span> <span class="o">=</span> <span class="n">pump</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">mfg</span> <span class="o">=</span> <span class="n">pump</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">pump</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">bep</span> <span class="o">=</span> <span class="p">(</span><span class="n">pump</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span> <span class="n">pump</span><span class="p">[</span><span class="mi">8</span><span class="p">])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">rpm</span> <span class="o">=</span> <span class="n">pump</span><span class="p">[</span><span class="mi">10</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">impeller</span> <span class="o">=</span> <span class="n">pump</span><span class="p">[</span><span class="mi">11</span><span class="p">]</span>
+                <span class="n">fstring</span> <span class="o">=</span> <span class="n">pump</span><span class="p">[</span><span class="mi">12</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s1">&#39;[]&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)</span>
+                <span class="n">hstring</span> <span class="o">=</span> <span class="n">pump</span><span class="p">[</span><span class="mi">13</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s1">&#39;[]&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)</span>
+                <span class="n">estring</span> <span class="o">=</span> <span class="n">pump</span><span class="p">[</span><span class="mi">14</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s1">&#39;[]&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)</span>
+
+                <span class="k">for</span> <span class="n">f</span><span class="p">,</span><span class="n">h</span><span class="p">,</span><span class="n">e</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">fstring</span><span class="p">,</span> <span class="n">hstring</span><span class="p">,</span> <span class="n">estring</span><span class="p">):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">flow</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">f</span><span class="p">))</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">head</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">h</span><span class="p">))</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">eff</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Pump loaded from database&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Pump.delete_pump"><a class="viewcode-back" href="../../code_reference.html#Water.Pump.delete_pump">[docs]</a>    <span class="k">def</span> <span class="nf">delete_pump</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pump_id</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;deletes a pump record from the database</span>
+<span class="sd">            enter pump_id of pump to be deleted &#39;&#39;&#39;</span>
+
+        <span class="n">conn</span> <span class="o">=</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">db_path</span><span class="p">)</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;pumpID&#39;</span> <span class="p">:</span> <span class="n">pump_id</span><span class="p">}</span>
+        <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s1">&#39;&#39;&#39;SELECT * FROM pumps</span>
+<span class="s1">                     WHERE pumpID=:pumpID&#39;&#39;&#39;</span><span class="p">,</span><span class="n">params</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">fetchall</span><span class="p">())</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s1">&#39;&#39;&#39;DELETE FROM pumps</span>
+<span class="s1">                         WHERE pumpID=:pumpID&#39;&#39;&#39;</span><span class="p">,</span><span class="n">params</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;pumpID&#39;</span><span class="p">,</span> <span class="n">pump_id</span><span class="p">,</span> <span class="s1">&#39;was deleted from the database.&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;No pumps with pumpID&#39;</span><span class="p">,</span> <span class="n">pump_id</span><span class="p">,</span> <span class="s1">&#39;was found in the database&#39;</span><span class="p">)</span>
+        <span class="n">conn</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+        <span class="n">conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+        
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">vfd_flow</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39; returns a numpy array of affinitized flows&#39;&#39;&#39;</span>
@@ -158,7 +306,6 @@
 <span class="sd">        - 30 hz</span>
 <span class="sd">        - 20 hz</span>
 <span class="sd">        - 10 hz</span>
-
 <span class="sd">        &#39;&#39;&#39;</span>
         <span class="n">percent_speed</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">60</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">6</span><span class="p">)</span><span class="o">/</span><span class="mi">60</span><span class="p">)</span><span class="o">**</span><span class="n">pwr</span>
         
@@ -167,13 +314,17 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">affinity_data</span></div>
 
 <div class="viewcode-block" id="Pump.plot_curve"><a class="viewcode-back" href="../../code_reference.html#Water.Pump.plot_curve">[docs]</a>    <span class="k">def</span> <span class="nf">plot_curve</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target_flow</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tdh</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vfd</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">eff</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39;returns a matplotlib plot of the pump curve.\n</span>
-<span class="sd">        Default is to plot affinitized curves with full speed curve. </span>
-<span class="sd">        User has option to add system curve and efficiency curve</span>
+        <span class="sd">&#39;&#39;&#39;returns a matplotlib plot of the pump curve.</span>
+<span class="sd">            Default is to plot affinitized curves with full speed curve. </span>
+<span class="sd">            User has option to add system curve and efficiency curve</span>
 <span class="sd">        &#39;&#39;&#39;</span>
-        <span class="n">title_str</span> <span class="o">=</span> <span class="s1">&#39;Pump: &#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">+</span> <span class="s1">&#39; - &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rpm</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; RPM - &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">impeller</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;&quot; impeller&#39;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">fig</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">impeller</span><span class="p">:</span>
+            <span class="n">title_str</span> <span class="o">=</span> <span class="s1">&#39;Pump: &#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">+</span> <span class="s1">&#39; - &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rpm</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; RPM - &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">impeller</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;&quot; impeller&#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">title_str</span> <span class="o">=</span> <span class="s1">&#39;Pump: &#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">+</span> <span class="s1">&#39; - &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rpm</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; RPM&#39;</span>
 
+        <span class="bp">self</span><span class="o">.</span><span class="n">fig</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mf">4.95</span><span class="p">))</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s1">&#39;seaborn-whitegrid&#39;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">eff</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot2grid</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span> <span class="n">rowspan</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot2grid</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">))</span>
@@ -206,8 +357,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;head (ft)&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">fig</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fig</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>   
+        <span class="n">plt</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="Pump.find_head"><a class="viewcode-back" href="../../code_reference.html#Water.Pump.find_head">[docs]</a>    <span class="k">def</span> <span class="nf">find_head</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">flow</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39; Returns head value from pump curve based on flow input.</span>
@@ -224,19 +375,15 @@
 
         <span class="k">return</span> <span class="n">head</span></div></div>
 
-
+<span class="c1">########################################</span>
 <span class="k">if</span> <span class="vm">__name__</span><span class="o">==</span><span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
     <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;test script:&#39;</span><span class="p">)</span>
 
     <span class="n">pump</span> <span class="o">=</span> <span class="n">Pump</span><span class="p">()</span>
     <span class="n">pump2</span> <span class="o">=</span> <span class="n">Pump</span><span class="p">()</span>
-    <span class="n">pump</span><span class="o">.</span><span class="n">load_pump</span><span class="p">(</span><span class="s1">&#39;Goulds 3657&#39;</span><span class="p">)</span>
-    <span class="n">pump2</span><span class="o">.</span><span class="n">load_pump</span><span class="p">(</span><span class="s1">&#39;Grunfos CM1&#39;</span><span class="p">)</span>
-    <span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">    for obs in pump.vfd_eff:</span>
-<span class="sd">        for data in obs:</span>
-<span class="sd">            print(data)</span>
-<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">pump</span><span class="o">.</span><span class="n">load_pump</span><span class="p">(</span><span class="s1">&#39;Goulds&#39;</span><span class="p">,</span> <span class="s1">&#39;3657 1.5x2 -6: 3SS&#39;</span><span class="p">)</span>
+    <span class="n">pump2</span><span class="o">.</span><span class="n">load_pump</span><span class="p">(</span><span class="s1">&#39;Grundfos&#39;</span><span class="p">,</span> <span class="s1">&#39;CM10-2-A-S-G-V-AQQV&#39;</span><span class="p">)</span>
+    
     <span class="n">system_flow</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">150</span><span class="p">,</span> <span class="mi">30</span><span class="p">)</span>
     <span class="n">system_head</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">flow</span> <span class="ow">in</span> <span class="n">system_flow</span><span class="p">:</span>
@@ -247,9 +394,39 @@
 
     <span class="n">pump</span><span class="o">.</span><span class="n">plot_curve</span><span class="p">(</span><span class="n">system_flow</span><span class="p">,</span> <span class="n">system_head</span><span class="p">,</span> <span class="n">vfd</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">eff</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">pump2</span><span class="o">.</span><span class="n">plot_curve</span><span class="p">(</span><span class="n">design_x</span><span class="p">,</span> <span class="n">design_y</span><span class="p">,</span> <span class="n">eff</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+     
+    <span class="c1">## example of pump database use</span>
 
-    <span class="c1"># TODO  Program halts after plt.show. </span>
-    <span class="c1"># Need to figure out howto show plots while running program.</span>
+    <span class="n">new_pump_data</span> <span class="o">=</span> <span class="p">{</span>
+                    <span class="s1">&#39;model&#39;</span> <span class="p">:</span> <span class="s1">&#39;test pump&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;mfg&#39;</span> <span class="p">:</span> <span class="s1">&#39;Acme&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;flow&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">8</span><span class="p">],</span>
+                    <span class="s1">&#39;head&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="mi">8</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span>
+                    <span class="s1">&#39;eff&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="o">.</span><span class="mi">1</span><span class="p">,</span><span class="o">.</span><span class="mi">2</span><span class="p">,</span><span class="o">.</span><span class="mi">3</span><span class="p">,</span><span class="o">.</span><span class="mi">4</span><span class="p">,</span><span class="o">.</span><span class="mi">5</span><span class="p">,</span><span class="o">.</span><span class="mi">6</span><span class="p">,</span><span class="o">.</span><span class="mi">7</span><span class="p">,</span><span class="o">.</span><span class="mi">8</span><span class="p">],</span>
+                    <span class="s1">&#39;bep&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span><span class="mi">5</span><span class="p">],</span>
+                    <span class="s1">&#39;rpm&#39;</span> <span class="p">:</span> <span class="mi">1800</span><span class="p">,</span>
+                    <span class="s1">&#39;impeller&#39;</span> <span class="p">:</span> <span class="s1">&#39;5.5&#39;</span>
+                    <span class="p">}</span>
+
+    <span class="n">pump</span><span class="o">.</span><span class="n">add_pump</span><span class="p">(</span><span class="o">**</span><span class="n">new_pump_data</span><span class="p">)</span>
+    <span class="n">pump</span><span class="o">.</span><span class="n">available_pumps</span><span class="p">()</span>
+
+    <span class="n">conn</span> <span class="o">=</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">db_path</span><span class="p">)</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+    <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s1">&#39;&#39;&#39;Select pumpID</span>
+<span class="s1">                 From</span>
+<span class="s1">                    pumps</span>
+<span class="s1">                 Where</span>
+<span class="s1">                    model=&#39;test pump&#39;</span>
+<span class="s1">             &#39;&#39;&#39;</span><span class="p">)</span>
+    <span class="n">pump_id</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()</span>    
+    <span class="n">pump</span><span class="o">.</span><span class="n">delete_pump</span><span class="p">(</span><span class="n">pump_id</span><span class="o">=</span><span class="n">pump_id</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">pump</span><span class="o">.</span><span class="n">available_pumps</span><span class="p">()</span>
+
+    <span class="n">conn</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+    <span class="n">conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 </pre></div>
 
           </div>
