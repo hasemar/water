@@ -11,11 +11,15 @@ class Tank:
             'name' : 'string',
             'diameter' : int/float,
             'height' : int/float (default 0),
-            'length' : int/float (default 0)
+            'length' : int/float (default 0),
+            'width' : int/float (default 0)
             'freeboard' : int/float (default 0),
             'deadstorage' : int/float (default 0),
             'elevation' : int/float (default 0)
-            'shape' : 'string' (default vertical)
+            'shape' : 'string' (default vertical),
+            'equalizing' : int/float (default 0),
+            'standby' : int/float (default 0),
+            'fire' : int/float (default 0)
             }
 
         tank_1 = Tank(\**tank_data)
@@ -28,19 +32,29 @@ class Tank:
     
     def __init__(self, **kwargs):
         self.name = kwargs.get('name')
-        self.diameter = kwargs.get('diameter')
-        self.height = kwargs.get('height', 0)
-        self.freeboard = kwargs.get('freeboard', 0)
-        self.deadstorage = kwargs.get('deadstorage', 0)
-        self.elevation = kwargs.get('elevation', 0)
-        self.shape = kwargs.get('shape', 'vertical')
-        self.length = kwargs.get('length', 0)
+        self.diameter = kwargs.get('diameter')              # ft
+        self.height = kwargs.get('height', 0)               # ft
+        self.freeboard = kwargs.get('freeboard', 0)         # ft
+        self.deadstorage = kwargs.get('deadstorage', 0)     # ft
+        self.elevation = kwargs.get('elevation', 0)         # ft
+        self.shape = kwargs.get('shape', 'vertical')        # 'vertical' 'horizontal' 'box'
+        self.length = kwargs.get('length', 0)               # ft
+        self.width = kwargs.get('width', 0)                 # ft
+        self.equalizing = kwargs.get('equalizing', 0)       # ft
+        self.standby = kwargs.get('standby', 0)             # ft 
+        self.fire = kwargs.get('fireflow', 0)           # ft
 
     @property
     def area(self):
         '''returns cross-sectional area of tank'''
-        r = self.diameter / 2
-        return pi * r*r 
+        if self.shape == 'vertical' or self.shape == 'horizontal':
+            a = pi * self.diameter**2 / 4
+        elif self.shape == 'box':
+            a = self.width * self.length
+        else:
+            print('tank shape must be vertical, horizontal or box')
+            a = None
+        return a
     @property
     def vol(self):
         '''returns dry volume of tank'''
@@ -117,6 +131,26 @@ class Tank:
                     self.shape,
                     self.length,
                     self.diameter
+                    )
+        elif self.shape == 'box':
+            info = '''
+            {3:} \r\n
+            Base Elevation:------------- {4:} ft
+            Orientation:---------------- {5:}
+            Tank Length:---------------- {6:} ft
+            Tank Width:----------------- {7:} ft
+            Tank Cross-Sectional Area:-- {0:.1f} ft^2 
+            Total Volume:--------------- {1:.1f} gal
+            Effective Volume:----------- {2:.1f} gal
+            '''.format(
+                    self.area,
+                    self.vol,
+                    self.useable,
+                    self.name,
+                    self.elevation,
+                    self.shape,
+                    self.length,
+                    self.width
                     )
         else:
              info = '''
