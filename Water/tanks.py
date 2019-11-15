@@ -41,7 +41,7 @@ class Tank:
         self.shape = kwargs.get('shape', 'vertical')        # 'vertical' 'horizontal' 'box'
         self.length = kwargs.get('length', 0)               # ft
         self.width = kwargs.get('width', 0)                 # ft
-        self.operational = kwargs.get('operational' 0)      # ft
+        self.operational = kwargs.get('operational', 0)      # ft
         self.equalizing = kwargs.get('equalizing', 0)       # ft
         self.standby = kwargs.get('standby', 0)             # ft 
         self.fire = kwargs.get('fireflow', 0)           # ft
