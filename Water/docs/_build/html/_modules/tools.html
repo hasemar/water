@@ -1,0 +1,579 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>tools &#8212; Water 1.0.0 documentation</title>
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Water 1.0.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for tools</h1><div class="highlight"><pre>
+<span></span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">Tools to calculate water system</span>
+<span class="sd">design aspects</span>
+<span class="sd">&#39;&#39;&#39;</span>
+
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span><span class="p">,</span> <span class="n">division</span>
+<span class="kn">from</span> <span class="nn">math</span> <span class="k">import</span> <span class="n">pi</span><span class="p">,</span> <span class="n">acos</span><span class="p">,</span> <span class="n">sqrt</span><span class="p">,</span> <span class="n">ceil</span>
+
+<div class="viewcode-block" id="coeffs"><a class="viewcode-back" href="../code_reference.html#tools.coeffs">[docs]</a><span class="k">def</span> <span class="nf">coeffs</span><span class="p">(</span><span class="n">num_ERUs</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;assigns C and F coefficients from DOH manual&#39;&#39;&#39;</span>
+    <span class="k">if</span> <span class="n">num_ERUs</span> <span class="o">&lt;</span> <span class="mi">51</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mf">3.0</span><span class="p">,</span> <span class="mi">0</span>
+    <span class="k">elif</span> <span class="n">num_ERUs</span> <span class="o">&gt;</span> <span class="mi">50</span> <span class="ow">and</span> <span class="n">num_ERUs</span> <span class="o">&lt;</span> <span class="mi">101</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mf">2.5</span><span class="p">,</span> <span class="mi">25</span>
+    <span class="k">elif</span> <span class="n">num_ERUs</span> <span class="o">&gt;</span> <span class="mi">100</span> <span class="ow">and</span> <span class="n">num_ERUs</span> <span class="o">&lt;</span> <span class="mi">251</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mi">75</span>
+    <span class="k">elif</span> <span class="n">num_ERUs</span> <span class="o">&gt;</span> <span class="mi">250</span> <span class="ow">and</span> <span class="n">num_ERUs</span> <span class="o">&lt;</span> <span class="mi">501</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mf">1.8</span><span class="p">,</span> <span class="mi">125</span>
+    <span class="k">elif</span> <span class="n">num_ERUs</span> <span class="o">&gt;</span> <span class="mi">500</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mf">1.6</span><span class="p">,</span> <span class="mi">225</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Number of ERU&#39;s must be a real number&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="PHD"><a class="viewcode-back" href="../code_reference.html#tools.PHD">[docs]</a><span class="k">def</span> <span class="nf">PHD</span><span class="p">(</span><span class="n">MDD</span><span class="p">,</span> <span class="n">num_ERUs</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;Peak Hour Demand:</span>
+<span class="sd">        Enter Max Day Demand and Number of ERU&#39;s</span>
+<span class="sd">        Also Returns Average Hour and Lowest Hour Demand</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="n">C</span><span class="p">,</span> <span class="n">F</span> <span class="o">=</span> <span class="n">coeffs</span><span class="p">(</span><span class="n">num_ERUs</span><span class="p">)</span>
+    <span class="n">phd</span> <span class="o">=</span> <span class="p">(</span><span class="n">MDD</span><span class="o">/</span><span class="mi">1440</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">C</span><span class="o">*</span><span class="n">num_ERUs</span> <span class="o">+</span> <span class="n">F</span><span class="p">)</span> <span class="o">+</span> <span class="mi">18</span>
+    <span class="n">ahd</span> <span class="o">=</span> <span class="n">phd</span><span class="o">/</span><span class="mf">1.74</span>
+    <span class="n">lhd</span> <span class="o">=</span> <span class="n">ahd</span> <span class="o">*</span> <span class="mf">0.22</span>
+
+    <span class="k">return</span> <span class="p">(</span><span class="n">phd</span><span class="p">,</span> <span class="n">ahd</span><span class="p">,</span> <span class="n">lhd</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="equalizing_storage"><a class="viewcode-back" href="../code_reference.html#tools.equalizing_storage">[docs]</a><span class="k">def</span> <span class="nf">equalizing_storage</span><span class="p">(</span><span class="n">PHD</span><span class="p">,</span> <span class="n">Qs</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;Equalizing Storage Calc from DOH design manual&#39;&#39;&#39;</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">PHD</span><span class="o">-</span><span class="n">Qs</span><span class="p">)</span><span class="o">*</span><span class="mi">150</span></div>
+
+<div class="viewcode-block" id="calc_hp"><a class="viewcode-back" href="../code_reference.html#tools.calc_hp">[docs]</a><span class="k">def</span> <span class="nf">calc_hp</span><span class="p">(</span><span class="n">flow_rate</span><span class="p">,</span> <span class="n">head</span><span class="p">,</span> <span class="n">pump_eff</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span> <span class="n">motor_eff</span><span class="o">=</span><span class="mf">0.9</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;Horsepower Calculations:</span>
+<span class="sd">        Returns Water HP, Break HP and Total HP</span>
+<span class="sd">        Enter flow and head in gpm and feet H20, and efficiencies</span>
+<span class="sd">        Power units in horsepower</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">water_hp</span> <span class="o">=</span> <span class="p">(</span><span class="n">flow_rate</span><span class="o">*</span><span class="n">head</span><span class="p">)</span><span class="o">/</span><span class="mi">3960</span>
+    <span class="n">break_hp</span> <span class="o">=</span> <span class="n">water_hp</span><span class="o">/</span><span class="n">pump_eff</span>
+    <span class="n">input_hp</span> <span class="o">=</span> <span class="n">break_hp</span><span class="o">/</span><span class="n">motor_eff</span>
+
+    <span class="k">return</span> <span class="p">(</span><span class="n">water_hp</span><span class="p">,</span> <span class="n">break_hp</span><span class="p">,</span> <span class="n">input_hp</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="velocity"><a class="viewcode-back" href="../code_reference.html#tools.velocity">[docs]</a><span class="k">def</span> <span class="nf">velocity</span><span class="p">(</span><span class="n">flow</span><span class="p">,</span> <span class="n">pipe_diam</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;Velocity Calculations:</span>
+<span class="sd">        Enter flow in gpm and pipe_diameter in inches</span>
+<span class="sd">        Returns velocity in FPS</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">V</span> <span class="o">=</span> <span class="mf">0.4085</span><span class="o">*</span><span class="n">flow</span><span class="o">/</span><span class="p">(</span><span class="n">pipe_diam</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">V</span></div>
+
+<div class="viewcode-block" id="flow"><a class="viewcode-back" href="../code_reference.html#tools.flow">[docs]</a><span class="k">def</span> <span class="nf">flow</span><span class="p">(</span><span class="n">velocity</span><span class="p">,</span> <span class="n">pipe_diam</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;Flow Calculation:</span>
+<span class="sd">        Enter velocity in fps and pipe_diam in inches</span>
+<span class="sd">        Returns Flow in gpm</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">Q</span> <span class="o">=</span> <span class="n">velocity</span> <span class="o">*</span> <span class="n">pipe_diam</span><span class="o">**</span><span class="mi">2</span><span class="o">/</span><span class="mf">0.4085</span>
+
+    <span class="k">return</span> <span class="n">Q</span></div>
+
+<div class="viewcode-block" id="gpm2cuftps"><a class="viewcode-back" href="../code_reference.html#tools.gpm2cuftps">[docs]</a><span class="k">def</span> <span class="nf">gpm2cuftps</span><span class="p">(</span><span class="n">gpm</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39; gpm to cuft per sec conversion &#39;&#39;&#39;</span>
+    <span class="k">return</span> <span class="n">gpm</span> <span class="o">*</span> <span class="mf">0.002228</span></div>
+<div class="viewcode-block" id="cuftps2gpm"><a class="viewcode-back" href="../code_reference.html#tools.cuftps2gpm">[docs]</a><span class="k">def</span> <span class="nf">cuftps2gpm</span><span class="p">(</span><span class="n">cuftps</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39; cuft per sec to gpm conversion&#39;&#39;&#39;</span>
+    <span class="k">return</span> <span class="n">cuftps</span> <span class="o">*</span> <span class="mf">448.831169</span></div>
+
+<div class="viewcode-block" id="pipeDiameter"><a class="viewcode-back" href="../code_reference.html#tools.pipeDiameter">[docs]</a><span class="k">def</span> <span class="nf">pipeDiameter</span><span class="p">(</span><span class="n">flow</span><span class="p">,</span> <span class="n">velocity</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;pipe diameter calculation:</span>
+<span class="sd">        Enter velocity in fps and flow in gpm</span>
+<span class="sd">        Reutrns diameter in inches</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">pipe_diam</span> <span class="o">=</span> <span class="p">(</span><span class="n">flow</span><span class="o">*</span><span class="mf">0.4085</span><span class="o">/</span><span class="n">velocity</span><span class="p">)</span><span class="o">**</span><span class="mf">0.5</span>
+
+    <span class="k">return</span> <span class="n">pipe_diam</span></div>
+
+<div class="viewcode-block" id="reynolds"><a class="viewcode-back" href="../code_reference.html#tools.reynolds">[docs]</a><span class="k">def</span> <span class="nf">reynolds</span><span class="p">(</span><span class="n">pipe_diam</span><span class="p">,</span> <span class="n">flow</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vel</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">viscocity</span><span class="o">=</span><span class="mf">1.3081</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;Reynolds Number Calculation:</span>
+<span class="sd">        Enter flow (gpm), pipe diameter(inches)</span>
+<span class="sd">        viscosity in cSt = 1.3081 (default)</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">if</span> <span class="n">flow</span><span class="p">:</span>
+        <span class="n">re</span> <span class="o">=</span> <span class="p">(</span><span class="n">flow</span><span class="o">*</span><span class="n">pipe_diam</span><span class="o">/</span><span class="mi">12</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">viscocity</span> <span class="o">*</span> <span class="n">pi</span> <span class="o">*</span> <span class="n">pipe_diam</span><span class="o">**</span><span class="mi">2</span><span class="o">/</span><span class="mi">4</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">vel</span><span class="p">:</span>
+        <span class="n">re</span> <span class="o">=</span> <span class="p">(</span><span class="n">pipe_diam</span><span class="o">/</span><span class="mi">12</span><span class="p">)</span><span class="o">*</span><span class="n">vel</span><span class="o">/</span><span class="n">viscocity</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Must enter flow or velocity&#39;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">re</span> <span class="o">&gt;</span> <span class="mi">2300</span><span class="p">:</span>
+        <span class="n">laminar</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">laminar</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="k">return</span> <span class="n">re</span><span class="p">,</span> <span class="n">laminar</span></div>
+
+<div class="viewcode-block" id="volume_cyl"><a class="viewcode-back" href="../code_reference.html#tools.volume_cyl">[docs]</a><span class="k">def</span> <span class="nf">volume_cyl</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">h</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39; volume of a cylinder using diameter</span>
+<span class="sd">        returns volume consistent with inputs</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">pi</span><span class="o">*</span><span class="n">d</span><span class="o">**</span><span class="mi">2</span> <span class="o">/</span> <span class="mi">4</span><span class="p">)</span><span class="o">*</span><span class="n">h</span></div>
+
+<div class="viewcode-block" id="volume_box"><a class="viewcode-back" href="../code_reference.html#tools.volume_box">[docs]</a><span class="k">def</span> <span class="nf">volume_box</span><span class="p">(</span><span class="n">length</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39; volume of a box</span>
+<span class="sd">        returns volume in units consistent with inputs</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">return</span> <span class="n">length</span><span class="o">*</span><span class="n">width</span><span class="o">*</span><span class="n">height</span></div>
+
+<div class="viewcode-block" id="cuft2gal"><a class="viewcode-back" href="../code_reference.html#tools.cuft2gal">[docs]</a><span class="k">def</span> <span class="nf">cuft2gal</span><span class="p">(</span><span class="n">cubic_feet</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39; cubic feet to gallon conversion&#39;&#39;&#39;</span>
+    <span class="k">return</span> <span class="n">cubic_feet</span><span class="o">*</span><span class="mf">7.4805</span></div>
+
+<div class="viewcode-block" id="gal2cuft"><a class="viewcode-back" href="../code_reference.html#tools.gal2cuft">[docs]</a><span class="k">def</span> <span class="nf">gal2cuft</span><span class="p">(</span><span class="n">gallons</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39; gallon to cubic feet conversion&#39;&#39;&#39;</span>
+    <span class="k">return</span> <span class="n">gallons</span><span class="o">/</span><span class="mf">7.4805</span></div>
+
+<div class="viewcode-block" id="gal2acft"><a class="viewcode-back" href="../code_reference.html#tools.gal2acft">[docs]</a><span class="k">def</span> <span class="nf">gal2acft</span><span class="p">(</span><span class="n">gallons</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39; convert gallons to acre-feet &#39;&#39;&#39;</span>
+    <span class="k">return</span> <span class="n">gallons</span><span class="o">/</span><span class="mi">325851</span></div>
+
+<div class="viewcode-block" id="acft2gal"><a class="viewcode-back" href="../code_reference.html#tools.acft2gal">[docs]</a><span class="k">def</span> <span class="nf">acft2gal</span><span class="p">(</span><span class="n">acft</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39; convert acre-feet to gallons &#39;&#39;&#39;</span>
+    <span class="k">return</span> <span class="n">acft</span> <span class="o">*</span> <span class="mi">325851</span></div>
+
+<div class="viewcode-block" id="cuin2gal"><a class="viewcode-back" href="../code_reference.html#tools.cuin2gal">[docs]</a><span class="k">def</span> <span class="nf">cuin2gal</span><span class="p">(</span><span class="n">cubic_inches</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39; convert cubic inches to gallons &#39;&#39;&#39;</span>
+    <span class="k">return</span> <span class="n">cubic_inches</span><span class="o">/</span><span class="mi">231</span></div>
+
+<div class="viewcode-block" id="gal2cuin"><a class="viewcode-back" href="../code_reference.html#tools.gal2cuin">[docs]</a><span class="k">def</span> <span class="nf">gal2cuin</span><span class="p">(</span><span class="n">gallons</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39; converts gallons to cubic inches &#39;&#39;&#39;</span>
+    <span class="k">return</span> <span class="n">gallons</span> <span class="o">*</span> <span class="mi">231</span></div>
+
+<div class="viewcode-block" id="minor_loss"><a class="viewcode-back" href="../code_reference.html#tools.minor_loss">[docs]</a><span class="k">def</span> <span class="nf">minor_loss</span><span class="p">(</span><span class="n">vel</span><span class="p">,</span> <span class="n">k_val</span> <span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39; minor head loss using FPS &#39;&#39;&#39;</span>
+    <span class="n">g</span> <span class="o">=</span> <span class="mf">32.2</span>
+    <span class="k">return</span> <span class="n">k_val</span> <span class="o">*</span> <span class="n">vel</span><span class="o">**</span><span class="mi">2</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">g</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="report_losses"><a class="viewcode-back" href="../code_reference.html#tools.report_losses">[docs]</a><span class="k">def</span> <span class="nf">report_losses</span><span class="p">(</span><span class="n">losses</span><span class="p">,</span> <span class="n">flow</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;prints high and low flow head loss for given inputs</span>
+<span class="sd">        report_losses(list, list, str)</span>
+<span class="sd">       if only one value is passed for both losses and flow</span>
+<span class="sd">       it will only report one losses value</span>
+
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">if</span> <span class="n">losses</span> <span class="ow">is</span> <span class="nb">list</span> <span class="ow">and</span> <span class="n">flow</span> <span class="ow">is</span> <span class="nb">list</span><span class="p">:</span>
+        <span class="n">output</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">: </span><span class="si">{:.2f}</span><span class="s1"> ft @ </span><span class="si">{:.1f}</span><span class="s1"> gpm -- </span><span class="si">{:.2f}</span><span class="s1"> ft @ </span><span class="si">{:.1f}</span><span class="s1"> gpm&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">,</span>
+                                                                           <span class="n">losses</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                                                                           <span class="n">flow</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> 
+                                                                           <span class="n">losses</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+                                                                           <span class="n">flow</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">output</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">: </span><span class="si">{:.2f}</span><span class="s1"> ft @ </span><span class="si">{:.2f}</span><span class="s1"> gpm&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">,</span>
+                                                     <span class="n">losses</span><span class="p">,</span>
+                                                     <span class="n">flow</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">output</span></div>
+
+<div class="viewcode-block" id="ft2psi"><a class="viewcode-back" href="../code_reference.html#tools.ft2psi">[docs]</a><span class="k">def</span> <span class="nf">ft2psi</span><span class="p">(</span><span class="n">ft_of_head</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39; convert feet of head to psi &#39;&#39;&#39;</span>
+    <span class="k">return</span> <span class="n">ft_of_head</span> <span class="o">*</span> <span class="mf">0.43333</span></div>
+
+<div class="viewcode-block" id="psi2ft"><a class="viewcode-back" href="../code_reference.html#tools.psi2ft">[docs]</a><span class="k">def</span> <span class="nf">psi2ft</span><span class="p">(</span><span class="n">psi</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39; return psi to feet of head &#39;&#39;&#39;</span>
+    <span class="k">return</span> <span class="n">psi</span> <span class="o">*</span> <span class="mf">2.308</span></div>
+
+<div class="viewcode-block" id="hpn_size"><a class="viewcode-back" href="../code_reference.html#tools.hpn_size">[docs]</a><span class="k">def</span> <span class="nf">hpn_size</span><span class="p">(</span><span class="n">cut_out</span><span class="p">,</span> <span class="n">cut_in</span><span class="p">,</span> <span class="n">num_cycles</span><span class="p">,</span> <span class="n">max_flow</span><span class="p">,</span> <span class="n">tank_diam</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39; Hydro Pneumatic Tank Sizing</span>
+
+<span class="sd">        cut_out = nominal pump-off pressure in psi</span>
+<span class="sd">        cut_in = nominal pump-on pressure in psi</span>
+<span class="sd">        num_cycles = max number of cycles/hour/pump</span>
+<span class="sd">        max_flow = estimated max flow from 1 pump</span>
+<span class="sd">        tank_diam = diameter of tank in inches</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    
+    <span class="n">R</span> <span class="o">=</span> <span class="n">tank_diam</span><span class="o">/</span><span class="mi">2</span>
+    <span class="n">A_t</span> <span class="o">=</span> <span class="p">(</span><span class="n">pi</span><span class="o">*</span><span class="n">R</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">A_6</span> <span class="o">=</span> <span class="p">(</span><span class="n">R</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="n">acos</span><span class="p">((</span><span class="n">R</span><span class="o">-</span><span class="mi">6</span><span class="p">)</span><span class="o">/</span><span class="n">R</span><span class="p">)</span> <span class="o">-</span> <span class="p">(</span><span class="n">R</span><span class="o">-</span><span class="mi">6</span><span class="p">)</span> <span class="o">*</span> <span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">R</span><span class="o">*</span><span class="mi">6</span> <span class="o">-</span> <span class="mi">6</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
+    <span class="n">MF</span> <span class="o">=</span> <span class="n">A_t</span> <span class="o">/</span> <span class="p">(</span><span class="n">A_t</span> <span class="o">-</span> <span class="n">A_6</span><span class="p">)</span>
+    
+    <span class="n">V</span> <span class="o">=</span> <span class="p">((</span><span class="n">cut_out</span> <span class="o">+</span> <span class="mf">14.7</span><span class="p">)</span><span class="o">*</span><span class="mi">15</span><span class="o">*</span><span class="n">max_flow</span><span class="o">*</span><span class="n">MF</span><span class="p">)</span><span class="o">/</span><span class="p">((</span><span class="n">cut_out</span><span class="o">-</span><span class="n">cut_in</span><span class="p">)</span><span class="o">*</span><span class="n">num_cycles</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">V</span></div>
+
+<div class="viewcode-block" id="bladder_size"><a class="viewcode-back" href="../code_reference.html#tools.bladder_size">[docs]</a><span class="k">def</span> <span class="nf">bladder_size</span><span class="p">(</span><span class="n">cut_out</span><span class="p">,</span> <span class="n">cut_in</span><span class="p">,</span> <span class="n">num_cycles</span><span class="p">,</span> <span class="n">max_flow</span><span class="p">,</span> <span class="n">bladder_vol</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39; Bladder Tank sizing</span>
+
+<span class="sd">        cut_out = nominal pump-off pressure in psi</span>
+<span class="sd">        cut_in = nominal pump-on pressure in psi</span>
+<span class="sd">        num_cycles = max number of cycles/hour/pump</span>
+<span class="sd">        max_flow = estimated max flow from 1 pump</span>
+<span class="sd">        bladder_vol = volume of bladder tank in gallons</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+    <span class="n">R</span> <span class="o">=</span> <span class="mi">15</span><span class="o">*</span><span class="p">(</span><span class="n">cut_out</span><span class="o">+</span><span class="mf">14.7</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">cut_in</span><span class="o">+</span><span class="mf">14.7</span><span class="p">)</span> <span class="o">/</span> <span class="p">((</span><span class="n">cut_out</span><span class="o">-</span><span class="n">cut_in</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">cut_in</span><span class="o">+</span><span class="mf">9.7</span><span class="p">))</span>
+    <span class="n">T</span> <span class="o">=</span> <span class="n">R</span><span class="o">*</span><span class="n">max_flow</span> <span class="o">/</span> <span class="p">(</span><span class="n">num_cycles</span> <span class="o">*</span> <span class="n">bladder_vol</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">ceil</span><span class="p">(</span><span class="n">T</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="air_dump_valve_size"><a class="viewcode-back" href="../code_reference.html#tools.air_dump_valve_size">[docs]</a><span class="k">def</span> <span class="nf">air_dump_valve_size</span><span class="p">(</span><span class="n">cut_out</span><span class="p">,</span> <span class="n">cut_in</span><span class="p">,</span> <span class="n">tank_vol</span><span class="p">,</span> <span class="n">evac_time</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">info</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39; Air Dump Valve Sizing :</span>
+<span class="sd">        cut_out = nominal pump off pressure in psi</span>
+<span class="sd">        cut_in = nominal pump on pressure in psi</span>
+<span class="sd">        tank_vol = volume of H-PN tank in gallons</span>
+<span class="sd">        evac_time = time to empty entire tank in minutes (default 5)</span>
+<span class="sd">        info = print report (default false)</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="c1"># Constants</span>
+    <span class="n">R</span> <span class="o">=</span> <span class="mf">53.35</span>  <span class="c1"># R constant in ftlb/Rankine</span>
+    <span class="n">T</span> <span class="o">=</span> <span class="mf">527.7</span>  <span class="c1"># Air temp  in Rankine</span>
+    <span class="n">Z</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">C</span> <span class="o">=</span> <span class="mi">356</span>
+    <span class="n">K</span> <span class="o">=</span> <span class="o">.</span><span class="mi">975</span>
+    <span class="n">k_b</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">M</span> <span class="o">=</span> <span class="mf">28.97</span>
+    <span class="c1"># Calcs</span>
+    <span class="n">V_tank</span> <span class="o">=</span> <span class="n">tank_vol</span> <span class="o">/</span> <span class="mf">7.481</span>   <span class="c1"># cuft</span>
+    <span class="n">V_air</span> <span class="o">=</span> <span class="n">V_tank</span><span class="o">/</span><span class="mi">2</span>      <span class="c1"># air vol in tank (half full)</span>
+    <span class="n">P_avg</span> <span class="o">=</span> <span class="p">(</span><span class="n">cut_out</span> <span class="o">+</span> <span class="n">cut_in</span><span class="p">)</span><span class="o">/</span> <span class="mi">2</span>   <span class="c1"># avg pressure</span>
+    <span class="c1"># In No-Water Event...</span>
+    <span class="n">P_empty</span> <span class="o">=</span> <span class="n">P_avg</span> <span class="o">*</span> <span class="n">V_air</span> <span class="o">/</span> <span class="n">V_tank</span>   <span class="c1"># in psi</span>
+    <span class="n">m</span> <span class="o">=</span> <span class="p">(</span><span class="n">P_empty</span><span class="o">*</span><span class="n">V_tank</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">R</span><span class="o">*</span><span class="n">T</span><span class="p">)</span> <span class="o">*</span> <span class="mi">144</span>  <span class="c1"># in lbs of air</span>
+    <span class="c1"># theoretical orifice dims</span>
+    <span class="n">W</span> <span class="o">=</span> <span class="p">(</span><span class="n">m</span><span class="o">/</span><span class="n">evac_time</span><span class="p">)</span> <span class="o">*</span> <span class="mi">60</span>   <span class="c1"># mean dischage in lb/hr</span>
+    <span class="n">A</span> <span class="o">=</span> <span class="p">(</span><span class="n">W</span> <span class="o">*</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">T</span><span class="o">*</span><span class="n">Z</span><span class="p">))</span> <span class="o">/</span> <span class="p">(</span><span class="n">C</span> <span class="o">*</span> <span class="n">K</span> <span class="o">*</span> <span class="p">(</span><span class="n">P_empty</span> <span class="o">+</span> <span class="mf">14.7</span><span class="p">)</span> <span class="o">*</span> <span class="n">k_b</span> <span class="o">*</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">M</span><span class="p">))</span>
+    <span class="n">D</span> <span class="o">=</span> <span class="n">sqrt</span><span class="p">(</span><span class="mi">4</span><span class="o">*</span><span class="n">A</span><span class="o">/</span><span class="n">pi</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">info</span><span class="p">:</span>
+        <span class="n">report</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39;</span>
+<span class="s1">            Pressure in No-Water Event = </span><span class="si">{0:.2f}</span><span class="s1"> psi</span>
+<span class="s1">            Mass of Air in Tank = </span><span class="si">{1:.2f}</span><span class="s1"> lbs</span>
+<span class="s1">            Mean Discharge Rate = </span><span class="si">{2:.2f}</span><span class="s1"> lbs/hr</span>
+<span class="s1">            Theoretical Orifice Dims:</span>
+<span class="s1">                                Area = </span><span class="si">{3:.3f}</span><span class="s1"> in^2</span>
+<span class="s1">                                Diameter = </span><span class="si">{4:.3f}</span><span class="s1"> in</span>
+<span class="s1">            &#39;&#39;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="n">P_empty</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">W</span><span class="p">,</span> <span class="n">A</span><span class="p">,</span> <span class="n">D</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="n">D</span> <span class="o">&lt;=</span> <span class="o">.</span><span class="mi">5</span><span class="p">:</span>
+            <span class="n">report</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Apco Valve #200 with 1/2&quot; diameter OK&#39;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">report</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">D</span></div>
+    
+<div class="viewcode-block" id="pressure_relief_valve_size"><a class="viewcode-back" href="../code_reference.html#tools.pressure_relief_valve_size">[docs]</a><span class="k">def</span> <span class="nf">pressure_relief_valve_size</span><span class="p">(</span>
+                                <span class="n">cut_out</span><span class="p">,</span>
+                                <span class="n">tank_vol</span><span class="p">,</span>
+                                <span class="n">capacity</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                                <span class="n">R</span><span class="o">=</span><span class="mf">53.35</span><span class="p">,</span>
+                                <span class="n">T</span><span class="o">=</span><span class="mf">527.7</span><span class="p">,</span>
+                                <span class="n">Z</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                                <span class="n">C</span><span class="o">=</span><span class="mi">356</span><span class="p">,</span>
+                                <span class="n">K</span><span class="o">=</span><span class="mf">0.878</span><span class="p">,</span>
+                                <span class="n">k_b</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                                <span class="n">M</span><span class="o">=</span><span class="mf">28.97</span><span class="p">,</span>
+                                <span class="n">info</span><span class="o">=</span><span class="kc">False</span>
+                                <span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39; pressure Relief Valve Sizing :</span>
+<span class="sd">        cut_out = nominal pump off pressure in psi</span>
+<span class="sd">        tank_vol = volume of H-PN tank in gallons</span>
+<span class="sd">        capacity = required relieving capacity in SCFM</span>
+<span class="sd">                if None then it will lenearly interpolate from cut_out press</span>
+<span class="sd">                using WWS standard compressor</span>
+
+<span class="sd">        # Constants (defauts)</span>
+<span class="sd">        R = 53.35  # R constant in ftlb/Rankine</span>
+<span class="sd">        T = 527.7  # Air temp  in Rankine</span>
+<span class="sd">        Z = 1</span>
+<span class="sd">        C = 356</span>
+<span class="sd">        K = .878</span>
+<span class="sd">        k_b = 1</span>
+<span class="sd">        M = 28.97</span>
+<span class="sd">        info = print report (default false)</span>
+
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">orifice_area</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;D&#39;</span> <span class="p">:</span> <span class="mf">0.121</span><span class="p">,</span>
+                    <span class="s1">&#39;E&#39;</span> <span class="p">:</span> <span class="mf">0.216</span><span class="p">,</span>
+                    <span class="s1">&#39;F&#39;</span> <span class="p">:</span> <span class="mf">0.337</span><span class="p">,</span>
+                    <span class="s1">&#39;G&#39;</span> <span class="p">:</span> <span class="mf">0.553</span><span class="p">,</span>
+                    <span class="s1">&#39;H&#39;</span> <span class="p">:</span> <span class="mf">0.864</span><span class="p">,</span>
+                    <span class="s1">&#39;J&#39;</span> <span class="p">:</span> <span class="mf">1.415</span><span class="p">}</span>
+    
+    
+    <span class="c1"># Calcs</span>
+    <span class="n">V_tank</span> <span class="o">=</span> <span class="n">tank_vol</span> <span class="o">/</span> <span class="mf">7.481</span>   <span class="c1"># cuft</span>
+    <span class="n">V_air</span> <span class="o">=</span> <span class="n">V_tank</span><span class="o">/</span><span class="mi">2</span>      <span class="c1"># air vol in tank (half full)</span>
+    <span class="n">P_1</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">cut_out</span> <span class="o">*</span> <span class="mf">1.1</span><span class="p">)</span>
+
+    <span class="c1"># assuming California Air Tools Compressor flow rate</span>
+    <span class="k">if</span> <span class="n">capacity</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> 
+        <span class="n">capacity</span> <span class="o">=</span> <span class="o">-.</span><span class="mi">022</span><span class="o">*</span><span class="n">cut_out</span> <span class="o">+</span> <span class="mf">7.28</span>  <span class="c1"># CFM</span>
+
+    <span class="c1"># mass of air per minute</span>
+    <span class="n">m_dot</span> <span class="o">=</span> <span class="p">(</span><span class="n">cut_out</span> <span class="o">*</span> <span class="n">capacity</span> <span class="o">*</span><span class="mi">144</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">R</span><span class="o">*</span><span class="n">T</span><span class="p">)</span>  <span class="c1"># in lbs of air/min</span>
+    <span class="n">delta_m</span> <span class="o">=</span> <span class="p">((</span><span class="n">P_1</span><span class="o">-</span><span class="n">cut_out</span><span class="p">)</span><span class="o">*</span><span class="n">V_air</span><span class="o">*</span><span class="mi">144</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">R</span><span class="o">*</span><span class="n">T</span><span class="p">)</span>
+    <span class="n">m</span> <span class="o">=</span> <span class="p">(</span><span class="n">m_dot</span> <span class="o">+</span> <span class="n">delta_m</span><span class="p">)</span> <span class="c1"># lbs of air/min</span>
+
+    <span class="c1"># theoretical orifice dims</span>
+    <span class="n">W</span> <span class="o">=</span> <span class="n">m</span> <span class="o">*</span> <span class="mi">60</span>   <span class="c1"># mean dischage in lb/hr</span>
+    <span class="n">A</span> <span class="o">=</span> <span class="p">(</span><span class="n">W</span> <span class="o">*</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">T</span><span class="o">*</span><span class="n">Z</span><span class="p">))</span> <span class="o">/</span> <span class="p">(</span><span class="n">C</span> <span class="o">*</span> <span class="n">K</span> <span class="o">*</span> <span class="p">(</span><span class="n">P_1</span> <span class="o">+</span> <span class="mf">14.7</span><span class="p">)</span> <span class="o">*</span> <span class="n">k_b</span> <span class="o">*</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">M</span><span class="p">))</span>
+    <span class="n">D</span> <span class="o">=</span> <span class="n">sqrt</span><span class="p">(</span><span class="mi">4</span><span class="o">*</span><span class="n">A</span><span class="o">/</span><span class="n">pi</span><span class="p">)</span>
+    
+
+    <span class="k">if</span> <span class="n">info</span><span class="p">:</span>
+        <span class="n">report</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39;</span>
+<span class="s1">            Pressure Setpoint = </span><span class="si">{0:.2f}</span><span class="s1"> psi</span>
+<span class="s1">            Volumetric Flow of Air Contribuited by compressor = </span><span class="si">{7:.2f}</span><span class="s1"></span>
+<span class="s1">            Mass of air contributed by compressor = </span><span class="si">{4:.2f}</span><span class="s1"></span>
+<span class="s1">            Mass of built up air to be discharged = </span><span class="si">{5:.2f}</span><span class="s1"></span>
+<span class="s1">            Total Mass of Air to be Discharged = </span><span class="si">{6:.2f}</span><span class="s1"></span>
+<span class="s1">            Mean Discharge Rate = </span><span class="si">{1:.2f}</span><span class="s1"> lbs/hr</span>
+<span class="s1">            Theoretical Orifice Dims:</span>
+<span class="s1">                                Area = </span><span class="si">{2:.3f}</span><span class="s1"> in^2</span>
+<span class="s1">                                Diameter = </span><span class="si">{3:.3f}</span><span class="s1"> in</span>
+<span class="s1">            &#39;&#39;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="n">P_1</span><span class="p">,</span> <span class="n">W</span><span class="p">,</span> <span class="n">A</span><span class="p">,</span> <span class="n">D</span><span class="p">,</span> <span class="n">m_dot</span><span class="p">,</span> <span class="n">delta_m</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">capacity</span><span class="p">)</span>
+            
+        <span class="nb">print</span><span class="p">(</span><span class="n">report</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">A</span></div>
+
+<div class="viewcode-block" id="resistance"><a class="viewcode-back" href="../code_reference.html#tools.resistance">[docs]</a><span class="k">def</span> <span class="nf">resistance</span><span class="p">(</span><span class="n">velocity</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">headloss</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">K</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39; calculates resistance coefficient or headloss</span>
+<span class="sd">        depending on what is given</span>
+
+<span class="sd">        Enter velociy in FPS</span>
+<span class="sd">        Enter headloss in feet</span>
+<span class="sd">        OR</span>
+<span class="sd">        Enter K</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">g</span> <span class="o">=</span> <span class="mf">32.2</span>
+    
+    <span class="k">if</span> <span class="n">headloss</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">K</span><span class="p">:</span>
+        <span class="n">K</span> <span class="o">=</span> <span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">g</span><span class="o">*</span><span class="n">headloss</span><span class="p">)</span><span class="o">/</span><span class="n">velocity</span><span class="o">**</span><span class="mi">2</span>
+        <span class="k">return</span> <span class="n">K</span>
+    <span class="k">elif</span> <span class="n">K</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">headloss</span><span class="p">:</span>
+        <span class="n">headloss</span> <span class="o">=</span> <span class="n">K</span> <span class="o">*</span> <span class="p">(</span><span class="n">velocity</span><span class="o">**</span><span class="mi">2</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">g</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">headloss</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;must enter headloss or K value&#39;</span><span class="p">)</span></div>
+        
+<div class="viewcode-block" id="leakage"><a class="viewcode-back" href="../code_reference.html#tools.leakage">[docs]</a><span class="k">def</span> <span class="nf">leakage</span><span class="p">(</span><span class="n">pipe_diam</span><span class="p">,</span> <span class="n">test_pressure</span><span class="p">,</span> <span class="n">linear_feet</span><span class="p">,</span> <span class="n">hydrants</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">interties</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">valves</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">end_caps</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39; calculates allowable leakage for a pressure test:</span>
+
+<span class="sd">        Enter: </span>
+<span class="sd">            pipe diameter in inches</span>
+<span class="sd">            test pressure in psi</span>
+<span class="sd">            linear_feet of pipe run</span>
+<span class="sd">            number of hydrants</span>
+<span class="sd">            number of interties</span>
+<span class="sd">            number of valves</span>
+<span class="sd">            number of end caps</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">lf</span> <span class="o">=</span> <span class="n">linear_feet</span><span class="o">/</span><span class="mi">20</span>
+    <span class="n">hyd</span> <span class="o">=</span> <span class="n">hydrants</span> <span class="o">*</span> <span class="mi">5</span>
+    <span class="n">vlv</span> <span class="o">=</span> <span class="n">valves</span> <span class="o">*</span> <span class="mi">2</span>
+    <span class="n">N</span> <span class="o">=</span> <span class="n">lf</span> <span class="o">+</span> <span class="n">hyd</span> <span class="o">+</span> <span class="n">interties</span> <span class="o">+</span> <span class="n">vlv</span> <span class="o">+</span> <span class="n">end_caps</span>
+
+    <span class="n">L_gph</span> <span class="o">=</span> <span class="n">N</span> <span class="o">*</span> <span class="n">pipe_diam</span> <span class="o">*</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">test_pressure</span><span class="p">)</span> <span class="o">/</span> <span class="mi">7400</span>
+    <span class="n">L_gpm</span> <span class="o">=</span> <span class="n">L_gph</span><span class="o">/</span><span class="mi">60</span>
+
+    <span class="k">return</span> <span class="n">L_gph</span><span class="p">,</span> <span class="n">L_gpm</span></div>
+
+<div class="viewcode-block" id="makeup_water"><a class="viewcode-back" href="../code_reference.html#tools.makeup_water">[docs]</a><span class="k">def</span> <span class="nf">makeup_water</span><span class="p">(</span><span class="n">diam_before</span><span class="p">,</span> <span class="n">diam_after</span><span class="p">,</span> <span class="n">depth_before</span><span class="p">,</span> <span class="n">depth_after</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39; Enter dimensions of frustrum or cylynder to return volume</span>
+<span class="sd">        </span>
+<span class="sd">        Used to estimate the volume of water in a trash can. </span>
+<span class="sd">        Units must be uniform.</span>
+<span class="sd">        Arguments:</span>
+<span class="sd">            diam_before = can diameter before pumping</span>
+<span class="sd">            diam_after = can diameter after pumping</span>
+<span class="sd">            depth_before = water level before pumping</span>
+<span class="sd">            depth_after - water level after pumping</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+    <span class="n">h</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">depth_before</span> <span class="o">-</span> <span class="n">depth_after</span><span class="p">)</span>
+    <span class="n">V</span> <span class="o">=</span> <span class="p">(</span><span class="n">pi</span> <span class="o">*</span> <span class="n">h</span> <span class="o">*</span> <span class="p">(</span><span class="n">diam_before</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">diam_before</span><span class="o">*</span><span class="n">diam_after</span> <span class="o">+</span> <span class="n">diam_after</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span> <span class="o">/</span> <span class="mi">12</span>
+    <span class="k">return</span> <span class="n">V</span></div>
+
+<div class="viewcode-block" id="wellhead_CFR"><a class="viewcode-back" href="../code_reference.html#tools.wellhead_CFR">[docs]</a><span class="k">def</span> <span class="nf">wellhead_CFR</span><span class="p">(</span><span class="n">Q</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mf">0.22</span><span class="p">,</span> <span class="n">t_list</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">10</span><span class="p">]):</span>
+    <span class="sd">&#39;&#39;&#39; Returns fixed radius wellhead contribution zones (CFR):</span>
+<span class="sd">        Default is 1 year, 5 year, and 10 year radii</span>
+<span class="sd">        Enter:</span>
+<span class="sd">            Q = pumping rate in cubic ft/yr</span>
+<span class="sd">            H = open interval in ft</span>
+<span class="sd">            n = aquifer porosity (defaults to 0.22)</span>
+<span class="sd">            t = time in years (default list [1,5,10])</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="p">[</span><span class="n">sqrt</span><span class="p">(</span><span class="n">Q</span><span class="o">*</span><span class="n">t</span><span class="o">/</span><span class="p">(</span><span class="n">pi</span><span class="o">*</span><span class="n">n</span><span class="o">*</span><span class="n">H</span><span class="p">))</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">t_list</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">r</span></div>
+
+<div class="viewcode-block" id="max_pump_elevation"><a class="viewcode-back" href="../code_reference.html#tools.max_pump_elevation">[docs]</a><span class="k">def</span> <span class="nf">max_pump_elevation</span><span class="p">(</span><span class="n">elevation</span><span class="p">,</span> <span class="n">NPSHr</span><span class="p">,</span> <span class="n">Losses</span><span class="p">,</span> <span class="n">SF</span><span class="o">=</span><span class="mf">1.5</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;Returns maximum elevation pump suction can be above water level</span>
+
+<span class="sd">        Negative number indicates ft of head that must be supplied</span>
+<span class="sd">        to suction line.</span>
+
+<span class="sd">        Positive number indicates how far pump can be above water level.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="c1"># Barometric Pressure Constants</span>
+    <span class="n">Pb</span> <span class="o">=</span> <span class="mf">29.92126</span>   <span class="c1"># in. Hg</span>
+    <span class="n">Tb</span> <span class="o">=</span> <span class="mf">288.15</span>     <span class="c1"># K</span>
+    <span class="n">R</span> <span class="o">=</span> <span class="mf">8.9494596</span><span class="o">*</span><span class="mi">10</span><span class="o">**</span><span class="mi">4</span>  <span class="c1"># lb·ft^2</span>
+    <span class="n">g</span> <span class="o">=</span> <span class="mf">32.17405</span>    <span class="c1">#ft/s^2</span>
+    <span class="n">M</span> <span class="o">=</span> <span class="mf">28.9644</span>   <span class="c1"># lb/lb-mol</span>
+    <span class="n">Pv</span> <span class="o">=</span> <span class="mf">0.75</span>    <span class="c1"># vapor pressure of water at 50F in ft</span>
+    
+    <span class="c1"># atm pressure at elevation</span>
+    <span class="n">P</span> <span class="o">=</span> <span class="n">Pb</span><span class="o">*</span><span class="n">exp</span><span class="p">((</span><span class="o">-</span><span class="n">g</span><span class="o">*</span><span class="n">M</span><span class="o">*</span><span class="n">elevation</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">R</span><span class="o">*</span><span class="n">Tb</span><span class="p">))</span>
+
+    <span class="c1"># convert inches Hg to ft of head</span>
+    <span class="n">P</span> <span class="o">=</span> <span class="n">P</span><span class="o">*</span><span class="mf">1.132925</span>
+
+    <span class="c1"># max pump height</span>
+    <span class="n">Z</span> <span class="o">=</span> <span class="n">P</span> <span class="o">-</span> <span class="n">NPSHr</span> <span class="o">-</span> <span class="n">Losses</span> <span class="o">-</span> <span class="n">Pv</span> <span class="o">-</span> <span class="n">SF</span>
+
+    <span class="k">return</span> <span class="n">Z</span> </div>
+
+<span class="c1">########## Test Script ############</span>
+<span class="k">if</span> <span class="vm">__name__</span><span class="o">==</span><span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;test script:&#39;</span><span class="p">)</span>
+
+    <span class="c1"># Peak Hour Demand Calcs</span>
+    <span class="n">phd</span><span class="p">,</span> <span class="n">ahd</span><span class="p">,</span> <span class="n">lhd</span> <span class="o">=</span> <span class="n">PHD</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">75</span><span class="p">)</span>
+    <span class="n">phd2</span><span class="p">,</span><span class="n">_</span><span class="p">,</span><span class="n">_</span> <span class="o">=</span> <span class="n">PHD</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
+
+    <span class="c1"># Horse Power Calcs</span>
+    <span class="n">water_p</span><span class="p">,</span> <span class="n">break_p</span><span class="p">,</span> <span class="n">input_p</span> <span class="o">=</span> <span class="n">calc_hp</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">120</span><span class="p">,</span> <span class="mf">0.65</span><span class="p">,</span> <span class="mf">0.95</span><span class="p">)</span>
+    <span class="n">water2_p</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">calc_hp</span><span class="p">(</span><span class="mi">230</span><span class="p">,</span><span class="mi">50</span><span class="p">)</span>
+
+    <span class="c1"># Flow and Velocity Calcs</span>
+    <span class="n">Q</span> <span class="o">=</span> <span class="mi">150</span> <span class="c1"># gpm</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="mi">3</span>  <span class="c1"># inches</span>
+
+    <span class="n">v</span> <span class="o">=</span> <span class="n">velocity</span><span class="p">(</span><span class="n">Q</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span>
+    <span class="n">q_func</span> <span class="o">=</span> <span class="n">flow</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span>
+    <span class="n">d_func</span> <span class="o">=</span> <span class="n">pipeDiameter</span><span class="p">(</span><span class="n">Q</span><span class="p">,</span><span class="n">v</span><span class="p">)</span>
+
+    <span class="c1"># Reynolds Number</span>
+    <span class="n">Re</span><span class="p">,</span> <span class="n">Lam</span> <span class="o">=</span> <span class="n">reynolds</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">vel</span><span class="o">=</span><span class="n">v</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">Lam</span><span class="p">:</span>
+        <span class="n">condition</span> <span class="o">=</span> <span class="s1">&#39;Laminar&#39;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">condition</span> <span class="o">=</span> <span class="s1">&#39;Turbulent&#39;</span>
+
+    <span class="c1"># Volume Calculations</span>
+    <span class="n">vol1</span> <span class="o">=</span> <span class="n">volume_cyl</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+    <span class="n">vol2</span> <span class="o">=</span> <span class="n">volume_box</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+
+    <span class="c1"># cubic feet to gallon conversion</span>
+    <span class="n">gals</span> <span class="o">=</span> <span class="n">cuft2gal</span><span class="p">(</span><span class="mi">1000</span><span class="p">)</span>
+
+    <span class="c1"># allowable leakage calc</span>
+    <span class="n">leak_gph</span><span class="p">,</span> <span class="n">leak_gpm</span> <span class="o">=</span> <span class="n">leakage</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">245</span><span class="p">,</span> <span class="mi">1460</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+    
+    <span class="c1"># makeup water volume (volume of a frustrum)</span>
+    <span class="n">mw</span> <span class="o">=</span> <span class="n">makeup_water</span><span class="p">(</span><span class="mi">18</span><span class="p">,</span> <span class="mf">17.5</span><span class="p">,</span> <span class="mi">19</span><span class="p">,</span> <span class="mi">18</span><span class="p">)</span>
+
+    <span class="c1"># bladder tank sizing</span>
+    <span class="n">bt</span> <span class="o">=</span> <span class="n">bladder_size</span><span class="p">(</span><span class="mi">86</span><span class="p">,</span> <span class="mi">67</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="mi">34</span><span class="p">)</span>
+
+    <span class="c1"># output string</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39;</span>
+<span class="s1">        PHD = </span><span class="si">{0:.2f}</span><span class="s1"> gmp</span>
+<span class="s1">        AHD = </span><span class="si">{15:.2f}</span><span class="s1"> gmp</span>
+<span class="s1">        LHD = </span><span class="si">{16:.2F}</span><span class="s1"> gmp</span>
+<span class="s1">        PHD2_raw = </span><span class="si">{1:f}</span><span class="s1"></span>
+<span class="s1">        hp_w1 = </span><span class="si">{2:.2f}</span><span class="s1"> hp</span>
+<span class="s1">        hp_b1 = </span><span class="si">{3:.2f}</span><span class="s1"> hp</span>
+<span class="s1">        hp_i1 = </span><span class="si">{4:.2f}</span><span class="s1"> hp</span>
+<span class="s1">        hp_raw = </span><span class="si">{5:f}</span><span class="s1"></span>
+<span class="s1">        flow input = </span><span class="si">{6:.1f}</span><span class="s1"> gpm</span>
+<span class="s1">        pipe diameter input = </span><span class="si">{7:.1f}</span><span class="s1"> in</span>
+<span class="s1">        calculated velocity = </span><span class="si">{8:.2f}</span><span class="s1"> fps</span>
+<span class="s1">        calculated flow = </span><span class="si">{9:.2f}</span><span class="s1"> gpm </span><span class="se">\r</span><span class="s1"></span>
+<span class="s1">        calculated diameter = </span><span class="si">{10:.2f}</span><span class="s1"> in</span>
+<span class="s1">        Reynolds Number = </span><span class="si">{11:.2f}</span><span class="s1"></span>
+<span class="s1">        Flow Condition = </span><span class="si">{12:s}</span><span class="s1"></span>
+<span class="s1">        vol1 = </span><span class="si">{13:f}</span><span class="s1"></span>
+<span class="s1">        vol2 = </span><span class="si">{14:.2f}</span><span class="s1"></span>
+<span class="s1">        gallons = </span><span class="si">{17:.2f}</span><span class="s1"></span>
+<span class="s1">        allowable leakage = </span><span class="si">{18:.2f}</span><span class="s1"> gph or </span><span class="si">{19:.3f}</span><span class="s1"> gpm</span>
+<span class="s1">        makeup water = </span><span class="si">{20:.3f}</span><span class="s1"> cubic inches or </span><span class="si">{21:.3f}</span><span class="s1"> gals</span>
+<span class="s1">        number of bladder tanks = </span><span class="si">{22:.1f}</span><span class="s1"> tanks</span>
+<span class="s1">        &#39;&#39;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="n">phd</span><span class="p">,</span> <span class="n">phd2</span><span class="p">,</span> <span class="n">water_p</span><span class="p">,</span> <span class="n">break_p</span><span class="p">,</span> <span class="n">input_p</span><span class="p">,</span>
+            <span class="n">water2_p</span><span class="p">,</span> <span class="n">Q</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">q_func</span><span class="p">,</span> <span class="n">d_func</span><span class="p">,</span> <span class="n">Re</span><span class="p">,</span>
+            <span class="n">condition</span><span class="p">,</span> <span class="n">vol1</span><span class="p">,</span> <span class="n">vol2</span><span class="p">,</span> <span class="n">ahd</span><span class="p">,</span> <span class="n">lhd</span><span class="p">,</span> <span class="n">gals</span><span class="p">,</span>
+            <span class="n">leak_gph</span><span class="p">,</span> <span class="n">leak_gpm</span><span class="p">,</span> <span class="n">mw</span><span class="p">,</span> <span class="n">cuin2gal</span><span class="p">(</span><span class="n">mw</span><span class="p">),</span> <span class="n">bt</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+    <span class="n">pressure_relief_valve_size</span><span class="p">(</span><span class="mi">95</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="n">info</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Water 1.0.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Ryan Haseman.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.2.
+    </div>
+  </body>
+</html>

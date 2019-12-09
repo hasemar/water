@@ -1,0 +1,34 @@
+CREATE TABLE pumps(
+pumpID integer primary key,
+manufacturer text,
+model text,
+maxFlow integer,
+minFlow integer,
+bestFlow integer,
+maxHead integer,
+minHead integer,
+bestHead integer,
+bestEff real,
+rmp integer,
+impeller text,
+flowArray text,
+headArray text,
+effArray text
+);
+
+
+
+                            manufacturer,
+                            model,
+                            maxFlow,
+                            minFlow,
+                            bestFlow,
+                            maxHead,
+                            minHead,
+                            bestHead,
+                            bestEff,
+                            rmp,
+                            impeller,
+                            flowArray,
+                            headArray,
+                            effArray) 

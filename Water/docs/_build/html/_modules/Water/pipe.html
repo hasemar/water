@@ -1,0 +1,407 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Water.pipe &#8212; Water 1.0.0 documentation</title>
+    <link rel="stylesheet" href="../../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Water 1.0.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for Water.pipe</h1><div class="highlight"><pre>
+<span></span><span class="sd">&#39;&#39;&#39;Pipe :</span>
+<span class="sd">This module holds the data for a variety of fittings and pipe sizes.</span>
+<span class="sd">It holds a class called Pipe that allows you to create Pipe objects</span>
+<span class="sd">and calculate losses.</span>
+
+<span class="sd">&#39;&#39;&#39;</span>
+
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
+<span class="kn">import</span> <span class="nn">Water.tools</span> <span class="k">as</span> <span class="nn">tools</span>
+
+
+<span class="n">c_dict</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;PVC&#39;</span> <span class="p">:</span> <span class="mi">150</span><span class="p">,</span>
+    <span class="s1">&#39;DI&#39;</span> <span class="p">:</span> <span class="mi">130</span><span class="p">,</span>
+    <span class="s1">&#39;STEEL&#39;</span> <span class="p">:</span> <span class="mi">150</span><span class="p">,</span>
+    <span class="s1">&#39;HDPE&#39;</span> <span class="p">:</span> <span class="mi">140</span><span class="p">,</span>
+    <span class="s1">&#39;STAINLESS STEEL&#39;</span> <span class="p">:</span> <span class="mi">140</span><span class="p">,</span>
+    <span class="s1">&#39;GALVANIZED PIPE&#39;</span> <span class="p">:</span> <span class="mi">120</span>
+<span class="p">}</span>
+
+<span class="n">pipe_dims</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="mi">40</span> <span class="p">:</span> <span class="p">{</span>
+        <span class="mi">1</span> <span class="p">:</span> <span class="p">[</span><span class="mf">1.315</span><span class="p">,</span> <span class="mf">0.133</span><span class="p">],</span>
+        <span class="mf">1.25</span> <span class="p">:</span> <span class="p">[</span><span class="mf">1.66</span><span class="p">,</span> <span class="mf">0.140</span><span class="p">],</span>
+        <span class="mf">1.5</span> <span class="p">:</span> <span class="p">[</span><span class="mf">1.9</span><span class="p">,</span> <span class="mf">0.145</span><span class="p">],</span>
+        <span class="mi">2</span> <span class="p">:</span> <span class="p">[</span><span class="mf">2.375</span><span class="p">,</span> <span class="mf">0.154</span><span class="p">],</span>
+        <span class="mf">2.5</span> <span class="p">:</span> <span class="p">[</span><span class="mf">2.875</span><span class="p">,</span> <span class="mf">0.203</span><span class="p">],</span>
+        <span class="mi">3</span> <span class="p">:</span> <span class="p">[</span><span class="mf">3.5</span><span class="p">,</span> <span class="mf">0.216</span><span class="p">],</span>
+        <span class="mi">4</span> <span class="p">:</span> <span class="p">[</span><span class="mf">4.5</span><span class="p">,</span> <span class="mf">0.237</span><span class="p">],</span>
+        <span class="mi">6</span> <span class="p">:</span> <span class="p">[</span><span class="mf">6.625</span><span class="p">,</span> <span class="mf">0.28</span><span class="p">],</span>
+        <span class="mi">8</span> <span class="p">:</span> <span class="p">[</span><span class="mf">8.625</span><span class="p">,</span> <span class="mf">0.322</span><span class="p">],</span>
+        <span class="mi">10</span> <span class="p">:</span> <span class="p">[</span><span class="mf">10.75</span><span class="p">,</span> <span class="mf">0.365</span><span class="p">]</span>
+    <span class="p">},</span>
+    <span class="mi">80</span> <span class="p">:</span> <span class="p">{</span>
+        <span class="mi">1</span> <span class="p">:</span> <span class="p">[</span><span class="mf">1.315</span><span class="p">,</span> <span class="mf">0.179</span><span class="p">],</span>
+        <span class="mf">1.25</span> <span class="p">:</span> <span class="p">[</span><span class="mf">1.66</span><span class="p">,</span> <span class="mf">0.191</span><span class="p">],</span>
+        <span class="mf">1.5</span> <span class="p">:</span> <span class="p">[</span><span class="mf">1.9</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">],</span>
+        <span class="mi">2</span> <span class="p">:</span> <span class="p">[</span><span class="mf">2.375</span><span class="p">,</span> <span class="mf">0.218</span><span class="p">],</span>
+        <span class="mf">2.5</span> <span class="p">:</span> <span class="p">[</span><span class="mf">2.875</span><span class="p">,</span> <span class="mf">0.276</span><span class="p">],</span>
+        <span class="mi">3</span> <span class="p">:</span> <span class="p">[</span><span class="mf">3.5</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">],</span>
+        <span class="mi">4</span> <span class="p">:</span> <span class="p">[</span><span class="mf">4.5</span><span class="p">,</span> <span class="mf">0.337</span><span class="p">],</span>
+        <span class="mi">6</span> <span class="p">:</span> <span class="p">[</span><span class="mf">6.625</span><span class="p">,</span> <span class="mf">0.432</span><span class="p">],</span>
+        <span class="mi">8</span> <span class="p">:</span> <span class="p">[</span><span class="mf">8.625</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">],</span>
+        <span class="mi">10</span> <span class="p">:</span> <span class="p">[</span><span class="mf">10.75</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">]</span>
+    <span class="p">},</span>
+    <span class="s1">&#39;C900 DR-18&#39;</span> <span class="p">:</span> <span class="p">{</span>
+        <span class="mi">4</span> <span class="p">:</span> <span class="p">[</span><span class="mf">4.80</span><span class="p">,</span> <span class="mf">0.267</span><span class="p">],</span>
+        <span class="mi">6</span> <span class="p">:</span> <span class="p">[</span><span class="mf">6.90</span><span class="p">,</span> <span class="mf">0.383</span><span class="p">],</span>
+        <span class="mi">8</span> <span class="p">:</span> <span class="p">[</span><span class="mf">9.05</span><span class="p">,</span> <span class="mf">0.503</span><span class="p">],</span>
+        <span class="mi">10</span> <span class="p">:</span> <span class="p">[</span><span class="mf">11.10</span><span class="p">,</span> <span class="mf">0.617</span><span class="p">],</span>
+        <span class="mi">12</span> <span class="p">:</span> <span class="p">[</span><span class="mf">13.20</span><span class="p">,</span> <span class="mf">0.733</span><span class="p">]</span>
+    <span class="p">},</span>
+    <span class="s1">&#39;DR 7&#39;</span> <span class="p">:</span> <span class="p">{</span>
+        <span class="mf">0.75</span> <span class="p">:</span> <span class="p">[</span><span class="mf">1.05</span><span class="p">,</span> <span class="mf">0.150</span><span class="p">],</span>
+        <span class="mi">1</span> <span class="p">:</span> <span class="p">[</span><span class="mf">1.315</span><span class="p">,</span> <span class="mf">0.188</span><span class="p">],</span>
+        <span class="mf">1.25</span> <span class="p">:</span> <span class="p">[</span><span class="mf">1.66</span><span class="p">,</span> <span class="mf">0.237</span><span class="p">],</span>
+        <span class="mf">1.5</span> <span class="p">:</span> <span class="p">[</span><span class="mf">1.90</span><span class="p">,</span> <span class="mf">0.271</span><span class="p">],</span>
+        <span class="mi">2</span> <span class="p">:</span> <span class="p">[</span><span class="mf">2.375</span><span class="p">,</span> <span class="mf">0.339</span><span class="p">],</span>
+        <span class="mi">3</span> <span class="p">:</span> <span class="p">[</span><span class="mf">3.5</span><span class="p">,</span> <span class="mf">0.50</span><span class="p">],</span>
+        <span class="mi">4</span> <span class="p">:</span> <span class="p">[</span><span class="mf">4.5</span><span class="p">,</span> <span class="mf">0.643</span><span class="p">],</span>
+        <span class="mi">5</span> <span class="p">:</span> <span class="p">[</span><span class="mf">5.375</span><span class="p">,</span> <span class="mf">0.768</span><span class="p">],</span>
+        <span class="mi">6</span> <span class="p">:</span> <span class="p">[</span><span class="mf">6.625</span><span class="p">,</span> <span class="mf">0.946</span><span class="p">],</span>
+        <span class="mi">7</span> <span class="p">:</span> <span class="p">[</span><span class="mf">7.125</span><span class="p">,</span> <span class="mf">1.018</span><span class="p">],</span>
+        <span class="mi">8</span> <span class="p">:</span> <span class="p">[</span><span class="mf">8.625</span><span class="p">,</span> <span class="mf">1.232</span><span class="p">],</span>
+        <span class="mi">10</span> <span class="p">:</span> <span class="p">[</span><span class="mf">10.75</span><span class="p">,</span> <span class="mf">1.536</span><span class="p">],</span>
+        <span class="mi">12</span> <span class="p">:</span> <span class="p">[</span><span class="mf">12.75</span><span class="p">,</span> <span class="mf">1.821</span><span class="p">],</span>
+        <span class="mi">14</span> <span class="p">:</span> <span class="p">[</span><span class="mf">14.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">],</span>
+        <span class="mi">16</span> <span class="p">:</span> <span class="p">[</span><span class="mf">16.0</span><span class="p">,</span> <span class="mf">2.286</span><span class="p">]</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="sd">&#39;&#39;&#39;fitting dictionary:</span>
+<span class="sd">    holds fitting shape and connection type. For each connection </span>
+<span class="sd">    type there is a kfactor list [geometry, k1, k_infinity]</span>
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="n">fitting_dict</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;elbow_90&#39;</span> <span class="p">:</span> <span class="p">{</span>
+        <span class="s1">&#39;standard_threaded&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">800</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">],</span>
+        <span class="s1">&#39;standard_glued&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">800</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">],</span>
+        <span class="s1">&#39;standard_flanged&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">800</span><span class="p">,</span> <span class="mf">0.25</span><span class="p">],</span>
+        <span class="s1">&#39;long_radius&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="mf">1.5</span><span class="p">,</span> <span class="mi">800</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">],</span>
+        <span class="s1">&#39;mitered_1&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="mf">1.5</span><span class="p">,</span> <span class="mi">1000</span><span class="p">,</span> <span class="mf">1.15</span><span class="p">,],</span>
+        <span class="s1">&#39;mitered_2&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="mf">1.5</span><span class="p">,</span> <span class="mi">800</span><span class="p">,</span> <span class="mf">0.35</span><span class="p">],</span>
+        <span class="s1">&#39;mitered_3&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="mf">1.5</span><span class="p">,</span> <span class="mi">800</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">],</span>
+        <span class="s1">&#39;mitered_4&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="mf">1.5</span><span class="p">,</span> <span class="mi">800</span><span class="p">,</span> <span class="mf">0.27</span><span class="p">],</span>
+        <span class="s1">&#39;mitered_5&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="mf">1.5</span><span class="p">,</span> <span class="mi">800</span><span class="p">,</span> <span class="mf">0.25</span><span class="p">]</span>
+    <span class="p">},</span>
+    <span class="s1">&#39;elbow_45&#39;</span> <span class="p">:</span> <span class="p">{</span>
+        <span class="s1">&#39;standard&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="mf">0.20</span><span class="p">],</span>
+        <span class="s1">&#39;long_radius&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="mf">1.5</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="mf">0.15</span><span class="p">],</span>
+        <span class="s1">&#39;mitered_1&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="mf">0.25</span><span class="p">],</span>
+        <span class="s1">&#39;mitered_2&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="mf">0.15</span><span class="p">]</span>
+    <span class="p">},</span>
+    <span class="s1">&#39;elbow_180&#39;</span> <span class="p">:</span> <span class="p">{</span>
+        <span class="s1">&#39;standard_threaded&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1000</span><span class="p">,</span> <span class="mf">0.60</span><span class="p">],</span>
+        <span class="s1">&#39;standard_glued&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">800</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">],</span>
+        <span class="s1">&#39;standard_flanged&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1000</span><span class="p">,</span> <span class="mf">0.35</span><span class="p">],</span>
+        <span class="s1">&#39;long_radius&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="mf">1.5</span><span class="p">,</span> <span class="mi">1000</span><span class="p">,</span> <span class="mf">0.30</span><span class="p">]</span>
+    <span class="p">},</span>
+    <span class="s1">&#39;tee_branch&#39;</span> <span class="p">:</span> <span class="p">{</span>
+        <span class="s1">&#39;standard_threaded&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="mf">0.70</span><span class="p">],</span>
+        <span class="s1">&#39;standard_glued&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">800</span><span class="p">,</span> <span class="mf">0.75</span><span class="p">],</span>
+        <span class="s1">&#39;standard_flanged&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="mi">800</span><span class="p">,</span> <span class="mf">0.80</span><span class="p">],</span>
+        <span class="s1">&#39;long_radius&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="mi">800</span><span class="p">,</span> <span class="mf">0.40</span><span class="p">],</span>
+        <span class="s1">&#39;stub_in&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="mi">1000</span><span class="p">,</span> <span class="mf">1.00</span><span class="p">]</span>
+    <span class="p">},</span>
+    <span class="s1">&#39;tee_through&#39;</span> <span class="p">:</span> <span class="p">{</span>
+        <span class="s1">&#39;standard_threaded&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="mf">0.10</span><span class="p">],</span>
+        <span class="s1">&#39;standard_glued&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">800</span><span class="p">,</span> <span class="mf">0.25</span><span class="p">],</span>
+        <span class="s1">&#39;standard_flanged&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">150</span><span class="p">,</span> <span class="mf">0.50</span><span class="p">],</span>
+        <span class="s1">&#39;stub_in&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+    <span class="p">},</span>
+    <span class="s1">&#39;valve&#39;</span> <span class="p">:</span> <span class="p">{</span>
+        <span class="s1">&#39;gate&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">300</span><span class="p">,</span> <span class="mf">0.10</span><span class="p">],</span>
+        <span class="s1">&#39;ball&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="mf">0.9</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="mf">0.15</span><span class="p">],</span>
+        <span class="s1">&#39;plug&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="mf">0.9</span><span class="p">,</span> <span class="mi">1000</span><span class="p">,</span> <span class="mf">0.25</span><span class="p">],</span>
+        <span class="s1">&#39;globe&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="mi">1500</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">],</span>
+        <span class="s1">&#39;angle&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="mi">1000</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">],</span>
+        <span class="s1">&#39;diaphragm&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="mi">1000</span><span class="p">,</span> <span class="mf">0.25</span><span class="p">],</span>
+        <span class="s1">&#39;butterfly&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="mi">800</span><span class="p">,</span> <span class="mf">0.25</span><span class="p">],</span>
+        <span class="s1">&#39;lift_check&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="mi">2000</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">],</span>
+        <span class="s1">&#39;swing_check&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="mi">1500</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">],</span>
+        <span class="s1">&#39;tilt_disc_check&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="mi">1000</span><span class="p">,</span> <span class="mf">0.50</span><span class="p">]</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<div class="viewcode-block" id="Pipe"><a class="viewcode-back" href="../../code_reference.html#Water.Pipe">[docs]</a><span class="k">class</span> <span class="nc">Pipe</span><span class="p">:</span>
+    <span class="sd">&#39;&#39;&#39;Defines Pipe object to add pipe section and fittings for head loss calculations.\n</span>
+<span class="sd">    See :doc:`data &lt;data&gt;` for available pipe properties.</span>
+
+<span class="sd">    :param length: straight pipe length (ft)</span>
+<span class="sd">    :param size: nominal pipe diamter (in)</span>
+<span class="sd">    :param kind: pipe material, default &#39;PVC&#39;</span>
+<span class="sd">    :param sch: pipe schedule, default=&#39;C900 DR-18&#39;</span>
+<span class="sd">    :param  Re: Reynolds number, default=2000</span>
+<span class="sd">    :type length: int</span>
+<span class="sd">    :type size: float</span>
+<span class="sd">    :type kind: string</span>
+<span class="sd">    :type sch: variable depending on pipe material</span>
+<span class="sd">    :type Re: int</span>
+<span class="sd">    :return: Pipe object</span>
+<span class="sd">    :rtype: object</span>
+
+<span class="sd">    :Example:</span>
+<span class="sd">    &gt;&gt;&gt; from Water import Pipe</span>
+<span class="sd">    &gt;&gt;&gt; pipe = Pipe(length=10, size=4, kind=&#39;STEEL&#39;, sch=40)</span>
+<span class="sd">     </span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">length</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s1">&#39;PVC&#39;</span><span class="p">,</span> <span class="n">sch</span><span class="o">=</span><span class="s1">&#39;C900 DR-18&#39;</span><span class="p">,</span> <span class="n">Re</span><span class="o">=</span><span class="mi">2000</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">kind</span> <span class="o">=</span> <span class="n">kind</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sch</span> <span class="o">=</span> <span class="n">sch</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">size</span> <span class="o">=</span> <span class="n">size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dims</span> <span class="o">=</span> <span class="n">pipe_dims</span><span class="p">[</span><span class="n">sch</span><span class="p">][</span><span class="n">size</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">length</span> <span class="o">=</span> <span class="n">length</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fitting_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reynolds</span> <span class="o">=</span> <span class="n">Re</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">outer_diameter</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39; outer diameter pipe property&#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">inner_diameter</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;inner diameter pipe property&#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">outer_diameter</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">volume</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;pipe volume property&#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="n">tools</span><span class="o">.</span><span class="n">volume_cyl</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">inner_diameter</span><span class="o">/</span><span class="mi">12</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">length</span><span class="p">)</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">area</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;pipe cross-sectional area property</span>
+<span class="sd">           &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">volume</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">length</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">c_factor</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;:pipe material C-factor property&#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="n">c_dict</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">kind</span><span class="p">]</span>
+    
+<div class="viewcode-block" id="Pipe.fitting"><a class="viewcode-back" href="../../code_reference.html#Water.Pipe.fitting">[docs]</a>    <span class="k">def</span> <span class="nf">fitting</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fitting_type</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">con_type</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">qty</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">Kvalue</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;Adds fitting to Pipe object&#39;s fitting_list to add to head loss</span>
+<span class="sd">        </span>
+<span class="sd">        :param fitting_type: keyword from fitting dictionary, (default None)  </span>
+<span class="sd">        :param con_type: keyword from fitting dictionary, (default None)  </span>
+<span class="sd">        :param qty: number of fittings in pipe object, (default 1)</span>
+<span class="sd">        :param Kvalue: custom loss coefficient, (default None)   </span>
+<span class="sd">        :type fitting_type: string  </span>
+<span class="sd">        :type con_type: string  </span>
+<span class="sd">        :type qty: int   </span>
+<span class="sd">        :type kValue: float  </span>
+<span class="sd">        :return: appends fitting onto Pipe object&#39;s fitting list</span>
+
+<span class="sd">        :Example:</span>
+<span class="sd">        &gt;&gt;&gt; # using fitting in standard fittings dictionary</span>
+<span class="sd">        &gt;&gt;&gt; pipe.fitting(fitting_type=&#39;elbow_90&#39;, con_type=&#39;standard_threaded&#39;, qty=2)</span>
+<span class="sd">         </span>
+<span class="sd">        &gt;&gt;&gt; # creating custom fitting</span>
+<span class="sd">        &gt;&gt;&gt; pipe.fitting(&#39;flow meter&#39;, &#39;flanged&#39;, qty=1, Kvalue=1.6)</span>
+<span class="sd">        </span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="n">fitting_type</span> <span class="ow">in</span> <span class="n">fitting_dict</span> <span class="ow">and</span> <span class="n">con_type</span> <span class="ow">in</span> <span class="n">fitting_dict</span><span class="p">[</span><span class="n">fitting_type</span><span class="p">]:</span>
+            <span class="n">Kfactors</span> <span class="o">=</span> <span class="n">fitting_dict</span><span class="p">[</span><span class="n">fitting_type</span><span class="p">][</span><span class="n">con_type</span><span class="p">]</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">Kvalue</span><span class="p">:</span>
+                <span class="n">Kvalue</span> <span class="o">=</span> <span class="n">Kfactors</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">reynolds</span><span class="o">+</span><span class="n">Kfactors</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="mi">1</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">inner_diameter</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">fitting_list</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">fitting_type</span><span class="p">,</span> <span class="n">con_type</span><span class="p">,</span> <span class="n">Kvalue</span><span class="p">,</span><span class="n">qty</span><span class="p">))</span></div>
+    
+<div class="viewcode-block" id="Pipe.fitting_info"><a class="viewcode-back" href="../../code_reference.html#Water.Pipe.fitting_info">[docs]</a>    <span class="k">def</span> <span class="nf">fitting_info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;:return: list of fittings currently defined in pipe object</span>
+<span class="sd">           :rtype: string</span>
+
+<span class="sd">           :Example:</span>
+<span class="sd">           &gt;&gt;&gt; print(pipe.fitting_info())</span>
+<span class="sd">              Fittings list:</span>
+<span class="sd">              elbow_90, standard_threaded: Kvalue = 0.899, qty = 2  </span>
+<span class="sd">              flow meter, flanged: Kvalue = 1.600, qty = 1</span>
+
+<span class="sd">            &#39;&#39;&#39;</span>
+        <span class="n">info</span> <span class="o">=</span> <span class="s1">&#39;Fittings list: </span><span class="se">\n</span><span class="s1">&#39;</span>
+        <span class="k">for</span> <span class="n">fitting</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">fitting_list</span><span class="p">:</span>
+            <span class="n">info</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">, </span><span class="si">{}</span><span class="s1">: Kvalue = </span><span class="si">{:.3f}</span><span class="s1">, qty = </span><span class="si">{}</span><span class="s1"> </span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">fitting</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                                                     <span class="n">fitting</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                                                     <span class="n">fitting</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+                                                     <span class="n">fitting</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+                                                     <span class="p">)</span>
+        <span class="k">return</span> <span class="n">info</span></div>
+
+<div class="viewcode-block" id="Pipe.print_fitting"><a class="viewcode-back" href="../../code_reference.html#Water.Pipe.print_fitting">[docs]</a>    <span class="k">def</span> <span class="nf">print_fitting</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;:return: prints out fitting dictionary for a quick reference</span>
+
+<span class="sd">           &#39;&#39;&#39;</span>
+        <span class="k">for</span> <span class="n">each_fitting</span> <span class="ow">in</span> <span class="n">fitting_dict</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">each_fitting</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">each_type</span> <span class="ow">in</span> <span class="n">fitting_dict</span><span class="p">[</span><span class="n">each_fitting</span><span class="p">]:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">each_type</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Pipe.major_loss"><a class="viewcode-back" href="../../code_reference.html#Water.Pipe.major_loss">[docs]</a>    <span class="k">def</span> <span class="nf">major_loss</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">flow</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;Uses `Hazen-Williams equation`_ to calculate major head loss for pipe object.  </span>
+
+<span class="sd">           .. _Hazen-Williams equation: https://en.wikipedia.org/wiki/Hazen%E2%80%93Williams_equation   </span>
+
+<span class="sd">           .. math:: h_{major} = \\frac{4.52 Q^{1.852}}{C^{1.852} \\  d^{4.8704}} \\cdot L    </span>
+
+<span class="sd">           :param flow: in gallons per minute (gpm)  </span>
+<span class="sd">           :type flow: int  </span>
+<span class="sd">           :return: major head loss in ft of head</span>
+<span class="sd">           :rtype: float</span>
+
+<span class="sd">           :Example:</span>
+<span class="sd">           &gt;&gt;&gt; flow = 300  # gpm</span>
+<span class="sd">           &gt;&gt;&gt; pipe.major_loss(flow)</span>
+<span class="sd">               0.4272... </span>
+<span class="sd">           &#39;&#39;&#39;</span>
+        <span class="n">h</span> <span class="o">=</span> <span class="p">(</span><span class="mf">10.45</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">length</span> <span class="o">*</span> <span class="n">flow</span><span class="o">**</span><span class="mf">1.852</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">c_factor</span><span class="o">**</span><span class="mf">1.852</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">inner_diameter</span><span class="o">**</span><span class="mf">4.8704</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">h</span></div>
+
+<div class="viewcode-block" id="Pipe.minor_loss"><a class="viewcode-back" href="../../code_reference.html#Water.Pipe.minor_loss">[docs]</a>    <span class="k">def</span> <span class="nf">minor_loss</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">flow</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;Uses `Darcy-Weisbach equation`_ to calculate minor head loss through fittings in fittings_list.  </span>
+<span class="sd">        </span>
+<span class="sd">           .. _Darcy-Weisbach equation: https://en.wikipedia.org/wiki/Darcy%E2%80%93Weisbach_equation   </span>
+
+<span class="sd">           .. math:: h_{minor} = f_D \\cdot \\frac{1}{2g} \\cdot \\frac{v^2}{D}     </span>
+
+<span class="sd">           :param flow: flow in gallons per minute (gpm)  </span>
+<span class="sd">           :type flow: int  </span>
+<span class="sd">           :return: minor head loss in ft of head</span>
+<span class="sd">           :rtype: float  </span>
+<span class="sd">           </span>
+<span class="sd">           :Example:</span>
+<span class="sd">           &gt;&gt;&gt; flow = 300  # gpm</span>
+<span class="sd">           &gt;&gt;&gt; pipe.minor_loss(flow)</span>
+<span class="sd">               3.0168... </span>
+<span class="sd">           &#39;&#39;&#39;</span>
+        <span class="n">g</span> <span class="o">=</span> <span class="mf">32.2</span>   <span class="c1"># gravity in fps</span>
+        <span class="n">vel</span> <span class="o">=</span> <span class="n">tools</span><span class="o">.</span><span class="n">velocity</span><span class="p">(</span><span class="n">flow</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">inner_diameter</span><span class="p">)</span>
+        <span class="n">minor_loss</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fitting_list</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">fitting</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">fitting_list</span><span class="p">:</span>
+                <span class="n">loss</span> <span class="o">=</span> <span class="n">fitting</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">*</span><span class="n">vel</span><span class="o">**</span><span class="mi">2</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">g</span><span class="p">)</span> <span class="o">*</span> <span class="n">fitting</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+                <span class="n">minor_loss</span> <span class="o">+=</span> <span class="n">loss</span>
+        <span class="k">return</span> <span class="n">minor_loss</span></div>
+
+<div class="viewcode-block" id="Pipe.get_losses"><a class="viewcode-back" href="../../code_reference.html#Water.Pipe.get_losses">[docs]</a>    <span class="k">def</span> <span class="nf">get_losses</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">flow</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;:param flow: in gallons per minute (gpm)</span>
+<span class="sd">           :type flow: int</span>
+<span class="sd">           :return: total losses (major + minor)</span>
+<span class="sd">           :rtype: float</span>
+<span class="sd">           </span>
+<span class="sd">           :Example:</span>
+<span class="sd">           &gt;&gt;&gt; flow = 300  # gpm</span>
+<span class="sd">           &gt;&gt;&gt; pipe.get_losses(flow)</span>
+<span class="sd">               3.4441...</span>
+<span class="sd">           &#39;&#39;&#39;</span>
+        <span class="n">total_loss</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">major_loss</span><span class="p">(</span><span class="n">flow</span><span class="p">)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">minor_loss</span><span class="p">(</span><span class="n">flow</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">total_loss</span></div></div>
+        
+<span class="c1">#### test script to test functionality</span>
+<span class="k">if</span> <span class="vm">__name__</span><span class="o">==</span><span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;test script:</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="n">length</span> <span class="o">=</span> <span class="mi">1000</span>    <span class="c1"># pipe length in ft</span>
+    <span class="n">size</span> <span class="o">=</span> <span class="mi">6</span>         <span class="c1"># nominal pipe diameter in inches</span>
+    <span class="n">flow</span> <span class="o">=</span> <span class="mi">300</span>       <span class="c1"># flow in gpm</span>
+    <span class="n">pipe_1</span> <span class="o">=</span> <span class="n">Pipe</span><span class="p">(</span><span class="n">length</span><span class="p">,</span> <span class="n">size</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Pipe 1 info:</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span>
+          <span class="s1">&#39;Pipe Length = &#39;</span><span class="p">,</span>
+          <span class="n">pipe_1</span><span class="o">.</span><span class="n">length</span><span class="p">,</span>
+          <span class="s1">&#39;ft </span><span class="se">\n</span><span class="s1">Head Loss = &#39;</span><span class="p">,</span>
+          <span class="nb">round</span><span class="p">(</span><span class="n">pipe_1</span><span class="o">.</span><span class="n">major_loss</span><span class="p">(</span><span class="n">flow</span><span class="p">),</span><span class="mi">2</span><span class="p">),</span>
+          <span class="s1">&#39;ft </span><span class="se">\n</span><span class="s1">Total Loss = &#39;</span><span class="p">,</span>
+          <span class="nb">round</span><span class="p">(</span><span class="n">pipe_1</span><span class="o">.</span><span class="n">get_losses</span><span class="p">(</span><span class="n">flow</span><span class="p">),</span><span class="mi">2</span><span class="p">),</span>
+          <span class="s1">&#39;ft&#39;</span>
+          <span class="p">)</span> 
+
+    <span class="n">pipe_2</span> <span class="o">=</span> <span class="n">Pipe</span><span class="p">(</span><span class="n">length</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s1">&#39;STEEL&#39;</span><span class="p">,</span> <span class="n">sch</span><span class="o">=</span><span class="mi">40</span><span class="p">)</span>
+
+    <span class="n">pipe_2</span><span class="o">.</span><span class="n">fitting</span><span class="p">(</span><span class="s1">&#39;elbow_90&#39;</span><span class="p">,</span> <span class="s1">&#39;standard_threaded&#39;</span><span class="p">,</span> <span class="n">qty</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">pipe_2</span><span class="o">.</span><span class="n">fitting</span><span class="p">(</span><span class="s1">&#39;tee_branch&#39;</span><span class="p">,</span> <span class="s1">&#39;standard_threaded&#39;</span><span class="p">,</span> <span class="n">qty</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+
+    <span class="n">losses</span> <span class="o">=</span> <span class="n">pipe_2</span><span class="o">.</span><span class="n">get_losses</span><span class="p">(</span><span class="n">flow</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Pipe 2 info:&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">pipe_2</span><span class="o">.</span><span class="n">fitting_info</span><span class="p">())</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;total head loss: &#39;</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="n">losses</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span> <span class="s1">&#39;ft&#39;</span><span class="p">)</span>
+
+    <span class="n">pipe_1</span><span class="o">.</span><span class="n">print_fitting</span><span class="p">()</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Water 1.0.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Ryan Haseman.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.2.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,215 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Code Examples and Tutorials &#8212; Water 1.0.0 documentation</title>
+    <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Water Package Code Reference" href="code_reference.html" />
+    <link rel="prev" title="Welcome to Water’s Documentation!" href="index.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="code_reference.html" title="Water Package Code Reference"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Welcome to Water’s Documentation!"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Water 1.0.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Code Examples and Tutorials</a><ul>
+<li><a class="reference internal" href="#pipe-class-examples">Pipe Class Examples</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">Welcome to Water’s Documentation!</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="code_reference.html"
+                        title="next chapter">Water Package Code Reference</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/tutorial.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="code-examples-and-tutorials">
+<h1>Code Examples and Tutorials<a class="headerlink" href="#code-examples-and-tutorials" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="pipe-class-examples">
+<span id="pipe-example"></span><h2>Pipe Class Examples<a class="headerlink" href="#pipe-class-examples" title="Permalink to this headline">¶</a></h2>
+<p>The <em>Water.Pipe</em> class allows you to create a pipe object to apply flow calculations. It is useful to
+start at a pump and create your pipe objects based on pipe size and/or material. You can add fittings
+to each pipe object and calculate the major and minor losses through the pipe based on flow.</p>
+<dl class="docutils">
+<dt><strong>Example #1:</strong> Calculating the losses from a pump’s discharge through a pipe network consisting of the following fittings:</dt>
+<dd><ul class="first simple">
+<li>90 degree elbow, quantity 2</li>
+<li>through-tee, quantity 1</li>
+<li>branch-tee, quantity 1</li>
+<li>gate valve, quantity 1</li>
+</ul>
+<p class="last">The pipe is 4-inch schedule 40 steel pipe and 60 ft long.</p>
+</dd>
+</dl>
+<div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">Water</span> <span class="kn">import</span> <span class="n">Pipe</span>
+
+ <span class="c1"># assign the flow you want to analyze in gallons per minute</span>
+ <span class="n">flow</span> <span class="o">=</span> <span class="mi">300</span>       <span class="c1"># gpm</span>
+
+ <span class="c1"># create the pipe object</span>
+ <span class="n">pipe_1</span> <span class="o">=</span> <span class="n">Pipe</span><span class="p">(</span><span class="n">length</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s1">&#39;STEEL&#39;</span><span class="p">,</span> <span class="n">sch</span><span class="o">=</span><span class="mi">40</span><span class="p">)</span>
+
+ <span class="c1"># add fittings to the pipe object</span>
+ <span class="n">pipe_1</span><span class="o">.</span><span class="n">fitting</span><span class="p">(</span><span class="n">fitting_type</span><span class="o">=</span><span class="s1">&#39;elbow_90&#39;</span><span class="p">,</span> <span class="n">con_type</span><span class="o">=</span><span class="s1">&#39;standard_threaded&#39;</span><span class="p">,</span> <span class="n">qty</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+ <span class="n">pipe_1</span><span class="o">.</span><span class="n">fitting</span><span class="p">(</span><span class="s1">&#39;tee_through&#39;</span><span class="p">,</span> <span class="s1">&#39;standard_threaded&#39;</span><span class="p">,</span> <span class="n">qty</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+ <span class="n">pipe_1</span><span class="o">.</span><span class="n">fitting</span><span class="p">(</span><span class="s1">&#39;tee_branch&#39;</span><span class="p">,</span> <span class="s1">&#39;standard_threaded&#39;</span><span class="p">,</span> <span class="n">qty</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+ <span class="n">pipe_1</span><span class="o">.</span><span class="n">fitting</span><span class="p">(</span><span class="s1">&#39;valve&#39;</span><span class="p">,</span> <span class="s1">&#39;gate&#39;</span><span class="p">,</span> <span class="n">qty</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+ <span class="c1"># apply the get_losses function to compute head loss</span>
+ <span class="n">losses</span> <span class="o">=</span> <span class="n">pipe_1</span><span class="o">.</span><span class="n">get_losses</span><span class="p">(</span><span class="n">flow</span><span class="p">)</span>
+
+ <span class="k">print</span><span class="p">(</span><span class="s1">&#39;head loss at {} gpm = {:.2f} ft&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">flow</span><span class="p">,</span> <span class="n">losses</span><span class="p">))</span>
+</pre></div>
+</td></tr></table></div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">output</span><span class="p">:</span> <span class="n">head</span> <span class="n">loss</span> <span class="n">at</span> <span class="mi">300</span> <span class="n">gpm</span> <span class="o">=</span> <span class="mf">5.60</span> <span class="n">ft</span>
+</pre></div>
+</div>
+<p>You can get a list of fittings in the pipe object by using the <em>Pipe.fitting_info()</em> method.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">pipe_1</span><span class="o">.</span><span class="n">fitting_info</span><span class="p">())</span>
+<span class="go">       Fittings list:</span>
+<span class="go">        elbow_90, standard_threaded: Kvalue = 0.899, qty = 2</span>
+<span class="go">        tee_through, standard_threaded: Kvalue = 0.225, qty = 1</span>
+<span class="go">        tee_branch, standard_threaded: Kvalue = 1.124, qty = 1</span>
+<span class="go">        valve, gate: Kvalue = 0.275, qty = 1</span>
+</pre></div>
+</div>
+<p><strong>Example #2:</strong> Building from example #1, this is an example of finding the Total Dynamic Head for a pipe network consisting
+of a pump, pipe and fittings, and a tank at an elevated location.</p>
+<img alt="_images/pipe_ex2.png" src="_images/pipe_ex2.png" />
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">Water</span> <span class="kn">import</span> <span class="n">Pipe</span>
+
+<span class="c1"># assign the flow you want to analyze in gallons per minute</span>
+<span class="n">flow</span> <span class="o">=</span> <span class="mi">300</span>       <span class="c1"># gpm</span>
+<span class="n">L</span> <span class="o">=</span> <span class="mi">100</span>          <span class="c1"># ft</span>
+
+<span class="c1"># create the 2 pipe segments in the pipe network</span>
+<span class="n">pipe_1</span> <span class="o">=</span> <span class="n">Pipe</span><span class="p">(</span><span class="n">length</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s1">&#39;STEEL&#39;</span><span class="p">,</span> <span class="n">sch</span><span class="o">=</span><span class="mi">40</span><span class="p">)</span>
+<span class="n">pipe_2</span> <span class="o">=</span> <span class="n">Pipe</span><span class="p">(</span><span class="n">length</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s1">&#39;STEEL&#39;</span><span class="p">,</span> <span class="n">sch</span><span class="o">=</span><span class="mi">40</span><span class="p">)</span>
+
+<span class="c1"># add fittings to the pipe segments</span>
+<span class="n">pipe_1</span><span class="o">.</span><span class="n">fitting</span><span class="p">(</span><span class="n">fitting_type</span><span class="o">=</span><span class="s1">&#39;elbow_90&#39;</span><span class="p">,</span> <span class="n">con_type</span><span class="o">=</span><span class="s1">&#39;standard_threaded&#39;</span><span class="p">,</span> <span class="n">qty</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">pipe_1</span><span class="o">.</span><span class="n">fitting</span><span class="p">(</span><span class="s1">&#39;tee_through&#39;</span><span class="p">,</span> <span class="s1">&#39;standard_threaded&#39;</span><span class="p">,</span> <span class="n">qty</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">pipe_1</span><span class="o">.</span><span class="n">fitting</span><span class="p">(</span><span class="s1">&#39;tee_branch&#39;</span><span class="p">,</span> <span class="s1">&#39;standard_threaded&#39;</span><span class="p">,</span> <span class="n">qty</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">pipe_1</span><span class="o">.</span><span class="n">fitting</span><span class="p">(</span><span class="s1">&#39;valve&#39;</span><span class="p">,</span> <span class="s1">&#39;gate&#39;</span><span class="p">,</span> <span class="n">qty</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="n">pipe_2</span><span class="o">.</span><span class="n">fitting</span><span class="p">(</span><span class="s1">&#39;elbow_90&#39;</span><span class="p">,</span> <span class="s1">&#39;standard_threaded&#39;</span><span class="p">,</span> <span class="n">qty</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="c1"># apply the get_losses function to compute major and minor losses</span>
+<span class="n">losses</span> <span class="o">=</span> <span class="n">pipe_1</span><span class="o">.</span><span class="n">get_losses</span><span class="p">(</span><span class="n">flow</span><span class="p">)</span> <span class="o">+</span> <span class="n">pipe_2</span><span class="o">.</span><span class="n">get_losses</span><span class="p">(</span><span class="n">flow</span><span class="p">)</span>
+
+<span class="n">TDH</span> <span class="o">=</span> <span class="n">L</span> <span class="o">+</span> <span class="n">losses</span>
+
+<span class="k">print</span><span class="p">(</span><span class="s1">&#39;Size Pump for {} gpm at {:.0f} feet of Head&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">flow</span><span class="p">,</span> <span class="n">TDH</span><span class="p">))</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">output</span><span class="p">:</span> <span class="n">Size</span> <span class="n">Pump</span> <span class="k">for</span> <span class="mi">300</span> <span class="n">gpm</span> <span class="n">at</span> <span class="mi">153</span> <span class="n">feet</span> <span class="n">of</span> <span class="n">Head</span>
+<span class="go">-----------------------------------------</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="code_reference.html" title="Water Package Code Reference"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Welcome to Water’s Documentation!"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Water 1.0.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Ryan Haseman.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.2.
+    </div>
+  </body>
+</html>
