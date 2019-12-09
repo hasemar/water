@@ -126,27 +126,25 @@ fitting_dict = {
 
 class Pipe:
     '''Defines Pipe object to add pipe section and fittings for head loss calculations.\n
-        attributes:\n  
-        - length: straight pipe length (in ft)   
-        - size: nominal pipe diameter (in inches)  
-        - kind: pipe material (PVC, steel, etc.)  
-        - sch: pipe schedule, default=40, can also put PVC AWWA sizes  
-        - fitting_list: list of fittings for pipe section  
-        - reynolds: reynolds number (default to 2000 - laminar)  
+    See :doc:`data <data>` for available pipe properties.
 
-        properties:\n
-        - inner diameter  
-        - outer diameter  
-        - c factor for hazen-williams equation
+    :param length: straight pipe length (ft)
+    :param size: nominal pipe diamter (in)
+    :param kind: pipe material, default 'PVC'
+    :param sch: pipe schedule, default='C900 DR-18'
+    :param  Re: Reynolds number, default=2000
+    :type length: int
+    :type size: float
+    :type kind: string
+    :type sch: variable depending on pipe material
+    :type Re: int
+    :return: Pipe object
+    :rtype: object
 
-        methods:\n  
-        - major_loss: uses hazen-williams equation to find head loss in straight pipe  
-        - minor_loss: uses Darcy-Wiesbach equation to find head loss in fittings  
-        - fitting: appends a fitting to the fitting_list  
-        - fitting_info: returns string of fitting info in fitting_list  
-        - print_fittings: prints fittings dictionary for reference  
-        - get_losses: returns total losses in the pipe section  
-    
+    :Example:
+    >>> from Water import Pipe
+    >>> pipe = Pipe(length=10, size=4, kind='STEEL', sch=40)
+     
     '''
 
     def __init__(self,length, size, kind='PVC', sch='C900 DR-18', Re=2000):
@@ -160,27 +158,47 @@ class Pipe:
 
     @property
     def outer_diameter(self):
-        '''returns outer diameter'''
+        ''' outer diameter pipe property'''
         return self.dims[0]
     @property
     def inner_diameter(self):
-        '''returns inner diamter'''
+        '''inner diameter pipe property'''
         return self.outer_diameter - 2 * self.dims[1]
     @property
     def volume(self):
-        '''returns volume inside of the pipe in cuft'''
+        '''pipe volume property'''
         return tools.volume_cyl(self.inner_diameter/12, self.length)
     @property
     def area(self):
-        '''returns pipe area'''
+        '''pipe cross-sectional area property
+           '''
         return self.volume/self.length
     @property
     def c_factor(self):
-        '''returns C factor for Hazen-Williams equation'''
+        ''':pipe material C-factor property'''
         return c_dict[self.kind]
     
     def fitting(self, fitting_type=None, con_type=None, qty=1, Kvalue=None):
-        '''adds fitting to Pipe object's fitting_list to add to head loss'''
+        '''Adds fitting to Pipe object's fitting_list to add to head loss
+        
+        :param fitting_type: keyword from fitting dictionary, (default None)  
+        :param con_type: keyword from fitting dictionary, (default None)  
+        :param qty: number of fittings in pipe object, (default 1)
+        :param Kvalue: custom loss coefficient, (default None)   
+        :type fitting_type: string  
+        :type con_type: string  
+        :type qty: int   
+        :type kValue: float  
+        :return: appends fitting onto Pipe object's fitting list
+
+        :Example:
+        >>> # using fitting in standard fittings dictionary
+        >>> pipe.fitting(fitting_type='elbow_90', con_type='standard_threaded', qty=2)
+         
+        >>> # creating custom fitting
+        >>> pipe.fitting('flow meter', 'flanged', qty=1, Kvalue=1.6)
+        
+        '''
         if fitting_type in fitting_dict and con_type in fitting_dict[fitting_type]:
             Kfactors = fitting_dict[fitting_type][con_type]
             if not Kvalue:
@@ -189,7 +207,16 @@ class Pipe:
         self.fitting_list.append((fitting_type, con_type, Kvalue,qty))
     
     def fitting_info(self):
-        '''returns string list of fittings currently defined in pipe object'''
+        ''':return: list of fittings currently defined in pipe object
+           :rtype: string
+
+           :Example:
+           >>> print(pipe.fitting_info())
+              Fittings list:
+              elbow_90, standard_threaded: Kvalue = 0.899, qty = 2  
+              flow meter, flanged: Kvalue = 1.600, qty = 1
+
+            '''
         info = 'Fittings list: \n'
         for fitting in self.fitting_list:
             info += '{}, {}: Kvalue = {:.3f}, qty = {} \n'.format(fitting[0],
@@ -200,20 +227,52 @@ class Pipe:
         return info
 
     def print_fitting(self):
-        '''prints out fittings dictionary for reference'''
+        ''':return: prints out fitting dictionary for a quick reference
+
+           '''
         for each_fitting in fitting_dict:
             print(each_fitting)
             for each_type in fitting_dict[each_fitting]:
                 print('\t', each_type)
 
     def major_loss(self, flow):
-        '''returns major head loss by using Hazen-Williams equation '''
+        '''Uses `Hazen-Williams equation`_ to calculate major head loss for pipe object.  
+
+           .. _Hazen-Williams equation: https://en.wikipedia.org/wiki/Hazen%E2%80%93Williams_equation   
+
+           .. math:: h_{major} = \\frac{4.52 Q^{1.852}}{C^{1.852} \\  d^{4.8704}} \\cdot L    
+
+           :param flow: in gallons per minute (gpm)  
+           :type flow: int  
+           :return: major head loss in ft of head
+           :rtype: float
+
+           :Example:
+           >>> flow = 300  # gpm
+           >>> pipe.major_loss(flow)
+               0.4272... 
+           '''
         h = (10.45 * self.length * flow**1.852)/(self.c_factor**1.852 * self.inner_diameter**4.8704)
         return h
 
     def minor_loss(self, flow):
-        '''returns minor head loss by using Darcy Wiesbach equation '''
-        g = 32.2
+        '''Uses `Darcy-Weisbach equation`_ to calculate minor head loss through fittings in fittings_list.  
+        
+           .. _Darcy-Weisbach equation: https://en.wikipedia.org/wiki/Darcy%E2%80%93Weisbach_equation   
+
+           .. math:: h_{minor} = f_D \\cdot \\frac{1}{2g} \\cdot \\frac{v^2}{D}     
+
+           :param flow: flow in gallons per minute (gpm)  
+           :type flow: int  
+           :return: minor head loss in ft of head
+           :rtype: float  
+           
+           :Example:
+           >>> flow = 300  # gpm
+           >>> pipe.minor_loss(flow)
+               3.0168... 
+           '''
+        g = 32.2   # gravity in fps
         vel = tools.velocity(flow, self.inner_diameter)
         minor_loss = 0
         if len(self.fitting_list) > 0:
@@ -223,7 +282,16 @@ class Pipe:
         return minor_loss
 
     def get_losses(self, flow):
-        '''returns total head loss (major + minor)'''
+        ''':param flow: in gallons per minute (gpm)
+           :type flow: int
+           :return: total losses (major + minor)
+           :rtype: float
+           
+           :Example:
+           >>> flow = 300  # gpm
+           >>> pipe.get_losses(flow)
+               3.4441...
+           '''
         total_loss = self.major_loss(flow) + self.minor_loss(flow)
         return total_loss
         

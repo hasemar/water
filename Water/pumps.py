@@ -11,7 +11,11 @@ BASE_DIR = path.dirname(path.abspath(__file__))
 db_path = path.join(BASE_DIR, "pumps.db")
 
 class Pump:
-    '''Defines Tank object to plot and/or affinitized pump curve and performance\n
+    '''Defines Pump object to plot and/or affinitized pump curve and performance  
+       
+       :Example:  
+       >>> from Water import Pump
+       >>> pump_1 = Pump()
 
     attributes:\n
     - flow_list: list of flows for pump curve (volumetric units) default=empty list
@@ -58,10 +62,16 @@ class Pump:
         self.affinity_data = []
 
     def check_pump(self, pump_model, impeller=None):
-        '''Checks database for existing pump
-            pump_model: dtype=string
-            impeller: dtype=string (default=None)'''
+        '''Checks sqlite database for existing pump record
 
+           :param pump_model: pump model
+           :param impeller: impeller diameter (default=None)
+           :type pump_model: string
+           :type impeller: float
+           :return: pump record if one exists 
+           :rtype: list
+           
+           '''
         conn = sqlite3.connect(db_path)
         c = conn.cursor()
         existing_params = {'model' : pump_model, 'impeller' : impeller}
@@ -85,17 +95,39 @@ class Pump:
         return exists
 
     def add_pump(self, **kwargs):
-        '''Adds pump to pumps.db
-            Use dictionary to specify parameters
-            kwargs = 
-                    {'model' : dtype=string model name,
-                     'mfg' : dtype=string manufacturer,
-                     'flow' : dtype=list length=8,
-                     'head' : dtype=list length=8,
-                     'eff' : dtype=list length=8,
-                     'bep' : dtype=list [flow, head] of best efficiency point,
-                     'rpm' : dtype=int motor rpm,
-                     'impeller' : dtype=float impeller diameter} 
+        '''Add a pump to the sqlite3 database  
+
+           :param \**kwargs: Use dictionary to specify parameters  
+           :type \**kwargs: dictionary
+           :keyword Arguments: 
+                :model: (*string*) - pump model 
+                :mfg: (*string*) - pump manufacturer  
+                :flow: (*list*) - pump flows in acending order (gpm)  
+                :mfg: (*string*) - pump manufacturer  
+                :flow: (*list*) - pump flows in acending order (gpm)  
+                :head: (*list*) - pump head in respective to flow  (ft)   
+                :eff: (*list*) - pump efficiencies respective to flow and head  
+                :bep: (*list*) - [flow, head] for best efficiency point    
+                :rpm: (*int*) - motor rpm  
+                :impeller: (*float*) - impeller diameter (inches)  
+            
+        :Example: 
+
+        .. code-block::  python  
+
+            kwargs = {
+                'model' : 'abc123',
+                'mfg' : 'Acme',
+                'flow' : [0, 10, 20 ,30, 40, 50, 60, 70],
+                'head' : [300, 280, 275, 270, 250, 240, 220, 200],
+                'eff' : [0.50, 0.53, 0.58, 0.61, 0.66, 0.70, 0.68, 0.63],
+                'bep' : [220, 0.70],
+                'rpm' : 1800,
+                'impeller' : 5.125
+                }
+
+            pump_1.add_pump(**kwargs) 
+            
         '''
         self.flow = kwargs.get('flow', [])
         self.head = kwargs.get('head', [])
@@ -185,13 +217,20 @@ class Pump:
         conn.close()
         
     def load_pump(self, mfg, model, impeller=None):
-        '''loads pump from pumps.db
-            Parameters
-            ----------
+        '''Loads pump data from sqlite3 database into pump object
             
-            mfg: pump manufacturer dtype=string
-            model: pump model dtype=string
-            impeller: pump impeller size dtype=string (default=None)'''
+           :param mfg: pump manufacturer  
+           :type mfg: string  
+           :param model: pump model   
+           :type model: string
+           :param impeller: pump impeller size (default=None) *inches*
+           :type impeller: float
+           
+           :Example:
+           >>> pump_2 = Pump()
+           >>> pump_2.load_pump('Goulds', '3657 1.5x2 -6: 3SS')
+
+           '''
         multiples = self.check_pump(model, impeller)
         print(multiples)
         if len(multiples) == 0:
@@ -232,7 +271,12 @@ class Pump:
 
     def delete_pump(self, pump_id):
         '''deletes a pump record from the database
-            enter pump_id of pump to be deleted '''
+            enter pump_id of pump to be deleted 
+            
+            :param pump_id: pump id from pump table in database
+            :type pump_id: int
+
+            '''
 
         conn = sqlite3.connect(db_path)
         c = conn.cursor()
@@ -250,21 +294,22 @@ class Pump:
         
     @property
     def vfd_flow(self):
-        ''' returns a numpy array of affinitized flows'''
-        return self.affinitize(self.flow, 1)
+        '''affinitized array of pump flows property'''
+        return self._affinitize(self.flow, 1)
 
     @property
     def vfd_head(self):
-        ''' returns a numpy array of affinitized heads'''
-        return self.affinitize(self.head, 2)
+        '''affinitized array of heads property'''
+        return self._affinitize(self.head, 2)
 
     @property
     def vfd_eff(self):
-        ''' returns a numpy array of affinitized efficiencies'''
-        return self.affinitize(self.eff, 3)
+        '''affinitized array of efficiencies property'''
+        return self._affinitize(self.eff, 3)
 
-    def affinitize(self, pump_data, pwr):
-        '''creates affinitized curves for flow, head and efficiency for motor speeds at:\n
+    def _affinitize(self, pump_data, pwr):
+        '''creates affinitized curves for flow, head and efficiency for motor speeds at:  
+
         Frequency =\n
         - 60 hz
         - 50 hz
@@ -280,9 +325,20 @@ class Pump:
         return self.affinity_data
 
     def plot_curve(self, target_flow=None, tdh=None, vfd=True, eff=False):
-        '''returns a matplotlib plot of the pump curve.
+        '''creates a matplotlib plot of the pump curve.
             Default is to plot affinitized curves with full speed curve. 
             User has option to add system curve and efficiency curve
+
+            :param target_flow: flow point to plot (gpm)
+            :param type: int/float
+            :param tdh: Total Dynamic Head (ft)
+            :type tdh: int/float  
+            :param vfd: turn on/off affinitized pump curves  
+            :type vfd: boolean
+            :param eff: turn on/off pump efficiency curve
+            :type eff: boolean
+            :return: matplotlib plot of pump curve for pump object
+        
         '''
         if self.impeller:
             title_str = 'Pump: ' + self.model + ' - ' + str(self.rpm) + ' RPM - ' + str(self.impeller) + '" impeller'
@@ -330,6 +386,12 @@ class Pump:
         ''' Returns head value from pump curve based on flow input.
             If flow is not a known value it will interprolate between the
             two closest points on the curve.
+
+            :param flow: pump flow (gpm)
+            :type flow: int/float  
+            :return: head value from curve data
+            :rtype: float
+            
         '''
         try:
             if flow in self.flow:
