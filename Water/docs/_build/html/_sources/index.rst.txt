@@ -5,9 +5,8 @@ Welcome to Water's Documentation!
    :maxdepth: 3
    :caption: Contents:
 
-   tutorial
    code_reference
-
+   tutorial
 
 
 Indices and tables

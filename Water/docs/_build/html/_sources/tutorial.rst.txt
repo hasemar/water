@@ -84,7 +84,71 @@ of a pump, pipe and fittings, and a tank at an elevated location.
     print('Size Pump for {} gpm at {:.0f} feet of Head'.format(flow, TDH))
 
 >>> output: Size Pump for 300 gpm at 153 feet of Head
+
 -----------------------------------------
 
+.. _pump_example:
 
+Pump Class Examples  
+--------------------  
+The *Water.Pump* class allows you to create a pump class to help in sizing a pump. 
+The Water package has includes a database of pumps that you can add to.
+Once pump data is loaded into the pump object you can plot it's pump curve.
+
+**Example #1** Load existing pump data into the a pump object and plot it's curve.
+
+.. code-block:: python
+   :linenos:
+
+   from Water import Pump
+
+   # design parameters
+    FLOW = 100    # gpm
+    TDH = 111            # ft head
+
+    # define pump object and load pump data
+    pump_1 = Pump()
+    pump_1.load_pump('Goulds', '3657 1.5x2 -6: 3SS')
+
+    # plot curve without affinitized curves and with efficiency curve
+    pump_1.plot_curve(target_flow=FLOW, tdh=TDH, vfd=False, eff=True, show=True)
+
+.. image:: pump_ex1.png
+
+**Example #2** Load new pump data into database, create a system curve and plot affinitized pump curve with the system curve.
+
+..  code-block::  python
+    :linenos:
+
+    import numpy as np
+    from Water import Pump
+
+    # create a pump object
+    pump_2 = Pump()
+
+    # define new pump parameters as a dictionary
+    new_pump_data = {
+            'model' : 'BF 1-1/2 x 2 - 10',
+            'mfg' : 'Goulds',
+            'flow' : [0, 50, 100, 150, 200, 250],
+            'head' : [400, 400, 390, 372, 340, 270],
+            'eff' : [0, 0, 0.49, 0.56, 0.60, 0.54],
+            'bep' : [200, 340],
+            'rpm' : 3500,
+            'impeller' : 9.1875
+            }
+    # add pump to database, this will load the parameters into the object variables as well
+    pump_2.add_pump(**new_pump_data)
+
+    # create system curve
+    system_flow = np.linspace(1, 220, 20)
+    
+    system_head = []
+    for flow in system_flow:
+        system_head.append(220 + 20*np.exp(-1/(flow*.005)))
+
+    # plot curve with system curve 
+    pump_2.plot_curve(system_flow, system_head, show=True)
+
+.. image:: pump_ex2.png
 

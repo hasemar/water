@@ -17,36 +17,6 @@ class Pump:
        >>> from Water import Pump
        >>> pump_1 = Pump()
 
-    attributes:\n
-    - flow_list: list of flows for pump curve (volumetric units) default=empty list
-    - head_list: list of head pressure for pump curve (pressure units) default=empty list
-    - eff_list: list of efficiencies for pump curve (float 0>eff<1 units) default=None
-    - model: pump model as string default=None
-    - rpm: pump motor rpm as int default=None
-    - imp: pump impeller size as float (distance units) default=None
-
-    properties:\n
-    - vfd_flow: affinitized flow data
-    - vfd_head: affinitized head data
-    - vfd_eff: affinitized efficiencty data
-
-    methods:\n
-    - load_pump: loads a pump from the pumps database
-    - add_pump: adds a pump to the database
-    - delete_pump: deletes a pump from the database
-    - check_pump: check for a specific pump in the database
-    - available_pumps: see all pumps in the database
-    - affinitize: takes pump curve info and applies affinity laws to the curve
-        params:\n 
-        - pump_data: flow, head or efficiency list
-        - pwr: exponent for operation (1 for flow, 2 for head, 3 for eff)
-
-    - plot_curve: plots pump curve with affinitized data, also plot system curve if entered
-        params:\n
-        - target_flow: system curve flow as list or point
-        - tdh: system curve head as list or point
-        
-    - find_head: lookup head condition from flow input.
     '''     
     def __init__(self):
         self.flow = []
@@ -127,7 +97,7 @@ class Pump:
                 }
 
             pump_1.add_pump(**kwargs) 
-            
+          
         '''
         self.flow = kwargs.get('flow', [])
         self.head = kwargs.get('head', [])
@@ -251,6 +221,7 @@ class Pump:
                             '''
             c.execute(sqlquery, params)
 
+
             pump = c.fetchall()
             if len(pump) > 0:
                 pump = pump[0]
@@ -324,7 +295,7 @@ class Pump:
             self.affinity_data.append([data * percent for data in pump_data])
         return self.affinity_data
 
-    def plot_curve(self, target_flow=None, tdh=None, vfd=True, eff=False):
+    def plot_curve(self, target_flow=None, tdh=None, vfd=True, eff=False, show=False):
         '''creates a matplotlib plot of the pump curve.
             Default is to plot affinitized curves with full speed curve. 
             User has option to add system curve and efficiency curve
@@ -337,7 +308,30 @@ class Pump:
             :type vfd: boolean
             :param eff: turn on/off pump efficiency curve
             :type eff: boolean
+            :param show: show plot (keep false if using in an .ipynb)
+            :type show: boolean
             :return: matplotlib plot of pump curve for pump object
+
+        :Example:  
+        Plotting a pump curve with one design point with efficiency curve
+
+        .. code-block:: python
+            
+            # design parameters
+            FLOW = 100    # gpm
+            TDH = 111            # ft head
+
+            # define pump object and load pump data
+            pump_1 = Pump()
+            pump_1.load_pump('Goulds', '3657 1.5x2 -6: 3SS')
+
+            # plot curve without affinitized curves and with efficiency curve
+            pump_1.plot_curve(target_flow=FLOW, tdh=TDH, vfd=False, eff=True, show=True)
+
+        .. image:: pump_ex1.png
+
+        See :doc:`Pump Class Example <tutorial>` for affinitize curve functionality and how to 
+        plot a system curve along with the pump curve. 
         
         '''
         if self.impeller:
@@ -381,6 +375,8 @@ class Pump:
         self.ax[1].legend()
         self.fig.tight_layout()   
         plt.draw()
+        if show:
+            plt.show()
 
     def find_head(self, flow):
         ''' Returns head value from pump curve based on flow input.
@@ -391,6 +387,12 @@ class Pump:
             :type flow: int/float  
             :return: head value from curve data
             :rtype: float
+        
+        :Example:  
+        >>> Q = 125
+        >>> h = pump_1.find_head(Q)
+        >>> print(h, 'ft')
+            100.125 ft
             
         '''
         try:

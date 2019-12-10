@@ -72,36 +72,6 @@
 <span class="sd">       &gt;&gt;&gt; from Water import Pump</span>
 <span class="sd">       &gt;&gt;&gt; pump_1 = Pump()</span>
 
-<span class="sd">    attributes:\n</span>
-<span class="sd">    - flow_list: list of flows for pump curve (volumetric units) default=empty list</span>
-<span class="sd">    - head_list: list of head pressure for pump curve (pressure units) default=empty list</span>
-<span class="sd">    - eff_list: list of efficiencies for pump curve (float 0&gt;eff&lt;1 units) default=None</span>
-<span class="sd">    - model: pump model as string default=None</span>
-<span class="sd">    - rpm: pump motor rpm as int default=None</span>
-<span class="sd">    - imp: pump impeller size as float (distance units) default=None</span>
-
-<span class="sd">    properties:\n</span>
-<span class="sd">    - vfd_flow: affinitized flow data</span>
-<span class="sd">    - vfd_head: affinitized head data</span>
-<span class="sd">    - vfd_eff: affinitized efficiencty data</span>
-
-<span class="sd">    methods:\n</span>
-<span class="sd">    - load_pump: loads a pump from the pumps database</span>
-<span class="sd">    - add_pump: adds a pump to the database</span>
-<span class="sd">    - delete_pump: deletes a pump from the database</span>
-<span class="sd">    - check_pump: check for a specific pump in the database</span>
-<span class="sd">    - available_pumps: see all pumps in the database</span>
-<span class="sd">    - affinitize: takes pump curve info and applies affinity laws to the curve</span>
-<span class="sd">        params:\n </span>
-<span class="sd">        - pump_data: flow, head or efficiency list</span>
-<span class="sd">        - pwr: exponent for operation (1 for flow, 2 for head, 3 for eff)</span>
-
-<span class="sd">    - plot_curve: plots pump curve with affinitized data, also plot system curve if entered</span>
-<span class="sd">        params:\n</span>
-<span class="sd">        - target_flow: system curve flow as list or point</span>
-<span class="sd">        - tdh: system curve head as list or point</span>
-<span class="sd">        </span>
-<span class="sd">    - find_head: lookup head condition from flow input.</span>
 <span class="sd">    &#39;&#39;&#39;</span>     
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">flow</span> <span class="o">=</span> <span class="p">[]</span>
@@ -182,7 +152,7 @@
 <span class="sd">                }</span>
 
 <span class="sd">            pump_1.add_pump(**kwargs) </span>
-<span class="sd">            </span>
+<span class="sd">          </span>
 <span class="sd">        &#39;&#39;&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">flow</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;flow&#39;</span><span class="p">,</span> <span class="p">[])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">head</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;head&#39;</span><span class="p">,</span> <span class="p">[])</span>
@@ -306,6 +276,7 @@
 <span class="s1">                            &#39;&#39;&#39;</span>
             <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">sqlquery</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
 
+
             <span class="n">pump</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()</span>
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">pump</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
                 <span class="n">pump</span> <span class="o">=</span> <span class="n">pump</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -379,7 +350,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">affinity_data</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">data</span> <span class="o">*</span> <span class="n">percent</span> <span class="k">for</span> <span class="n">data</span> <span class="ow">in</span> <span class="n">pump_data</span><span class="p">])</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">affinity_data</span>
 
-<div class="viewcode-block" id="Pump.plot_curve"><a class="viewcode-back" href="../../code_reference.html#Water.Pump.plot_curve">[docs]</a>    <span class="k">def</span> <span class="nf">plot_curve</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target_flow</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tdh</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vfd</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">eff</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="Pump.plot_curve"><a class="viewcode-back" href="../../code_reference.html#Water.Pump.plot_curve">[docs]</a>    <span class="k">def</span> <span class="nf">plot_curve</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target_flow</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tdh</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vfd</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">eff</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;creates a matplotlib plot of the pump curve.</span>
 <span class="sd">            Default is to plot affinitized curves with full speed curve. </span>
 <span class="sd">            User has option to add system curve and efficiency curve</span>
@@ -392,7 +363,30 @@
 <span class="sd">            :type vfd: boolean</span>
 <span class="sd">            :param eff: turn on/off pump efficiency curve</span>
 <span class="sd">            :type eff: boolean</span>
+<span class="sd">            :param show: show plot (keep false if using in an .ipynb)</span>
+<span class="sd">            :type show: boolean</span>
 <span class="sd">            :return: matplotlib plot of pump curve for pump object</span>
+
+<span class="sd">        :Example:  </span>
+<span class="sd">        Plotting a pump curve with one design point with efficiency curve</span>
+
+<span class="sd">        .. code-block:: python</span>
+<span class="sd">            </span>
+<span class="sd">            # design parameters</span>
+<span class="sd">            FLOW = 100    # gpm</span>
+<span class="sd">            TDH = 111            # ft head</span>
+
+<span class="sd">            # define pump object and load pump data</span>
+<span class="sd">            pump_1 = Pump()</span>
+<span class="sd">            pump_1.load_pump(&#39;Goulds&#39;, &#39;3657 1.5x2 -6: 3SS&#39;)</span>
+
+<span class="sd">            # plot curve without affinitized curves and with efficiency curve</span>
+<span class="sd">            pump_1.plot_curve(target_flow=FLOW, tdh=TDH, vfd=False, eff=True, show=True)</span>
+
+<span class="sd">        .. image:: pump_ex1.png</span>
+
+<span class="sd">        See :doc:`Pump Class Example &lt;tutorial&gt;` for affinitize curve functionality and how to </span>
+<span class="sd">        plot a system curve along with the pump curve. </span>
 <span class="sd">        </span>
 <span class="sd">        &#39;&#39;&#39;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">impeller</span><span class="p">:</span>
@@ -435,7 +429,9 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fig</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>   
-        <span class="n">plt</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span></div>
+        <span class="n">plt</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">show</span><span class="p">:</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="Pump.find_head"><a class="viewcode-back" href="../../code_reference.html#Water.Pump.find_head">[docs]</a>    <span class="k">def</span> <span class="nf">find_head</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">flow</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39; Returns head value from pump curve based on flow input.</span>
@@ -446,6 +442,12 @@
 <span class="sd">            :type flow: int/float  </span>
 <span class="sd">            :return: head value from curve data</span>
 <span class="sd">            :rtype: float</span>
+<span class="sd">        </span>
+<span class="sd">        :Example:  </span>
+<span class="sd">        &gt;&gt;&gt; Q = 125</span>
+<span class="sd">        &gt;&gt;&gt; h = pump_1.find_head(Q)</span>
+<span class="sd">        &gt;&gt;&gt; print(h, &#39;ft&#39;)</span>
+<span class="sd">            100.125 ft</span>
 <span class="sd">            </span>
 <span class="sd">        &#39;&#39;&#39;</span>
         <span class="k">try</span><span class="p">:</span>

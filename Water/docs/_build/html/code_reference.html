@@ -16,7 +16,8 @@
     <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="prev" title="Code Examples and Tutorials" href="tutorial.html" /> 
+    <link rel="next" title="Code Examples and Tutorials" href="tutorial.html" />
+    <link rel="prev" title="Welcome to Water’s Documentation!" href="index.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
@@ -29,6 +30,9 @@
              >modules</a> |</li>
         <li class="right" >
           <a href="tutorial.html" title="Code Examples and Tutorials"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Welcome to Water’s Documentation!"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">Water 1.0.0 documentation</a> &#187;</li> 
       </ul>
@@ -48,8 +52,11 @@
 </ul>
 
   <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">Welcome to Water’s Documentation!</a></p>
+  <h4>Next topic</h4>
   <p class="topless"><a href="tutorial.html"
-                        title="previous chapter">Code Examples and Tutorials</a></p>
+                        title="next chapter">Code Examples and Tutorials</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -397,8 +404,7 @@ on the tutorials page.</p>
 <em class="property">class </em><code class="descclassname">Water.</code><code class="descname">Pump</code><a class="reference internal" href="_modules/Water/pumps.html#Pump"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Water.Pump" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Defines Pump object to plot and/or affinitized pump curve and performance</p>
-<blockquote>
-<div><table class="docutils field-list" frame="void" rules="none">
+<table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
@@ -410,49 +416,6 @@ on the tutorials page.</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pump_1</span> <span class="o">=</span> <span class="n">Pump</span><span class="p">()</span>
 </pre></div>
 </div>
-</div></blockquote>
-<p>attributes:</p>
-<ul class="simple">
-<li>flow_list: list of flows for pump curve (volumetric units) default=empty list</li>
-<li>head_list: list of head pressure for pump curve (pressure units) default=empty list</li>
-<li>eff_list: list of efficiencies for pump curve (float 0&gt;eff&lt;1 units) default=None</li>
-<li>model: pump model as string default=None</li>
-<li>rpm: pump motor rpm as int default=None</li>
-<li>imp: pump impeller size as float (distance units) default=None</li>
-</ul>
-<p>properties:</p>
-<ul class="simple">
-<li>vfd_flow: affinitized flow data</li>
-<li>vfd_head: affinitized head data</li>
-<li>vfd_eff: affinitized efficiencty data</li>
-</ul>
-<p>methods:</p>
-<ul class="simple">
-<li>load_pump: loads a pump from the pumps database</li>
-<li>add_pump: adds a pump to the database</li>
-<li>delete_pump: deletes a pump from the database</li>
-<li>check_pump: check for a specific pump in the database</li>
-<li>available_pumps: see all pumps in the database</li>
-<li><dl class="first docutils">
-<dt>affinitize: takes pump curve info and applies affinity laws to the curve</dt>
-<dd>params:<ul class="last">
-<li>pump_data: flow, head or efficiency list</li>
-<li>pwr: exponent for operation (1 for flow, 2 for head, 3 for eff)</li>
-</ul>
-</dd>
-</dl>
-</li>
-<li><dl class="first docutils">
-<dt>plot_curve: plots pump curve with affinitized data, also plot system curve if entered</dt>
-<dd>params:<ul class="last">
-<li>target_flow: system curve flow as list or point</li>
-<li>tdh: system curve head as list or point</li>
-</ul>
-</dd>
-</dl>
-</li>
-<li>find_head: lookup head condition from flow input.</li>
-</ul>
 <dl class="method">
 <dt id="Water.Pump.check_pump">
 <code class="descname">check_pump</code><span class="sig-paren">(</span><em>pump_model</em>, <em>impeller=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Water/pumps.html#Pump.check_pump"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Water.Pump.check_pump" title="Permalink to this definition">¶</a></dt>
@@ -614,48 +577,105 @@ enter pump_id of pump to be deleted</p>
 
 <dl class="method">
 <dt id="Water.Pump.plot_curve">
-<code class="descname">plot_curve</code><span class="sig-paren">(</span><em>target_flow=None</em>, <em>tdh=None</em>, <em>vfd=True</em>, <em>eff=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Water/pumps.html#Pump.plot_curve"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Water.Pump.plot_curve" title="Permalink to this definition">¶</a></dt>
-<dd><p>creates a matplotlib plot of the pump curve.
-Default is to plot affinitized curves with full speed curve.
+<code class="descname">plot_curve</code><span class="sig-paren">(</span><em>target_flow=None</em>, <em>tdh=None</em>, <em>vfd=True</em>, <em>eff=False</em>, <em>show=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Water/pumps.html#Pump.plot_curve"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Water.Pump.plot_curve" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>creates a matplotlib plot of the pump curve.</dt>
+<dd><p class="first">Default is to plot affinitized curves with full speed curve.
 User has option to add system curve and efficiency curve</p>
+<table class="last docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">param target_flow:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body">flow point to plot (gpm)</td>
+</tr>
+<tr class="field-even field"><th class="field-name">param type:</th><td class="field-body">int/float</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">param tdh:</th><td class="field-body">Total Dynamic Head (ft)</td>
+</tr>
+<tr class="field-even field"><th class="field-name">type tdh:</th><td class="field-body">int/float</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">param vfd:</th><td class="field-body">turn on/off affinitized pump curves</td>
+</tr>
+<tr class="field-even field"><th class="field-name">type vfd:</th><td class="field-body">boolean</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">param eff:</th><td class="field-body">turn on/off pump efficiency curve</td>
+</tr>
+<tr class="field-even field"><th class="field-name">type eff:</th><td class="field-body">boolean</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">param show:</th><td class="field-body">show plot (keep false if using in an .ipynb)</td>
+</tr>
+<tr class="field-even field"><th class="field-name">type show:</th><td class="field-body">boolean</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">return:</th><td class="field-body">matplotlib plot of pump curve for pump object</td>
+</tr>
+</tbody>
+</table>
+</dd>
+</dl>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>target_flow</strong> – flow point to plot (gpm)</li>
-<li><strong>type</strong> – int/float</li>
-<li><strong>tdh</strong> (<em>int/float</em>) – Total Dynamic Head (ft)</li>
-<li><strong>vfd</strong> (<em>boolean</em>) – turn on/off affinitized pump curves</li>
-<li><strong>eff</strong> (<em>boolean</em>) – turn on/off pump efficiency curve</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">matplotlib plot of pump curve for pump object</p>
-</td>
+<tr class="field-odd field"><th class="field-name">Example:</th><td class="field-body"></td>
 </tr>
 </tbody>
 </table>
+<p>Plotting a pump curve with one design point with efficiency curve</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># design parameters</span>
+<span class="n">FLOW</span> <span class="o">=</span> <span class="mi">100</span>    <span class="c1"># gpm</span>
+<span class="n">TDH</span> <span class="o">=</span> <span class="mi">111</span>            <span class="c1"># ft head</span>
+
+<span class="c1"># define pump object and load pump data</span>
+<span class="n">pump_1</span> <span class="o">=</span> <span class="n">Pump</span><span class="p">()</span>
+<span class="n">pump_1</span><span class="o">.</span><span class="n">load_pump</span><span class="p">(</span><span class="s1">&#39;Goulds&#39;</span><span class="p">,</span> <span class="s1">&#39;3657 1.5x2 -6: 3SS&#39;</span><span class="p">)</span>
+
+<span class="c1"># plot curve without affinitized curves and with efficiency curve</span>
+<span class="n">pump_1</span><span class="o">.</span><span class="n">plot_curve</span><span class="p">(</span><span class="n">target_flow</span><span class="o">=</span><span class="n">FLOW</span><span class="p">,</span> <span class="n">tdh</span><span class="o">=</span><span class="n">TDH</span><span class="p">,</span> <span class="n">vfd</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">eff</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="_images/pump_ex1.png" src="_images/pump_ex1.png" />
+<p>See <a class="reference internal" href="tutorial.html"><span class="doc">Pump Class Example</span></a> for affinitize curve functionality and how to
+plot a system curve along with the pump curve.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="Water.Pump.find_head">
 <code class="descname">find_head</code><span class="sig-paren">(</span><em>flow</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Water/pumps.html#Pump.find_head"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Water.Pump.find_head" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns head value from pump curve based on flow input.
-If flow is not a known value it will interprolate between the
+<dd><dl class="docutils">
+<dt>Returns head value from pump curve based on flow input.</dt>
+<dd><p class="first">If flow is not a known value it will interprolate between the
 two closest points on the curve.</p>
+<table class="last docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">param flow:</th><td class="field-body">pump flow (gpm)</td>
+</tr>
+<tr class="field-even field"><th class="field-name">type flow:</th><td class="field-body">int/float</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">return:</th><td class="field-body">head value from curve data</td>
+</tr>
+<tr class="field-even field"><th class="field-name">rtype:</th><td class="field-body">float</td>
+</tr>
+</tbody>
+</table>
+</dd>
+</dl>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>flow</strong> (<em>int/float</em>) – pump flow (gpm)</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">head value from curve data</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">float</td>
+<tr class="field-odd field"><th class="field-name">Example:</th><td class="field-body"></td>
 </tr>
 </tbody>
 </table>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Q</span> <span class="o">=</span> <span class="mi">125</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">h</span> <span class="o">=</span> <span class="n">pump_1</span><span class="o">.</span><span class="n">find_head</span><span class="p">(</span><span class="n">Q</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="s1">&#39;ft&#39;</span><span class="p">)</span>
+<span class="go">    100.125 ft</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </dd></dl>
@@ -1148,6 +1168,9 @@ used in fluid mechanics in english units</dd>
              >modules</a> |</li>
         <li class="right" >
           <a href="tutorial.html" title="Code Examples and Tutorials"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Welcome to Water’s Documentation!"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">Water 1.0.0 documentation</a> &#187;</li> 
       </ul>

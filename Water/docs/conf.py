@@ -81,6 +81,7 @@ pygments_style = None
 # a list of builtin themes.
 #
 html_theme = 'sphinxdoc'
+#html_theme = 'python-docs-theme-2018.7'
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the

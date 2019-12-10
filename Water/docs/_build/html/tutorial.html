@@ -16,8 +16,7 @@
     <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Water Package Code Reference" href="code_reference.html" />
-    <link rel="prev" title="Welcome to Water’s Documentation!" href="index.html" /> 
+    <link rel="prev" title="Water Package Code Reference" href="code_reference.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
@@ -30,9 +29,6 @@
              >modules</a> |</li>
         <li class="right" >
           <a href="code_reference.html" title="Water Package Code Reference"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="index.html" title="Welcome to Water’s Documentation!"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">Water 1.0.0 documentation</a> &#187;</li> 
       </ul>
@@ -43,16 +39,14 @@
   <ul>
 <li><a class="reference internal" href="#">Code Examples and Tutorials</a><ul>
 <li><a class="reference internal" href="#pipe-class-examples">Pipe Class Examples</a></li>
+<li><a class="reference internal" href="#pump-class-examples">Pump Class Examples</a></li>
 </ul>
 </li>
 </ul>
 
   <h4>Previous topic</h4>
-  <p class="topless"><a href="index.html"
-                        title="previous chapter">Welcome to Water’s Documentation!</a></p>
-  <h4>Next topic</h4>
   <p class="topless"><a href="code_reference.html"
-                        title="next chapter">Water Package Code Reference</a></p>
+                        title="previous chapter">Water Package Code Reference</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -177,9 +171,103 @@ of a pump, pipe and fittings, and a tank at an elevated location.</p>
 </pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">output</span><span class="p">:</span> <span class="n">Size</span> <span class="n">Pump</span> <span class="k">for</span> <span class="mi">300</span> <span class="n">gpm</span> <span class="n">at</span> <span class="mi">153</span> <span class="n">feet</span> <span class="n">of</span> <span class="n">Head</span>
-<span class="go">-----------------------------------------</span>
 </pre></div>
 </div>
+<hr class="docutils" />
+</div>
+<div class="section" id="pump-class-examples">
+<span id="pump-example"></span><h2>Pump Class Examples<a class="headerlink" href="#pump-class-examples" title="Permalink to this headline">¶</a></h2>
+<p>The <em>Water.Pump</em> class allows you to create a pump class to help in sizing a pump.
+The Water package has includes a database of pumps that you can add to.
+Once pump data is loaded into the pump object you can plot it’s pump curve.</p>
+<p><strong>Example #1</strong> Load existing pump data into the a pump object and plot it’s curve.</p>
+<div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">Water</span> <span class="kn">import</span> <span class="n">Pump</span>
+
+<span class="c1"># design parameters</span>
+ <span class="n">FLOW</span> <span class="o">=</span> <span class="mi">100</span>    <span class="c1"># gpm</span>
+ <span class="n">TDH</span> <span class="o">=</span> <span class="mi">111</span>            <span class="c1"># ft head</span>
+
+ <span class="c1"># define pump object and load pump data</span>
+ <span class="n">pump_1</span> <span class="o">=</span> <span class="n">Pump</span><span class="p">()</span>
+ <span class="n">pump_1</span><span class="o">.</span><span class="n">load_pump</span><span class="p">(</span><span class="s1">&#39;Goulds&#39;</span><span class="p">,</span> <span class="s1">&#39;3657 1.5x2 -6: 3SS&#39;</span><span class="p">)</span>
+
+ <span class="c1"># plot curve without affinitized curves and with efficiency curve</span>
+ <span class="n">pump_1</span><span class="o">.</span><span class="n">plot_curve</span><span class="p">(</span><span class="n">target_flow</span><span class="o">=</span><span class="n">FLOW</span><span class="p">,</span> <span class="n">tdh</span><span class="o">=</span><span class="n">TDH</span><span class="p">,</span> <span class="n">vfd</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">eff</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</pre></div>
+</td></tr></table></div>
+<img alt="_images/pump_ex1.png" src="_images/pump_ex1.png" />
+<p><strong>Example #2</strong> Load new pump data into database, create a system curve and plot affinitized pump curve with the system curve.</p>
+<div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">Water</span> <span class="kn">import</span> <span class="n">Pump</span>
+
+<span class="c1"># create a pump object</span>
+<span class="n">pump_2</span> <span class="o">=</span> <span class="n">Pump</span><span class="p">()</span>
+
+<span class="c1"># define new pump parameters as a dictionary</span>
+<span class="n">new_pump_data</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;model&#39;</span> <span class="p">:</span> <span class="s1">&#39;BF 1-1/2 x 2 - 10&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;mfg&#39;</span> <span class="p">:</span> <span class="s1">&#39;Goulds&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;flow&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">150</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">250</span><span class="p">],</span>
+        <span class="s1">&#39;head&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="mi">400</span><span class="p">,</span> <span class="mi">400</span><span class="p">,</span> <span class="mi">390</span><span class="p">,</span> <span class="mi">372</span><span class="p">,</span> <span class="mi">340</span><span class="p">,</span> <span class="mi">270</span><span class="p">],</span>
+        <span class="s1">&#39;eff&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mf">0.49</span><span class="p">,</span> <span class="mf">0.56</span><span class="p">,</span> <span class="mf">0.60</span><span class="p">,</span> <span class="mf">0.54</span><span class="p">],</span>
+        <span class="s1">&#39;bep&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="mi">200</span><span class="p">,</span> <span class="mi">340</span><span class="p">],</span>
+        <span class="s1">&#39;rpm&#39;</span> <span class="p">:</span> <span class="mi">3500</span><span class="p">,</span>
+        <span class="s1">&#39;impeller&#39;</span> <span class="p">:</span> <span class="mf">9.1875</span>
+        <span class="p">}</span>
+<span class="c1"># add pump to database, this will load the parameters into the object variables as well</span>
+<span class="n">pump_2</span><span class="o">.</span><span class="n">add_pump</span><span class="p">(</span><span class="o">**</span><span class="n">new_pump_data</span><span class="p">)</span>
+
+<span class="c1"># create system curve</span>
+<span class="n">system_flow</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">220</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+
+<span class="n">system_head</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">flow</span> <span class="ow">in</span> <span class="n">system_flow</span><span class="p">:</span>
+    <span class="n">system_head</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">220</span> <span class="o">+</span> <span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="o">/</span><span class="p">(</span><span class="n">flow</span><span class="o">*.</span><span class="mo">005</span><span class="p">)))</span>
+
+<span class="c1"># plot curve with system curve</span>
+<span class="n">pump_2</span><span class="o">.</span><span class="n">plot_curve</span><span class="p">(</span><span class="n">system_flow</span><span class="p">,</span> <span class="n">system_head</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</pre></div>
+</td></tr></table></div>
+<img alt="_images/pump_ex2.png" src="_images/pump_ex2.png" />
 </div>
 </div>
 
@@ -200,9 +288,6 @@ of a pump, pipe and fittings, and a tank at an elevated location.</p>
              >modules</a> |</li>
         <li class="right" >
           <a href="code_reference.html" title="Water Package Code Reference"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="index.html" title="Welcome to Water’s Documentation!"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">Water 1.0.0 documentation</a> &#187;</li> 
       </ul>
