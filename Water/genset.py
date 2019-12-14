@@ -6,23 +6,27 @@ Genset:
 from __future__ import print_function, division
 
 class Genset:
-    '''Defines Genset object to calculate generator loads.\n
-    attributes:\n
-    - voltage: generator voltage (V)
-    - phase: generator phase
-    - capacity: the power capacity of the generator (kW) defaults to None
-    - fire_list: list of fire flow motor loads
-    - dom_list : list of domestic flow motor loads
-    - pf: dict of power factors for 3ph and 1ph motor
-    
-    methods:\n
-    - add_load: appends load to self.load_list and sums list to 
-        calculate self.total_load
-    - delete_load: deletes load fro self.load_list and decreases 
-        self.total_load
+    '''Defines a Genset object to calculate generator loads. 
 
+    :param voltage:  generator output voltage (v)
+    :param phase: generator phase (ph)
+    :param capacity: generator load capaicty (kW), *default None*
+    :param model: generator model, *default None*
+    :param  mfg: generator manufacturer,  *default None*
+    :type voltage: int
+    :type phase: int
+    :type capacity: int
+    :type model: string
+    :type mfg: string
+    :return: Genset object
+    :rtype: object
+
+    :Example:  
+    >>> from Water import Genset
+    >>> gen = Genset(voltage=480, phase=3, capacity=120, model='AB120', mfg='Acme')
+    
     '''
-    def __init__(self, voltage, phase, capacity=None, model=None):
+    def __init__(self, voltage, phase, capacity=None, model=None, mfg=None):
         self.load_dict = {'domestic':[], 'fire':[], 'resistive':[]}
         self.voltage = voltage
         self.phase = phase
@@ -33,49 +37,55 @@ class Genset:
 
     @property
     def fire_load(self):
-        '''returns total fire pump motor loads'''
+        '''returns sum of all fire pump motor loads'''
         return sum(self.load_dict['fire'])
     @property
     def dom_load(self):
-        '''returns total domestic pump motor loads'''
+        '''returns sum of all domestic pump motor loads'''
         return sum(self.load_dict['domestic'])
     @property
     def res_load(self):
-        '''returns total resistive loads'''
+        '''returns sum of all resistive loads'''
         return sum(self.load_dict['resistive'])
     @property
     def total_load(self):
-        '''returns total of domestic, fire and resistive loads'''
+        '''returns sum total of domestic, fire and resistive loads'''
         return sum(sum(self.load_dict.values(),[]))
     @property
     def power_factors(self):
         '''returns power factors for apparent power'''
         return self._power_factors
-    @power_factors.setter
-    def power_factors(self, pwr_factor):
-        self._power_factors[self.phase] = pwr_factor
     @property
     def full_load(self):
-        '''returns percent genset is loaded under fire flow conditions'''
+        '''returns percent genset is loaded under fire flow conditions (fully loaded)'''
         return int((self.total_load/self.capacity)*100)
     @property
     def normal_load(self):
-        '''returns percent genset is loaded under normal conditions'''
+        '''returns percent genset is loaded under normal conditions (domestic and resistive only)'''
         norm = self.total_load - self.fire_load
         return int((norm/self.capacity)*100)
 
     def add_motor_load(self, power, units='hp', fire=False):
-        '''adds motor load to self.load_list uses kVA calculation
-            based on power factors.\n
-            
-        attributes:\n 
-            power: motor power\n
-            units: power units(default hp)\n
-                unit options --> 'hp', 'kw'\n
-            fire: fire-flow flag (default False)\n
-                if True load is added to self.fire_load\n
+        '''adds motor load to self.load_dict uses kVA calculation
+        based on default power factors. All loads are saved in self.load_dict 
+        in kilovolt-amps
 
+            * 3-Phase motor power factor:  0.89
+            * 1-Phase motor power factor: 0.85 
+
+        :param power: motor power
+        :param units: units of power ('hp' or 'kw'), *default hp*
+        :param fire: enable fire-flow load, *default False*
+        :type power: int/float
+        :type units: string
+        :type fire: boolean
+
+        :Example:
+        >>> gen.add_motor_load(power=5)   # adding domestic pump motor load
+        >>> gen.add_motor_load(power=25, fire=True)   # adding fire-pump motor load
+         
         '''
+
         units = units.lower()
         if units == 'kw':
             kVA = power/self.power_factors[self.phase]
@@ -89,13 +99,18 @@ class Genset:
             self.load_dict['domestic'].append(kVA)
     
     def add_resistive_load(self, power, units='kw'):
-        '''adds resistive load to self.load_list\n
+        '''adds resistive load to self.load_dict 
+
             *for example heaters, lights, controls...*
             
-        attributes:\n
-            power: power\n
-            units: power units(default kw)\n
-                unit options --> 'kw', 'watts'\n
+        :param power: resistive load power
+        :param units: power units ('kw' or 'watts'), *default 'kw'*
+        :type power: int/float
+        :type units: string
+        
+        :Example:
+        >>> gen.add_resistive_load(power=0.5)   
+        >>> gen.add_resistive_load(power=500, units='watts')
 
         '''
         units = units.lower()
@@ -107,26 +122,62 @@ class Genset:
             print('units not recognized: use "kw" or "watts"')
 
     def delete_load(self, load_type, index=-1):
-        '''deletes specific load from self.load_dict\n
-            enter load_type, list index. 
-            Prints verification when removed.\n
-            default index is last item in list (-1)\n
-                load_types = 'fire', 'domestic', 'resistive'
+        '''deletes specific load from self.load_dict
+            Prints verification when removed.
+
+        :param load_type: load type keyword ('fire', 'domestic', 'resistive')
+        :param index: index number (use python index conventions), *default -1*
+        :type load_type: string
+        :type index: int
+
+        :Example:
+        >>> gen.show_loads()
+            {'domestic': [4.189325842696629], 'fire': [20.94662921348315], 'resistive': [0.5, 0.5]}
+        >>> gen.delete_load('resistive') 
+            0.5 has been removed
+        >>> gen.show_loads()
+            {'domestic': [4.189325842696629], 'fire': [20.94662921348315], 'resistive': [0.5]}
 
         '''
         print(self.load_dict[load_type].pop(index), ' has been removed')
 
     def add_consumption(self, consumption_list):
-        '''Enter list of consumption rates\n
+        '''Sets consumption rate for Genset object
+        
+        Consumtion rates are entered as a 4 item list.
+        Consumption values are in scfm and represent fuel consumed 
+        at 25%, 50%, 75% and 100% capacity.
 
-        Consumtion rates are entered as a 4 item list
-        consumption values are in scfm and represent consumption
-        at 25%, 50%, 75% and 100% loads.
+        :param consumption_list: fuel consumption at different capacities, in scfm
+        :type consumption_list: list
 
-            *example: consumption_list=[100, 200, 300 400]*
+        :Example: 
+        >>> consumption_list=[100, 200, 300 400]  # scfm 
     
         '''
         self.consumption = consumption_list
+
+    def change_power_factor(self, factor):
+        '''Change the default power factor for the object.
+
+        default power factors:   
+            * 3-Phase motor power factor:  0.89
+            * 1-Phase motor power factor: 0.85 
+
+        :param factor: power factor
+        :type factor: float
+        
+        '''
+        self._power_factors[self.phase] = factor
+
+    def show_loads(self):
+        '''see loads in self.load_dict()
+        
+        :return: loads from the genset object
+        :rtype: dictionary
+
+        '''
+        return self.load_dict
 
 # test script
 if __name__ == "__main__":

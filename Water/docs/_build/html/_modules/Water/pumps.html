@@ -90,7 +90,7 @@
         <span class="sd">&#39;&#39;&#39;Checks sqlite database for existing pump record</span>
 
 <span class="sd">           :param pump_model: pump model</span>
-<span class="sd">           :param impeller: impeller diameter (default=None)</span>
+<span class="sd">           :param impeller: impeller diameter in inches, *default None*</span>
 <span class="sd">           :type pump_model: string</span>
 <span class="sd">           :type impeller: float</span>
 <span class="sd">           :return: pump record if one exists </span>
@@ -248,7 +248,7 @@
 <span class="sd">           :type mfg: string  </span>
 <span class="sd">           :param model: pump model   </span>
 <span class="sd">           :type model: string</span>
-<span class="sd">           :param impeller: pump impeller size (default=None) *inches*</span>
+<span class="sd">           :param impeller: pump impeller size in inches, *default None*  </span>
 <span class="sd">           :type impeller: float</span>
 <span class="sd">           </span>
 <span class="sd">           :Example:</span>
@@ -355,17 +355,18 @@
 <span class="sd">            Default is to plot affinitized curves with full speed curve. </span>
 <span class="sd">            User has option to add system curve and efficiency curve</span>
 
-<span class="sd">            :param target_flow: flow point to plot (gpm)</span>
-<span class="sd">            :param type: int/float</span>
-<span class="sd">            :param tdh: Total Dynamic Head (ft)</span>
-<span class="sd">            :type tdh: int/float  </span>
-<span class="sd">            :param vfd: turn on/off affinitized pump curves  </span>
-<span class="sd">            :type vfd: boolean</span>
-<span class="sd">            :param eff: turn on/off pump efficiency curve</span>
-<span class="sd">            :type eff: boolean</span>
-<span class="sd">            :param show: show plot (keep false if using in an .ipynb)</span>
-<span class="sd">            :type show: boolean</span>
-<span class="sd">            :return: matplotlib plot of pump curve for pump object</span>
+<span class="sd">        :param target_flow: flow point to plot (gpm), *default None*  </span>
+<span class="sd">        :type target_flow: int/float</span>
+<span class="sd">        :param tdh: Total Dynamic Head (ft), *default None*  </span>
+<span class="sd">        :type tdh: int/float  </span>
+<span class="sd">        :param vfd: turn on/off affinitized pump curves, *default True*    </span>
+<span class="sd">        :type vfd: boolean</span>
+<span class="sd">        :param eff: turn on/off pump efficiency curve, *default False*</span>
+<span class="sd">        :type eff: boolean</span>
+<span class="sd">        :param show: show plot (keep false if using in an .ipynb), *default False*</span>
+<span class="sd">        :type show: boolean</span>
+<span class="sd">        :return: pump curve for pump object</span>
+<span class="sd">        :rtype: matplotlib.pyplot plot </span>
 
 <span class="sd">        :Example:  </span>
 <span class="sd">        Plotting a pump curve with one design point with efficiency curve</span>
@@ -438,10 +439,10 @@
 <span class="sd">            If flow is not a known value it will interprolate between the</span>
 <span class="sd">            two closest points on the curve.</span>
 
-<span class="sd">            :param flow: pump flow (gpm)</span>
-<span class="sd">            :type flow: int/float  </span>
-<span class="sd">            :return: head value from curve data</span>
-<span class="sd">            :rtype: float</span>
+<span class="sd">        :param flow: pump flow (gpm)</span>
+<span class="sd">        :type flow: int/float  </span>
+<span class="sd">        :return: head value from curve data</span>
+<span class="sd">        :rtype: float</span>
 <span class="sd">        </span>
 <span class="sd">        :Example:  </span>
 <span class="sd">        &gt;&gt;&gt; Q = 125</span>

@@ -35,7 +35,7 @@ class Pump:
         '''Checks sqlite database for existing pump record
 
            :param pump_model: pump model
-           :param impeller: impeller diameter (default=None)
+           :param impeller: impeller diameter in inches, *default None*
            :type pump_model: string
            :type impeller: float
            :return: pump record if one exists 
@@ -193,7 +193,7 @@ class Pump:
            :type mfg: string  
            :param model: pump model   
            :type model: string
-           :param impeller: pump impeller size (default=None) *inches*
+           :param impeller: pump impeller size in inches, *default None*  
            :type impeller: float
            
            :Example:
@@ -300,17 +300,18 @@ class Pump:
             Default is to plot affinitized curves with full speed curve. 
             User has option to add system curve and efficiency curve
 
-            :param target_flow: flow point to plot (gpm)
-            :param type: int/float
-            :param tdh: Total Dynamic Head (ft)
-            :type tdh: int/float  
-            :param vfd: turn on/off affinitized pump curves  
-            :type vfd: boolean
-            :param eff: turn on/off pump efficiency curve
-            :type eff: boolean
-            :param show: show plot (keep false if using in an .ipynb)
-            :type show: boolean
-            :return: matplotlib plot of pump curve for pump object
+        :param target_flow: flow point to plot (gpm), *default None*  
+        :type target_flow: int/float
+        :param tdh: Total Dynamic Head (ft), *default None*  
+        :type tdh: int/float  
+        :param vfd: turn on/off affinitized pump curves, *default True*    
+        :type vfd: boolean
+        :param eff: turn on/off pump efficiency curve, *default False*
+        :type eff: boolean
+        :param show: show plot (keep false if using in an .ipynb), *default False*
+        :type show: boolean
+        :return: pump curve for pump object
+        :rtype: matplotlib.pyplot plot 
 
         :Example:  
         Plotting a pump curve with one design point with efficiency curve
@@ -383,10 +384,10 @@ class Pump:
             If flow is not a known value it will interprolate between the
             two closest points on the curve.
 
-            :param flow: pump flow (gpm)
-            :type flow: int/float  
-            :return: head value from curve data
-            :rtype: float
+        :param flow: pump flow (gpm)
+        :type flow: int/float  
+        :return: head value from curve data
+        :rtype: float
         
         :Example:  
         >>> Q = 125

@@ -61,23 +61,27 @@
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span><span class="p">,</span> <span class="n">division</span>
 
 <div class="viewcode-block" id="Genset"><a class="viewcode-back" href="../../code_reference.html#Water.Genset">[docs]</a><span class="k">class</span> <span class="nc">Genset</span><span class="p">:</span>
-    <span class="sd">&#39;&#39;&#39;Defines Genset object to calculate generator loads.\n</span>
-<span class="sd">    attributes:\n</span>
-<span class="sd">    - voltage: generator voltage (V)</span>
-<span class="sd">    - phase: generator phase</span>
-<span class="sd">    - capacity: the power capacity of the generator (kW) defaults to None</span>
-<span class="sd">    - fire_list: list of fire flow motor loads</span>
-<span class="sd">    - dom_list : list of domestic flow motor loads</span>
-<span class="sd">    - pf: dict of power factors for 3ph and 1ph motor</span>
-<span class="sd">    </span>
-<span class="sd">    methods:\n</span>
-<span class="sd">    - add_load: appends load to self.load_list and sums list to </span>
-<span class="sd">        calculate self.total_load</span>
-<span class="sd">    - delete_load: deletes load fro self.load_list and decreases </span>
-<span class="sd">        self.total_load</span>
+    <span class="sd">&#39;&#39;&#39;Defines a Genset object to calculate generator loads. </span>
 
+<span class="sd">    :param voltage:  generator output voltage (v)</span>
+<span class="sd">    :param phase: generator phase (ph)</span>
+<span class="sd">    :param capacity: generator load capaicty (kW), *default None*</span>
+<span class="sd">    :param model: generator model, *default None*</span>
+<span class="sd">    :param  mfg: generator manufacturer,  *default None*</span>
+<span class="sd">    :type voltage: int</span>
+<span class="sd">    :type phase: int</span>
+<span class="sd">    :type capacity: int</span>
+<span class="sd">    :type model: string</span>
+<span class="sd">    :type mfg: string</span>
+<span class="sd">    :return: Genset object</span>
+<span class="sd">    :rtype: object</span>
+
+<span class="sd">    :Example:  </span>
+<span class="sd">    &gt;&gt;&gt; from Water import Genset</span>
+<span class="sd">    &gt;&gt;&gt; gen = Genset(voltage=480, phase=3, capacity=120, model=&#39;AB120&#39;, mfg=&#39;Acme&#39;)</span>
+<span class="sd">    </span>
 <span class="sd">    &#39;&#39;&#39;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">voltage</span><span class="p">,</span> <span class="n">phase</span><span class="p">,</span> <span class="n">capacity</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">voltage</span><span class="p">,</span> <span class="n">phase</span><span class="p">,</span> <span class="n">capacity</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">mfg</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">load_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;domestic&#39;</span><span class="p">:[],</span> <span class="s1">&#39;fire&#39;</span><span class="p">:[],</span> <span class="s1">&#39;resistive&#39;</span><span class="p">:[]}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">voltage</span> <span class="o">=</span> <span class="n">voltage</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">phase</span> <span class="o">=</span> <span class="n">phase</span>
@@ -88,49 +92,55 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">fire_load</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39;returns total fire pump motor loads&#39;&#39;&#39;</span>
+        <span class="sd">&#39;&#39;&#39;returns sum of all fire pump motor loads&#39;&#39;&#39;</span>
         <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">load_dict</span><span class="p">[</span><span class="s1">&#39;fire&#39;</span><span class="p">])</span>
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">dom_load</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39;returns total domestic pump motor loads&#39;&#39;&#39;</span>
+        <span class="sd">&#39;&#39;&#39;returns sum of all domestic pump motor loads&#39;&#39;&#39;</span>
         <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">load_dict</span><span class="p">[</span><span class="s1">&#39;domestic&#39;</span><span class="p">])</span>
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">res_load</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39;returns total resistive loads&#39;&#39;&#39;</span>
+        <span class="sd">&#39;&#39;&#39;returns sum of all resistive loads&#39;&#39;&#39;</span>
         <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">load_dict</span><span class="p">[</span><span class="s1">&#39;resistive&#39;</span><span class="p">])</span>
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">total_load</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39;returns total of domestic, fire and resistive loads&#39;&#39;&#39;</span>
+        <span class="sd">&#39;&#39;&#39;returns sum total of domestic, fire and resistive loads&#39;&#39;&#39;</span>
         <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">load_dict</span><span class="o">.</span><span class="n">values</span><span class="p">(),[]))</span>
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">power_factors</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;returns power factors for apparent power&#39;&#39;&#39;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_power_factors</span>
-    <span class="nd">@power_factors</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">power_factors</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pwr_factor</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_power_factors</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">phase</span><span class="p">]</span> <span class="o">=</span> <span class="n">pwr_factor</span>
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">full_load</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39;returns percent genset is loaded under fire flow conditions&#39;&#39;&#39;</span>
+        <span class="sd">&#39;&#39;&#39;returns percent genset is loaded under fire flow conditions (fully loaded)&#39;&#39;&#39;</span>
         <span class="k">return</span> <span class="nb">int</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">total_load</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">capacity</span><span class="p">)</span><span class="o">*</span><span class="mi">100</span><span class="p">)</span>
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">normal_load</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39;returns percent genset is loaded under normal conditions&#39;&#39;&#39;</span>
+        <span class="sd">&#39;&#39;&#39;returns percent genset is loaded under normal conditions (domestic and resistive only)&#39;&#39;&#39;</span>
         <span class="n">norm</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">total_load</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">fire_load</span>
         <span class="k">return</span> <span class="nb">int</span><span class="p">((</span><span class="n">norm</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">capacity</span><span class="p">)</span><span class="o">*</span><span class="mi">100</span><span class="p">)</span>
 
 <div class="viewcode-block" id="Genset.add_motor_load"><a class="viewcode-back" href="../../code_reference.html#Water.Genset.add_motor_load">[docs]</a>    <span class="k">def</span> <span class="nf">add_motor_load</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">power</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;hp&#39;</span><span class="p">,</span> <span class="n">fire</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39;adds motor load to self.load_list uses kVA calculation</span>
-<span class="sd">            based on power factors.\n</span>
-<span class="sd">            </span>
-<span class="sd">        attributes:\n </span>
-<span class="sd">            power: motor power\n</span>
-<span class="sd">            units: power units(default hp)\n</span>
-<span class="sd">                unit options --&gt; &#39;hp&#39;, &#39;kw&#39;\n</span>
-<span class="sd">            fire: fire-flow flag (default False)\n</span>
-<span class="sd">                if True load is added to self.fire_load\n</span>
+        <span class="sd">&#39;&#39;&#39;adds motor load to self.load_dict uses kVA calculation</span>
+<span class="sd">        based on default power factors. All loads are saved in self.load_dict </span>
+<span class="sd">        in kilovolt-amps</span>
 
+<span class="sd">            * 3-Phase motor power factor:  0.89</span>
+<span class="sd">            * 1-Phase motor power factor: 0.85 </span>
+
+<span class="sd">        :param power: motor power</span>
+<span class="sd">        :param units: units of power (&#39;hp&#39; or &#39;kw&#39;), *default hp*</span>
+<span class="sd">        :param fire: enable fire-flow load, *default False*</span>
+<span class="sd">        :type power: int/float</span>
+<span class="sd">        :type units: string</span>
+<span class="sd">        :type fire: boolean</span>
+
+<span class="sd">        :Example:</span>
+<span class="sd">        &gt;&gt;&gt; gen.add_motor_load(power=5)   # adding domestic pump motor load</span>
+<span class="sd">        &gt;&gt;&gt; gen.add_motor_load(power=25, fire=True)   # adding fire-pump motor load</span>
+<span class="sd">         </span>
 <span class="sd">        &#39;&#39;&#39;</span>
+
         <span class="n">units</span> <span class="o">=</span> <span class="n">units</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">units</span> <span class="o">==</span> <span class="s1">&#39;kw&#39;</span><span class="p">:</span>
             <span class="n">kVA</span> <span class="o">=</span> <span class="n">power</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">power_factors</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">phase</span><span class="p">]</span>
@@ -144,13 +154,18 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">load_dict</span><span class="p">[</span><span class="s1">&#39;domestic&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">kVA</span><span class="p">)</span></div>
     
 <div class="viewcode-block" id="Genset.add_resistive_load"><a class="viewcode-back" href="../../code_reference.html#Water.Genset.add_resistive_load">[docs]</a>    <span class="k">def</span> <span class="nf">add_resistive_load</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">power</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;kw&#39;</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39;adds resistive load to self.load_list\n</span>
+        <span class="sd">&#39;&#39;&#39;adds resistive load to self.load_dict </span>
+
 <span class="sd">            *for example heaters, lights, controls...*</span>
 <span class="sd">            </span>
-<span class="sd">        attributes:\n</span>
-<span class="sd">            power: power\n</span>
-<span class="sd">            units: power units(default kw)\n</span>
-<span class="sd">                unit options --&gt; &#39;kw&#39;, &#39;watts&#39;\n</span>
+<span class="sd">        :param power: resistive load power</span>
+<span class="sd">        :param units: power units (&#39;kw&#39; or &#39;watts&#39;), *default &#39;kw&#39;*</span>
+<span class="sd">        :type power: int/float</span>
+<span class="sd">        :type units: string</span>
+<span class="sd">        </span>
+<span class="sd">        :Example:</span>
+<span class="sd">        &gt;&gt;&gt; gen.add_resistive_load(power=0.5)   </span>
+<span class="sd">        &gt;&gt;&gt; gen.add_resistive_load(power=500, units=&#39;watts&#39;)</span>
 
 <span class="sd">        &#39;&#39;&#39;</span>
         <span class="n">units</span> <span class="o">=</span> <span class="n">units</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
@@ -162,26 +177,62 @@
             <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;units not recognized: use &quot;kw&quot; or &quot;watts&quot;&#39;</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Genset.delete_load"><a class="viewcode-back" href="../../code_reference.html#Water.Genset.delete_load">[docs]</a>    <span class="k">def</span> <span class="nf">delete_load</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">load_type</span><span class="p">,</span> <span class="n">index</span><span class="o">=-</span><span class="mi">1</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39;deletes specific load from self.load_dict\n</span>
-<span class="sd">            enter load_type, list index. </span>
-<span class="sd">            Prints verification when removed.\n</span>
-<span class="sd">            default index is last item in list (-1)\n</span>
-<span class="sd">                load_types = &#39;fire&#39;, &#39;domestic&#39;, &#39;resistive&#39;</span>
+        <span class="sd">&#39;&#39;&#39;deletes specific load from self.load_dict</span>
+<span class="sd">            Prints verification when removed.</span>
+
+<span class="sd">        :param load_type: load type keyword (&#39;fire&#39;, &#39;domestic&#39;, &#39;resistive&#39;)</span>
+<span class="sd">        :param index: index number (use python index conventions), *default -1*</span>
+<span class="sd">        :type load_type: string</span>
+<span class="sd">        :type index: int</span>
+
+<span class="sd">        :Example:</span>
+<span class="sd">        &gt;&gt;&gt; gen.show_loads()</span>
+<span class="sd">            {&#39;domestic&#39;: [4.189325842696629], &#39;fire&#39;: [20.94662921348315], &#39;resistive&#39;: [0.5, 0.5]}</span>
+<span class="sd">        &gt;&gt;&gt; gen.delete_load(&#39;resistive&#39;) </span>
+<span class="sd">            0.5 has been removed</span>
+<span class="sd">        &gt;&gt;&gt; gen.show_loads()</span>
+<span class="sd">            {&#39;domestic&#39;: [4.189325842696629], &#39;fire&#39;: [20.94662921348315], &#39;resistive&#39;: [0.5]}</span>
 
 <span class="sd">        &#39;&#39;&#39;</span>
         <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">load_dict</span><span class="p">[</span><span class="n">load_type</span><span class="p">]</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">index</span><span class="p">),</span> <span class="s1">&#39; has been removed&#39;</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Genset.add_consumption"><a class="viewcode-back" href="../../code_reference.html#Water.Genset.add_consumption">[docs]</a>    <span class="k">def</span> <span class="nf">add_consumption</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">consumption_list</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39;Enter list of consumption rates\n</span>
+        <span class="sd">&#39;&#39;&#39;Sets consumption rate for Genset object</span>
+<span class="sd">        </span>
+<span class="sd">        Consumtion rates are entered as a 4 item list.</span>
+<span class="sd">        Consumption values are in scfm and represent fuel consumed </span>
+<span class="sd">        at 25%, 50%, 75% and 100% capacity.</span>
 
-<span class="sd">        Consumtion rates are entered as a 4 item list</span>
-<span class="sd">        consumption values are in scfm and represent consumption</span>
-<span class="sd">        at 25%, 50%, 75% and 100% loads.</span>
+<span class="sd">        :param consumption_list: fuel consumption at different capacities, in scfm</span>
+<span class="sd">        :type consumption_list: list</span>
 
-<span class="sd">            *example: consumption_list=[100, 200, 300 400]*</span>
+<span class="sd">        :Example: </span>
+<span class="sd">        &gt;&gt;&gt; consumption_list=[100, 200, 300 400]  # scfm </span>
 <span class="sd">    </span>
 <span class="sd">        &#39;&#39;&#39;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">consumption</span> <span class="o">=</span> <span class="n">consumption_list</span></div></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">consumption</span> <span class="o">=</span> <span class="n">consumption_list</span></div>
+
+<div class="viewcode-block" id="Genset.change_power_factor"><a class="viewcode-back" href="../../code_reference.html#Water.Genset.change_power_factor">[docs]</a>    <span class="k">def</span> <span class="nf">change_power_factor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">factor</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;Change the default power factor for the object.</span>
+
+<span class="sd">        default power factors:   </span>
+<span class="sd">            * 3-Phase motor power factor:  0.89</span>
+<span class="sd">            * 1-Phase motor power factor: 0.85 </span>
+
+<span class="sd">        :param factor: power factor</span>
+<span class="sd">        :type factor: float</span>
+<span class="sd">        </span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_power_factors</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">phase</span><span class="p">]</span> <span class="o">=</span> <span class="n">factor</span></div>
+
+<div class="viewcode-block" id="Genset.show_loads"><a class="viewcode-back" href="../../code_reference.html#Water.Genset.show_loads">[docs]</a>    <span class="k">def</span> <span class="nf">show_loads</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;see loads in self.load_dict()</span>
+<span class="sd">        </span>
+<span class="sd">        :return: loads from the genset object</span>
+<span class="sd">        :rtype: dictionary</span>
+
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">load_dict</span></div></div>
 
 <span class="c1"># test script</span>
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>

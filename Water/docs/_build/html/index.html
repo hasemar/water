@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Welcome to Water’s Documentation! &#8212; Water 1.0.0 documentation</title>
+    <title>Welcome to the Water Documentation! &#8212; Water 1.0.0 documentation</title>
     <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -37,7 +37,7 @@
         <div class="sphinxsidebarwrapper">
   <h3><a href="#">Table of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">Welcome to Water’s Documentation!</a></li>
+<li><a class="reference internal" href="#">Welcome to the Water Documentation!</a></li>
 <li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
 </ul>
 
@@ -71,8 +71,24 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="welcome-to-water-s-documentation">
-<h1>Welcome to Water’s Documentation!<a class="headerlink" href="#welcome-to-water-s-documentation" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="welcome-to-the-water-documentation">
+<h1>Welcome to the Water Documentation!<a class="headerlink" href="#welcome-to-the-water-documentation" title="Permalink to this headline">¶</a></h1>
+<p>This Python package was built to aid engineers in the design of common water system assets.
+It contains several python classes and helper functions that help analyze common scenarios such as pumping power,
+head loss, storage capacity, and PRV sizing.</p>
+<p>Currently units are in industry standard form:</p>
+<ul class="simple">
+<li>Distance: feet (ft)</li>
+<li>Head Loss: feet of water  (ft)</li>
+<li>Time: seconds  (s)</li>
+<li>Pressure:  pounds per square inch  (psi)</li>
+<li>Flow: gallons per minute (gpm)</li>
+<li>Velocity: feet per second  (fps)</li>
+<li>Volume: cubic feet (cuft), gallons (gal), acre feet (acft) <em>depending on the context</em></li>
+</ul>
+<p>Some helper functions, such as area and volume are not unit specific and as long as you maintain unit consistency
+the units can be what ever you want. This reference will identify when a function will return specific units.</p>
+<p># TODO In the future I would like to make the units “user specifiable”.</p>
 <div class="toctree-wrapper compound">
 <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul>
