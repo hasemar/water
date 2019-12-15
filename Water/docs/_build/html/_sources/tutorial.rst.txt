@@ -4,7 +4,7 @@ Code Examples and Tutorials
 .. _pipe-example:
 
 Pipe Class Examples
--------------------
+--------------------
 The *Water.Pipe* class allows you to create a pipe object to apply flow calculations. It is useful to
 start at a pump and create your pipe objects based on pipe size and/or material. You can add fittings
 to each pipe object and calculate the major and minor losses through the pipe based on flow.
@@ -85,7 +85,7 @@ of a pump, pipe and fittings, and a tank at an elevated location.
 
 >>> output: Size Pump for 300 gpm at 153 feet of Head
 
------------------------------------------
+-------------------------------------------------------
 
 .. _pump_example:
 

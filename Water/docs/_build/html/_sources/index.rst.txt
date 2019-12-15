@@ -1,5 +1,5 @@
 Welcome to the Water Documentation!
-==================================  
+=====================================  
 
 This Python package was built to aid engineers in the design of common water system assets. 
 It contains several python classes and helper functions that help analyze common scenarios such as pumping power, 

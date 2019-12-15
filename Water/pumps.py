@@ -1,4 +1,5 @@
 '''Pumps Module:
+
     This module calculates and produces pump curves based on mfg's data points
 '''
 from __future__ import print_function, division
@@ -14,6 +15,7 @@ class Pump:
     '''Defines Pump object to plot and/or affinitized pump curve and performance  
        
        :Example:  
+
        >>> from Water import Pump
        >>> pump_1 = Pump()
 
@@ -171,6 +173,7 @@ class Pump:
         
     def available_pumps(self):
         '''returns pump table from pumps.db'''
+
         conn = sqlite3.connect(db_path)
         c = conn.cursor()
         c.execute('''SELECT
@@ -197,6 +200,7 @@ class Pump:
            :type impeller: float
            
            :Example:
+
            >>> pump_2 = Pump()
            >>> pump_2.load_pump('Goulds', '3657 1.5x2 -6: 3SS')
 
@@ -313,7 +317,8 @@ class Pump:
         :return: pump curve for pump object
         :rtype: matplotlib.pyplot plot 
 
-        :Example:  
+        :Example: 
+
         Plotting a pump curve with one design point with efficiency curve
 
         .. code-block:: python
@@ -390,6 +395,7 @@ class Pump:
         :rtype: float
         
         :Example:  
+        
         >>> Q = 125
         >>> h = pump_1.find_head(Q)
         >>> print(h, 'ft')

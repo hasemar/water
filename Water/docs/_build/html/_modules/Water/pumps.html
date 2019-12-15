@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Water.pumps &#8212; Water 1.0.0 documentation</title>
+    <title>Water.pumps &#8212; Water 1.1.2 documentation</title>
     <link rel="stylesheet" href="../../_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -26,7 +26,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">Water 1.0.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Water 1.1.2 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>
@@ -54,6 +54,7 @@
             
   <h1>Source code for Water.pumps</h1><div class="highlight"><pre>
 <span></span><span class="sd">&#39;&#39;&#39;Pumps Module:</span>
+
 <span class="sd">    This module calculates and produces pump curves based on mfg&#39;s data points</span>
 <span class="sd">&#39;&#39;&#39;</span>
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span><span class="p">,</span> <span class="n">division</span>
@@ -69,6 +70,7 @@
     <span class="sd">&#39;&#39;&#39;Defines Pump object to plot and/or affinitized pump curve and performance  </span>
 <span class="sd">       </span>
 <span class="sd">       :Example:  </span>
+
 <span class="sd">       &gt;&gt;&gt; from Water import Pump</span>
 <span class="sd">       &gt;&gt;&gt; pump_1 = Pump()</span>
 
@@ -226,6 +228,7 @@
         
 <div class="viewcode-block" id="Pump.available_pumps"><a class="viewcode-back" href="../../code_reference.html#Water.Pump.available_pumps">[docs]</a>    <span class="k">def</span> <span class="nf">available_pumps</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;returns pump table from pumps.db&#39;&#39;&#39;</span>
+
         <span class="n">conn</span> <span class="o">=</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">db_path</span><span class="p">)</span>
         <span class="n">c</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
         <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s1">&#39;&#39;&#39;SELECT</span>
@@ -252,6 +255,7 @@
 <span class="sd">           :type impeller: float</span>
 <span class="sd">           </span>
 <span class="sd">           :Example:</span>
+
 <span class="sd">           &gt;&gt;&gt; pump_2 = Pump()</span>
 <span class="sd">           &gt;&gt;&gt; pump_2.load_pump(&#39;Goulds&#39;, &#39;3657 1.5x2 -6: 3SS&#39;)</span>
 
@@ -368,7 +372,8 @@
 <span class="sd">        :return: pump curve for pump object</span>
 <span class="sd">        :rtype: matplotlib.pyplot plot </span>
 
-<span class="sd">        :Example:  </span>
+<span class="sd">        :Example: </span>
+
 <span class="sd">        Plotting a pump curve with one design point with efficiency curve</span>
 
 <span class="sd">        .. code-block:: python</span>
@@ -445,6 +450,7 @@
 <span class="sd">        :rtype: float</span>
 <span class="sd">        </span>
 <span class="sd">        :Example:  </span>
+<span class="sd">        </span>
 <span class="sd">        &gt;&gt;&gt; Q = 125</span>
 <span class="sd">        &gt;&gt;&gt; h = pump_1.find_head(Q)</span>
 <span class="sd">        &gt;&gt;&gt; print(h, &#39;ft&#39;)</span>
@@ -529,12 +535,12 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">Water 1.0.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Water 1.1.2 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2019, Ryan Haseman.
+        &#169; Copyright 2017, Ryan Haseman.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.2.
     </div>
   </body>

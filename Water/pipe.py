@@ -1,4 +1,5 @@
 '''Pipe :
+
 This module holds the data for a variety of fittings and pipe sizes.
 It holds a class called Pipe that allows you to create Pipe objects
 and calculate losses.
@@ -70,6 +71,7 @@ pipe_dims = {
 }
 
 '''fitting dictionary:
+
     holds fitting shape and connection type. For each connection 
     type there is a kfactor list [geometry, k1, k_infinity]
 '''
@@ -125,7 +127,8 @@ fitting_dict = {
 }
 
 class Pipe:
-    '''Defines Pipe object to add pipe section and fittings for head loss calculations.\n
+    '''Defines Pipe object to add pipe section and fittings for head loss calculations.
+
     See :doc:`data <data>` for available pipe properties.
 
     :param length: straight pipe length (ft)
@@ -142,6 +145,7 @@ class Pipe:
     :rtype: object
 
     :Example:
+
     >>> from Water import Pipe
     >>> pipe = Pipe(length=10, size=4, kind='STEEL', sch=40)
      
@@ -192,6 +196,7 @@ class Pipe:
         :return: appends fitting onto Pipe object's fitting list
 
         :Example:
+
         >>> # using fitting in standard fittings dictionary
         >>> pipe.fitting(fitting_type='elbow_90', con_type='standard_threaded', qty=2)
          
@@ -211,6 +216,7 @@ class Pipe:
            :rtype: string
 
            :Example:
+
            >>> print(pipe.fitting_info())
               Fittings list:
               elbow_90, standard_threaded: Kvalue = 0.899, qty = 2  
@@ -227,11 +233,11 @@ class Pipe:
         return info
 
     def print_fitting(self):
-        ''':return: prints out fitting dictionary for a quick reference
+        ''':return: prints out fitting dictionary for a quick reference'''
 
-           '''
         for each_fitting in fitting_dict:
             print(each_fitting)
+
             for each_type in fitting_dict[each_fitting]:
                 print('\t', each_type)
 
@@ -248,9 +254,11 @@ class Pipe:
            :rtype: float
 
            :Example:
+
            >>> flow = 300  # gpm
            >>> pipe.major_loss(flow)
                0.4272... 
+
            '''
         h = (10.45 * self.length * flow**1.852)/(self.c_factor**1.852 * self.inner_diameter**4.8704)
         return h
@@ -268,9 +276,11 @@ class Pipe:
            :rtype: float  
            
            :Example:
+
            >>> flow = 300  # gpm
            >>> pipe.minor_loss(flow)
                3.0168... 
+
            '''
         g = 32.2   # gravity in fps
         vel = tools.velocity(flow, self.inner_diameter)
@@ -282,15 +292,19 @@ class Pipe:
         return minor_loss
 
     def get_losses(self, flow):
-        ''':param flow: in gallons per minute (gpm)
-           :type flow: int
-           :return: total losses (major + minor)
-           :rtype: float
-           
-           :Example:
-           >>> flow = 300  # gpm
-           >>> pipe.get_losses(flow)
-               3.4441...
+        ''' Calculate the major and minor losses through the Pipe object.
+        
+        :param flow: in gallons per minute (gpm)
+        :type flow: int
+        :return: total losses (major + minor)
+        :rtype: float
+        
+        :Example:
+
+        >>> flow = 300  # gpm
+        >>> pipe.get_losses(flow)
+            3.4441...
+
            '''
         total_loss = self.major_loss(flow) + self.minor_loss(flow)
         return total_loss

@@ -1,5 +1,6 @@
 '''
 Genset:
+
     This module helps size auxiliary power for a pumping system based on 
     electrical loads.
 '''
@@ -22,6 +23,7 @@ class Genset:
     :rtype: object
 
     :Example:  
+
     >>> from Water import Genset
     >>> gen = Genset(voltage=480, phase=3, capacity=120, model='AB120', mfg='Acme')
     
@@ -81,18 +83,20 @@ class Genset:
         :type fire: boolean
 
         :Example:
+
         >>> gen.add_motor_load(power=5)   # adding domestic pump motor load
         >>> gen.add_motor_load(power=25, fire=True)   # adding fire-pump motor load
          
         '''
 
         units = units.lower()
+        assert (units == 'hp' or units == 'kw'), "units must be either 'kw' or 'hp'"
+
         if units == 'kw':
             kVA = power/self.power_factors[self.phase]
         elif units == 'hp':
             kVA = (power * 745.7 * .001/self.power_factors[self.phase])
-        else:
-            print('units not recognized: use "hp" or "kw"')
+
         if fire:
             self.load_dict['fire'].append(kVA)
         else:
@@ -109,17 +113,18 @@ class Genset:
         :type units: string
         
         :Example:
+
         >>> gen.add_resistive_load(power=0.5)   
         >>> gen.add_resistive_load(power=500, units='watts')
 
         '''
         units = units.lower()
+        assert (units == 'watts' or units == 'kw'), "units must be either 'kw' or 'watts'"
+
         if units == 'watts':
             self.load_dict['resistive'].append(power * 0.001)
         elif units == 'kw':
             self.load_dict['resistive'].append(power)
-        else:
-            print('units not recognized: use "kw" or "watts"')
 
     def delete_load(self, load_type, index=-1):
         '''deletes specific load from self.load_dict
@@ -131,6 +136,7 @@ class Genset:
         :type index: int
 
         :Example:
+
         >>> gen.show_loads()
             {'domestic': [4.189325842696629], 'fire': [20.94662921348315], 'resistive': [0.5, 0.5]}
         >>> gen.delete_load('resistive') 
@@ -152,6 +158,7 @@ class Genset:
         :type consumption_list: list
 
         :Example: 
+
         >>> consumption_list=[100, 200, 300 400]  # scfm 
     
         '''

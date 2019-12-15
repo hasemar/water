@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Water Package Code Reference &#8212; Water 1.0.0 documentation</title>
+    <title>Water Package Code Reference &#8212; Water 1.1.2 documentation</title>
     <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -34,7 +34,7 @@
         <li class="right" >
           <a href="index.html" title="Welcome to the Water Documentation!"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Water 1.0.0 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Water 1.1.2 documentation</a> &#187;</li> 
       </ul>
     </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
@@ -285,7 +285,8 @@ on the tutorials page.</p>
 <dl class="method">
 <dt id="Water.Pipe.get_losses">
 <code class="descname">get_losses</code><span class="sig-paren">(</span><em>flow</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Water/pipe.html#Pipe.get_losses"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Water.Pipe.get_losses" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
+<dd><p>Calculate the major and minor losses through the Pipe object.</p>
+<table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
@@ -318,30 +319,72 @@ on the tutorials page.</p>
 <em class="property">class </em><code class="descclassname">Water.</code><code class="descname">Tank</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Water/tanks.html#Tank"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Water.Tank" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Defines Tank object to calculate storage and other tank properties.</p>
-<p>Tank object arugments can be passed as a dict:</p>
-<blockquote>
-<div><p><em>example:</em></p>
-<dl class="docutils">
-<dt>tank_data = {</dt>
-<dd>‘name’ : ‘string’,
-‘diameter’ : int/float,
-‘height’ : int/float (default 0),
-‘length’ : int/float (default 0),
-‘width’ : int/float (default 0)
-‘freeboard’ : int/float (default 0),
-‘deadstorage’ : int/float (default 0),
-‘elevation’ : int/float (default 0)
-‘shape’ : ‘string’ (default vertical),
-‘operational’ : int/float (default 0),
-‘equalizing’ : int/float (default 0),
-‘standby’ : int/float (default 0),
-‘fire’ : int/float (default 0)
-}</dd>
-</dl>
-<p>tank_1 = Tank(**tank_data)</p>
-<p><em>or individually like so:</em></p>
-<p>tank_2 = Tank(name=’string’, diameter=int/float, height=int/float )</p>
-</div></blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>**kwargs</strong> (<em>dictionary</em>) – keyword arguments</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Tank object</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">object</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Keyword Arguments:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body"><strong>Arguments</strong> – <table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">name:</th><td class="field-body">(<em>string</em>) - tank name</td>
+</tr>
+<tr class="field-even field"><th class="field-name">diameter:</th><td class="field-body">(<em>int/float</em>) - tank diameter in ft</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">height:</th><td class="field-body">(<em>int/float</em>) - tank height in ft, <em>default 0</em></td>
+</tr>
+<tr class="field-even field"><th class="field-name">length:</th><td class="field-body">(<em>int/float</em>) - tank length in ft, <em>default 0</em></td>
+</tr>
+<tr class="field-odd field"><th class="field-name">width:</th><td class="field-body">(<em>int/float</em>) - tank width in ft, <em>default 0</em></td>
+</tr>
+<tr class="field-even field"><th class="field-name">freeboard:</th><td class="field-body">(<em>int/float</em>) - distance from the top ring of tank to the highest water level in ft, <em>default 0</em></td>
+</tr>
+<tr class="field-odd field"><th class="field-name">deadstorage:</th><td class="field-body">(<em>int/float</em>) - distance from the lowest water level to the bottom of the tank in ft, <em>defalut 0</em></td>
+</tr>
+<tr class="field-even field"><th class="field-name">elevation:</th><td class="field-body">(<em>int/float</em>) - tank’s base elevation in ft, <em>default 0</em></td>
+</tr>
+<tr class="field-odd field"><th class="field-name">shape:</th><td class="field-body">(<em>string</em>) - tank shape (‘horizontal’, ‘vertical’, or  ‘box’), <em>default ‘vertical’</em></td>
+</tr>
+<tr class="field-even field"><th class="field-name">operational:</th><td class="field-body">(<em>int/float</em>) - operational storage partition in ft, <em>default 0</em></td>
+</tr>
+<tr class="field-odd field"><th class="field-name">equalizing:</th><td class="field-body">(<em>int/float</em>) - equalizing storage partition  in ft, <em>default 0</em></td>
+</tr>
+<tr class="field-even field"><th class="field-name">standby:</th><td class="field-body">(<em>int/float</em>) - standby storage partition in ft, <em>default 0</em></td>
+</tr>
+<tr class="field-odd field"><th class="field-name">fire:</th><td class="field-body">(<em>int/float</em>) - fire-flow storage partition in ft, <em>default 0</em></td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Example:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+<p>..code-block:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># properties for 30 ft diameter 45 ft tall cylindrical storage tank</span>
+<span class="n">tank_data</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;name&#39;</span> <span class="p">:</span> <span class="s1">&#39;Tank 1&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;diameter&#39;</span> <span class="p">:</span> <span class="mi">30</span><span class="p">,</span>
+            <span class="s1">&#39;height&#39;</span> <span class="p">:</span> <span class="mi">45</span><span class="p">,</span>
+            <span class="s1">&#39;freeboard&#39;</span> <span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+            <span class="s1">&#39;deadstorage&#39;</span> <span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+            <span class="s1">&#39;elevation&#39;</span> <span class="p">:</span> <span class="mi">230</span><span class="p">,</span>
+            <span class="p">}</span>
+
+    <span class="n">tank_1</span> <span class="o">=</span> <span class="n">Tank</span><span class="p">(</span>\<span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="c1"># or tank object can be instantiated with individually specified parameters</span>
+    <span class="n">tank_2</span> <span class="o">=</span> <span class="n">Tank</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;Tank 2&#39;</span><span class="p">,</span> <span class="n">diameter</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">45</span><span class="p">)</span>
+</pre></div>
+</div>
 <dl class="attribute">
 <dt id="Water.Tank.area">
 <code class="descname">area</code><a class="headerlink" href="#Water.Tank.area" title="Permalink to this definition">¶</a></dt>
@@ -363,31 +406,102 @@ on the tutorials page.</p>
 <dl class="method">
 <dt id="Water.Tank.horizontal_vol">
 <code class="descname">horizontal_vol</code><span class="sig-paren">(</span><em>height</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Water/tanks.html#Tank.horizontal_vol"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Water.Tank.horizontal_vol" title="Permalink to this definition">¶</a></dt>
-<dd><p>returns filled volume of horizontal tank at height</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="Water.Tank.horizontal_vol_dict">
-<code class="descname">horizontal_vol_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/Water/tanks.html#Tank.horizontal_vol_dict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Water.Tank.horizontal_vol_dict" title="Permalink to this definition">¶</a></dt>
-<dd><p>returns a dict of volumes at heights ranging from 0 to self.diameter</p>
+<dd><dl class="docutils">
+<dt>calculate filled volume of horizontal tank at a specific height</dt>
+<dd><div class="first last math notranslate nohighlight">
+\[ \begin{align}\begin{aligned}A_w &amp;= \pi r^2 - r^2 arcos\big{(}\frac{(r-h)}{r}\big{)} + (r-h)\sqrt{2rh - h^2}\\V &amp;= A_w \cdot L\end{aligned}\end{align} \]</div>
+</dd>
+</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>height</strong> (<em>int/float</em>) – water level</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">water volume</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">float</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="Water.Tank.getPercent">
 <code class="descname">getPercent</code><span class="sig-paren">(</span><em>vol</em>, <em>of_vol</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Water/tanks.html#Tank.getPercent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Water.Tank.getPercent" title="Permalink to this definition">¶</a></dt>
-<dd><p>percentage volume of total system volume</p>
+<dd><p>simple percentage calculation used to get the tank
+volume percentage of total system volume</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>vol</strong> (<em>int/float</em>) – tank or partition volume (numerator)</li>
+<li><strong>of_vol</strong> (<em>int/float</em>) – total system or tank volume (denominator)</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">percentage of total/system volume</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">float</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="Water.Tank.getHeight">
-<code class="descname">getHeight</code><span class="sig-paren">(</span><em>vol</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Water/tanks.html#Tank.getHeight"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Water.Tank.getHeight" title="Permalink to this definition">¶</a></dt>
-<dd><p>returns water level in ft at given volume</p>
+<code class="descname">getHeight</code><span class="sig-paren">(</span><em>vol</em>, <em>units='gal'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Water/tanks.html#Tank.getHeight"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Water.Tank.getHeight" title="Permalink to this definition">¶</a></dt>
+<dd><p>calculates the water level in ft at given volume</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>vol</strong> (<em>int/float</em>) – water volume</li>
+<li><strong>units</strong> (<em>string</em>) – units volume is given (‘gal’ or ‘cuft’)</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">water level in ft</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">float</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="Water.Tank.getInfo">
 <code class="descname">getInfo</code><span class="sig-paren">(</span><em>SB=0</em>, <em>ES=0</em>, <em>OS=0</em>, <em>FFS=0</em>, <em>total_vol=0</em>, <em>details=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Water/tanks.html#Tank.getInfo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Water.Tank.getInfo" title="Permalink to this definition">¶</a></dt>
-<dd><p>returns string of tank properties</p>
+<dd><p>returns string of the current tank properties</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>SB</strong> (<em>int/float</em>) – system’s required standby storage in gallons, <em>default 0</em></li>
+<li><strong>ES</strong> (<em>int/float</em>) – system’s required equalizing in gallons, <em>default 0</em></li>
+<li><strong>OS</strong> (<em>int/float</em>) – system’s required operational storagein gallons, <em>default 0</em></li>
+<li><strong>FFS</strong> (<em>int/float</em>) – system’s required fire-flow storage in gallons, <em>default 0</em></li>
+<li><strong>total_vol</strong> (<em>int/float</em>) – total system volume</li>
+<li><strong>details</strong> (<em>boolean</em>) – show storage partition details</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">tank object information, if details True it shows storage partition volumes and heights
+relative to whole system</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">string</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>
@@ -1230,11 +1344,11 @@ used in fluid mechanics in english units</dd>
         <li class="right" >
           <a href="index.html" title="Welcome to the Water Documentation!"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">Water 1.0.0 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Water 1.1.2 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2019, Ryan Haseman.
+        &#169; Copyright 2017, Ryan Haseman.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.2.
     </div>
   </body>

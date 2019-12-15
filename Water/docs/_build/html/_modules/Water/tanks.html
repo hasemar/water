@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Water.tanks &#8212; Water 1.0.0 documentation</title>
+    <title>Water.tanks &#8212; Water 1.1.2 documentation</title>
     <link rel="stylesheet" href="../../_static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -26,7 +26,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">Water 1.0.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Water 1.1.2 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>
@@ -58,32 +58,46 @@
 <span class="kn">from</span> <span class="nn">Water</span> <span class="k">import</span> <span class="n">tools</span>
 
 <div class="viewcode-block" id="Tank"><a class="viewcode-back" href="../../code_reference.html#Water.Tank">[docs]</a><span class="k">class</span> <span class="nc">Tank</span><span class="p">:</span>
-    <span class="sd">&#39;&#39;&#39;Defines Tank object to calculate storage and other tank properties.\n</span>
-<span class="sd">    Tank object arugments can be passed as a dict:\n</span>
-<span class="sd">        *example:*\n </span>
-<span class="sd">        </span>
+    <span class="sd">&#39;&#39;&#39;Defines Tank object to calculate storage and other tank properties.</span>
+
+<span class="sd">    :param \**kwargs: keyword arguments</span>
+<span class="sd">    :type \**kwargs: dictionary</span>
+<span class="sd">    :return: Tank object</span>
+<span class="sd">    :rtype: object</span>
+<span class="sd">    :keyword Arguments: </span>
+<span class="sd">        :name: (*string*) - tank name </span>
+<span class="sd">        :diameter: (*int/float*) - tank diameter in ft  </span>
+<span class="sd">        :height: (*int/float*) - tank height in ft, *default 0*  </span>
+<span class="sd">        :length: (*int/float*) - tank length in ft, *default 0*</span>
+<span class="sd">        :width: (*int/float*) - tank width in ft, *default 0*  </span>
+<span class="sd">        :freeboard: (*int/float*) - distance from the top ring of tank to the highest water level in ft, *default 0*   </span>
+<span class="sd">        :deadstorage: (*int/float*) - distance from the lowest water level to the bottom of the tank in ft, *defalut 0*</span>
+<span class="sd">        :elevation: (*int/float*) - tank&#39;s base elevation in ft, *default 0*    </span>
+<span class="sd">        :shape: (*string*) - tank shape (&#39;horizontal&#39;, &#39;vertical&#39;, or  &#39;box&#39;), *default &#39;vertical&#39;* </span>
+<span class="sd">        :operational: (*int/float*) - operational storage partition in ft, *default 0*</span>
+<span class="sd">        :equalizing: (*int/float*) - equalizing storage partition  in ft, *default 0*</span>
+<span class="sd">        :standby: (*int/float*) - standby storage partition in ft, *default 0*</span>
+<span class="sd">        :fire: (*int/float*) - fire-flow storage partition in ft, *default 0*</span>
+
+<span class="sd">    :Example:</span>
+
+<span class="sd">    ..code-block:: </span>
+
+<span class="sd">        # properties for 30 ft diameter 45 ft tall cylindrical storage tank</span>
 <span class="sd">        tank_data = {          </span>
-<span class="sd">            &#39;name&#39; : &#39;string&#39;,</span>
-<span class="sd">            &#39;diameter&#39; : int/float,</span>
-<span class="sd">            &#39;height&#39; : int/float (default 0),</span>
-<span class="sd">            &#39;length&#39; : int/float (default 0),</span>
-<span class="sd">            &#39;width&#39; : int/float (default 0)</span>
-<span class="sd">            &#39;freeboard&#39; : int/float (default 0),</span>
-<span class="sd">            &#39;deadstorage&#39; : int/float (default 0),</span>
-<span class="sd">            &#39;elevation&#39; : int/float (default 0)</span>
-<span class="sd">            &#39;shape&#39; : &#39;string&#39; (default vertical),</span>
-<span class="sd">            &#39;operational&#39; : int/float (default 0),</span>
-<span class="sd">            &#39;equalizing&#39; : int/float (default 0),</span>
-<span class="sd">            &#39;standby&#39; : int/float (default 0),</span>
-<span class="sd">            &#39;fire&#39; : int/float (default 0)</span>
-<span class="sd">            }</span>
+<span class="sd">                    &#39;name&#39; : &#39;Tank 1&#39;,</span>
+<span class="sd">                    &#39;diameter&#39; : 30,</span>
+<span class="sd">                    &#39;height&#39; : 45,</span>
+<span class="sd">                    &#39;freeboard&#39; : 2,</span>
+<span class="sd">                    &#39;deadstorage&#39; : 1,</span>
+<span class="sd">                    &#39;elevation&#39; : 230,</span>
+<span class="sd">                    }</span>
 
-<span class="sd">        tank_1 = Tank(\**tank_data)</span>
+<span class="sd">            tank_1 = Tank(\**kwargs)</span>
 
-<span class="sd">        *or individually like so:*</span>
-
-<span class="sd">        tank_2 = Tank(name=&#39;string&#39;, diameter=int/float, height=int/float )</span>
-<span class="sd">    </span>
+<span class="sd">            # or tank object can be instantiated with individually specified parameters</span>
+<span class="sd">            tank_2 = Tank(name=&#39;Tank 2&#39;, diameter=30, height=45)</span>
+<span class="sd">            </span>
 <span class="sd">    &#39;&#39;&#39;</span>
     
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
@@ -130,7 +144,19 @@
             <span class="k">return</span> <span class="n">tools</span><span class="o">.</span><span class="n">cuft2gal</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">deadstorage</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">freeboard</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">area</span><span class="p">)</span>
    
 <div class="viewcode-block" id="Tank.horizontal_vol"><a class="viewcode-back" href="../../code_reference.html#Water.Tank.horizontal_vol">[docs]</a>    <span class="k">def</span> <span class="nf">horizontal_vol</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">height</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39;returns filled volume of horizontal tank at height&#39;&#39;&#39;</span>
+        <span class="sd">&#39;&#39;&#39;calculate filled volume of horizontal tank at a specific height</span>
+<span class="sd">            .. math:: </span>
+<span class="sd">            </span>
+<span class="sd">                A_w &amp;= \\pi r^2 - r^2 arcos\\big{(}\\frac{(r-h)}{r}\\big{)} + (r-h)\\sqrt{2rh - h^2}</span>
+
+<span class="sd">                V &amp;= A_w \cdot L </span>
+
+<span class="sd">        :param height: water level </span>
+<span class="sd">        :type height: int/float</span>
+<span class="sd">        :return: water volume  </span>
+<span class="sd">        :rtype: float</span>
+<span class="sd">    </span>
+<span class="sd">        &#39;&#39;&#39;</span>
         <span class="n">L</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">length</span>
         <span class="n">R</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">diameter</span><span class="o">/</span><span class="mi">2</span>
         <span class="n">h</span> <span class="o">=</span> <span class="n">height</span> 
@@ -138,29 +164,65 @@
         
         <span class="k">return</span> <span class="n">v</span></div>
 
-<div class="viewcode-block" id="Tank.horizontal_vol_dict"><a class="viewcode-back" href="../../code_reference.html#Water.Tank.horizontal_vol_dict">[docs]</a>    <span class="k">def</span> <span class="nf">horizontal_vol_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39;returns a dict of volumes at heights ranging from 0 to self.diameter&#39;&#39;&#39;</span>
+    <span class="k">def</span> <span class="nf">_horizontal_vol_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;returns a dict of volumes at heights ranging from 0 to self.diameter</span>
+<span class="sd">        This is used to get the water level in a horizontal tank, given the water</span>
+<span class="sd">        volume. Opted to just create a &quot;lookup table&quot; rather than solve for h.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
         <span class="n">L</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">length</span>
         <span class="n">R</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">diameter</span><span class="o">/</span><span class="mi">2</span>
         <span class="n">l</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">diameter</span><span class="o">/</span><span class="mi">1001</span>
         <span class="n">h_arr</span> <span class="o">=</span> <span class="p">[</span><span class="n">l</span><span class="o">*</span> <span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1001</span><span class="p">)]</span>  <span class="c1"># create an array much like np.linspace</span>
         <span class="n">vol</span> <span class="o">=</span> <span class="p">[]</span>
+
         <span class="k">for</span> <span class="n">h</span> <span class="ow">in</span> <span class="n">h_arr</span><span class="p">:</span>
             <span class="n">vol</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">L</span><span class="o">*</span><span class="p">(</span><span class="n">R</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="n">acos</span><span class="p">((</span><span class="n">R</span><span class="o">-</span><span class="n">h</span><span class="p">)</span><span class="o">/</span><span class="n">R</span><span class="p">)</span> <span class="o">-</span> <span class="p">(</span><span class="n">R</span><span class="o">-</span><span class="n">h</span><span class="p">)</span> <span class="o">*</span> <span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">R</span><span class="o">*</span><span class="n">h</span> <span class="o">-</span> <span class="n">h</span><span class="o">**</span><span class="mi">2</span><span class="p">)))</span>    
         <span class="n">vol_lookup</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">vol</span><span class="p">,</span> <span class="n">h_arr</span><span class="p">))</span>
         
-        <span class="k">return</span> <span class="n">vol_lookup</span></div>
+        <span class="k">return</span> <span class="n">vol_lookup</span>
     
 <div class="viewcode-block" id="Tank.getPercent"><a class="viewcode-back" href="../../code_reference.html#Water.Tank.getPercent">[docs]</a>    <span class="k">def</span> <span class="nf">getPercent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vol</span><span class="p">,</span> <span class="n">of_vol</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39;percentage volume of total system volume&#39;&#39;&#39;</span>
-        <span class="k">return</span> <span class="n">vol</span><span class="o">/</span><span class="n">of_vol</span></div>
+        <span class="sd">&#39;&#39;&#39;simple percentage calculation used to get the tank </span>
+<span class="sd">        volume percentage of total system volume</span>
+<span class="sd">        </span>
+<span class="sd">        :param vol: tank or partition volume (numerator)</span>
+<span class="sd">        :param of_vol: total system or tank volume (denominator) </span>
+<span class="sd">        :type vol: int/float</span>
+<span class="sd">        :type of_vol: int/float</span>
+<span class="sd">        :return: percentage of total/system volume</span>
+<span class="sd">        :rtype: float</span>
 
-<div class="viewcode-block" id="Tank.getHeight"><a class="viewcode-back" href="../../code_reference.html#Water.Tank.getHeight">[docs]</a>    <span class="k">def</span> <span class="nf">getHeight</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vol</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39;returns water level in ft at given volume&#39;&#39;&#39;</span>
-        <span class="n">v</span> <span class="o">=</span> <span class="n">tools</span><span class="o">.</span><span class="n">gal2cuft</span><span class="p">(</span><span class="n">vol</span><span class="p">)</span> <span class="c1"># change back to cu.ft</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">p</span> <span class="o">=</span> <span class="n">vol</span><span class="o">/</span><span class="n">of_vol</span> 
+        <span class="k">except</span> <span class="ne">ZeroDivisionError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">p</span> </div>
 
+<div class="viewcode-block" id="Tank.getHeight"><a class="viewcode-back" href="../../code_reference.html#Water.Tank.getHeight">[docs]</a>    <span class="k">def</span> <span class="nf">getHeight</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vol</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;gal&#39;</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;calculates the water level in ft at given volume</span>
+<span class="sd">        </span>
+<span class="sd">        :param vol: water volume</span>
+<span class="sd">        :param units: units volume is given (&#39;gal&#39; or &#39;cuft&#39;)</span>
+<span class="sd">        :type vol: int/float</span>
+<span class="sd">        :type units: string</span>
+<span class="sd">        :return: water level in ft</span>
+<span class="sd">        :rtype: float </span>
+
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">units</span> <span class="o">=</span> <span class="n">units</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+        <span class="k">assert</span> <span class="p">(</span><span class="n">units</span> <span class="o">==</span> <span class="s1">&#39;gal&#39;</span> <span class="ow">or</span> <span class="n">units</span> <span class="o">==</span> <span class="s1">&#39;cuft&#39;</span><span class="p">),</span> <span class="s2">&quot;units must be either &#39;gal&#39; or &#39;cuft&#39;&quot;</span> 
+        
+        <span class="k">if</span> <span class="n">units</span> <span class="o">==</span> <span class="s1">&#39;gal&#39;</span><span class="p">:</span>
+            <span class="n">v</span> <span class="o">=</span> <span class="n">tools</span><span class="o">.</span><span class="n">gal2cuft</span><span class="p">(</span><span class="n">vol</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">units</span> <span class="o">==</span> <span class="s1">&#39;cuft&#39;</span><span class="p">:</span>
+            <span class="n">v</span> <span class="o">=</span> <span class="n">vol</span>
+            
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="s1">&#39;horizontal&#39;</span><span class="p">:</span>
-            <span class="n">v_dict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">horizontal_vol_dict</span><span class="p">()</span>
+            <span class="n">v_dict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_horizontal_vol_dict</span><span class="p">()</span>
+            <span class="c1"># select height from v_dictionary if present, else take the closest lower value</span>
             <span class="n">h</span> <span class="o">=</span> <span class="n">v_dict</span><span class="p">[</span><span class="n">vol</span><span class="p">]</span> <span class="k">if</span> <span class="n">vol</span> <span class="ow">in</span> <span class="n">v_dict</span> <span class="k">else</span> <span class="n">v_dict</span><span class="p">[</span><span class="nb">min</span><span class="p">(</span><span class="n">v_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">k</span><span class="p">:</span> <span class="nb">abs</span><span class="p">(</span><span class="n">k</span><span class="o">-</span><span class="n">vol</span><span class="p">))]</span>
             <span class="k">return</span> <span class="n">h</span>
         <span class="k">else</span><span class="p">:</span>
@@ -168,7 +230,25 @@
             <span class="k">return</span> <span class="n">h</span></div>
         
 <div class="viewcode-block" id="Tank.getInfo"><a class="viewcode-back" href="../../code_reference.html#Water.Tank.getInfo">[docs]</a>    <span class="k">def</span> <span class="nf">getInfo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">SB</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">ES</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">OS</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">FFS</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">total_vol</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">details</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39;returns string of tank properties&#39;&#39;&#39;</span>
+        <span class="sd">&#39;&#39;&#39;returns string of the current tank properties</span>
+
+<span class="sd">        :param SB: system&#39;s required standby storage in gallons, *default 0*</span>
+<span class="sd">        :param ES: system&#39;s required equalizing in gallons, *default 0*</span>
+<span class="sd">        :param OS: system&#39;s required operational storagein gallons, *default 0*</span>
+<span class="sd">        :param FFS: system&#39;s required fire-flow storage in gallons, *default 0*</span>
+<span class="sd">        :param total_vol: total system volume</span>
+<span class="sd">        :param details: show storage partition details </span>
+<span class="sd">        :type SB: int/float</span>
+<span class="sd">        :type ES: int/float</span>
+<span class="sd">        :type OS: int/float</span>
+<span class="sd">        :type FFS: int/float</span>
+<span class="sd">        :type total_vol: int/float</span>
+<span class="sd">        :type details: boolean</span>
+<span class="sd">        :return: tank object information, if details True it shows storage partition volumes and heights</span>
+<span class="sd">            relative to whole system</span>
+<span class="sd">        :rtype: string</span>
+
+<span class="sd">        &#39;&#39;&#39;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="s1">&#39;horizontal&#39;</span><span class="p">:</span>
             <span class="n">info</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39;</span>
 <span class="s1">            </span><span class="si">{3:}</span><span class="s1"> </span><span class="se">\r\n</span><span class="s1"></span>
@@ -273,6 +353,8 @@
 
         <span class="k">return</span> <span class="n">info</span></div></div>
 
+<span class="c1">#-----------------------------------------------------------------</span>
+
 <span class="k">if</span> <span class="vm">__name__</span><span class="o">==</span><span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Test Script&quot;</span><span class="p">)</span>
     
@@ -327,12 +409,12 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">Water 1.0.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Water 1.1.2 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2019, Ryan Haseman.
+        &#169; Copyright 2017, Ryan Haseman.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.2.
     </div>
   </body>
