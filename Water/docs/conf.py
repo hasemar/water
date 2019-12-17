@@ -14,6 +14,8 @@
 #
 import os
 import sys
+#import sphinx_readable_theme
+
 sys.path.insert(0, os.path.abspath('/home/clarkii/github/water/Water'))
 
 
@@ -80,15 +82,19 @@ pygments_style = None
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
+#html_theme_path = [sphinx_readable_theme.get_html_theme_path()]
+#html_theme = 'readable'
+#
 html_theme = 'sphinxdoc'
 #html_theme = 'python-docs-theme-2018.7'
-
+#html_theme = 'alabaster'
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
 # documentation.
 # 
 # page_width used for alabaster theme
 #html_theme_options = {
+#    'sticky_navigation': True,
 #    'page_width': 'auto',
 #}
 
@@ -104,6 +110,11 @@ html_static_path = ['_static']
 # defined by theme itself.  Builtin themes are using these templates by
 # default: ``['localtoc.html', 'relations.html', 'sourcelink.html',
 # 'searchbox.html']``.
+html_sidebars = {
+   '**': ['globaltoc.html', 'relations.html', 'sourcelink.html', 'searchbox.html'],
+   'using/windows': ['windowssidebar.html', 'searchbox.html'],
+}
+
 #
 # html_sidebars = {}
 #

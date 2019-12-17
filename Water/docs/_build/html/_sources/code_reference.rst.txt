@@ -4,7 +4,6 @@ Water Package Code Reference
 
 .. toctree::
    :maxdepth: 3
-   :caption: Contents:
 
 .. automodule:: Water
 
@@ -42,7 +41,12 @@ Information about Tank Class
 Pump Class
 ==========
 
-Information about Pump Class 
+Use the Pump class to help size pumps and compare the pump curve to a system loss curve. You can 
+enter load for an existing pump from the built-in pump database or add new pump data. Curves can be
+affinitized to show where the design point would compare to pump-motor speed.
+
+To see how this class can be used See :ref:`Pump Class Example <pump-example>` 
+on the tutorials page. 
 
 -----------------------------------
 

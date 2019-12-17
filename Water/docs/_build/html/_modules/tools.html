@@ -32,6 +32,12 @@
     </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
+<h3><a href="../index.html">Table of Contents</a></h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../code_reference.html">Water Package Code Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial.html">Code Examples and Tutorials</a></li>
+</ul>
+
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <div class="searchformwrapper">
@@ -62,7 +68,22 @@
 <span class="kn">from</span> <span class="nn">math</span> <span class="k">import</span> <span class="n">pi</span><span class="p">,</span> <span class="n">acos</span><span class="p">,</span> <span class="n">sqrt</span><span class="p">,</span> <span class="n">ceil</span>
 
 <div class="viewcode-block" id="coeffs"><a class="viewcode-back" href="../code_reference.html#tools.coeffs">[docs]</a><span class="k">def</span> <span class="nf">coeffs</span><span class="p">(</span><span class="n">num_ERUs</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;assigns C and F coefficients from DOH manual&#39;&#39;&#39;</span>
+    <span class="sd">&#39;&#39;&#39;C and F coefficients from `2019 DOH Water System Design Manual`_ Table 3-1 </span>
+<span class="sd">    </span>
+<span class="sd">    .. _2019 DOH Water System Design Manual: https://www.doh.wa.gov/Portals/1/Documents/Pubs/331-123.pdf?ver=2019-10-03-153237-220</span>
+
+<span class="sd">    :param num_ERUs: number of Equivalent Residential Units</span>
+<span class="sd">    :type num_ERUs: int</span>
+<span class="sd">    :return: C and F Coefficients</span>
+<span class="sd">    :rtype: tuple (C, F)</span>
+
+<span class="sd">    :Example:</span>
+
+<span class="sd">    &gt;&gt;&gt; from Water import tools</span>
+<span class="sd">    &gt;&gt;&gt; ERUs = 1500</span>
+<span class="sd">    &gt;&gt;&gt; C, F = tools.coeffs(ERUs)</span>
+
+<span class="sd">    &#39;&#39;&#39;</span>
     <span class="k">if</span> <span class="n">num_ERUs</span> <span class="o">&lt;</span> <span class="mi">51</span><span class="p">:</span>
         <span class="k">return</span> <span class="mf">3.0</span><span class="p">,</span> <span class="mi">0</span>
     <span class="k">elif</span> <span class="n">num_ERUs</span> <span class="o">&gt;</span> <span class="mi">50</span> <span class="ow">and</span> <span class="n">num_ERUs</span> <span class="o">&lt;</span> <span class="mi">101</span><span class="p">:</span>
@@ -95,9 +116,20 @@
 
 <div class="viewcode-block" id="calc_hp"><a class="viewcode-back" href="../code_reference.html#tools.calc_hp">[docs]</a><span class="k">def</span> <span class="nf">calc_hp</span><span class="p">(</span><span class="n">flow_rate</span><span class="p">,</span> <span class="n">head</span><span class="p">,</span> <span class="n">pump_eff</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span> <span class="n">motor_eff</span><span class="o">=</span><span class="mf">0.9</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;Horsepower Calculations:</span>
-<span class="sd">        Returns Water HP, Break HP and Total HP</span>
-<span class="sd">        Enter flow and head in gpm and feet H20, and efficiencies</span>
-<span class="sd">        Power units in horsepower</span>
+<span class="sd">    Returns Water HP, Break HP and Total HP</span>
+<span class="sd">    Enter flow and head in gpm and feet H20, and efficiencies</span>
+<span class="sd">    Power units in horsepower</span>
+
+<span class="sd">    Horse Power Calculation:</span>
+<span class="sd">    </span>
+<span class="sd">    ..math::</span>
+<span class="sd">    </span>
+<span class="sd">        hp_{water}=(Q)(TDH)\\bigg{(}\\frac{1\ psi}{2.308\ ft}\\bigg{)}\\bigg{(}\\frac{1\ hp}{1714 (psi\ gpm)}\\bigg{)}</span>
+
+<span class="sd">        hp_{break}=\\frac{hp_{water}}{\eta_{pump}} \quad hp_{input}=\\frac{hp_{break}}{\eta_{motor}}</span>
+
+<span class="sd">        \\text{where:}\\quad \\eta_{pump}=0.6 \\quad \\eta_{motor}=0.9</span>
+
 <span class="sd">    &#39;&#39;&#39;</span>
     <span class="n">water_hp</span> <span class="o">=</span> <span class="p">(</span><span class="n">flow_rate</span><span class="o">*</span><span class="n">head</span><span class="p">)</span><span class="o">/</span><span class="mi">3960</span>
     <span class="n">break_hp</span> <span class="o">=</span> <span class="n">water_hp</span><span class="o">/</span><span class="n">pump_eff</span>

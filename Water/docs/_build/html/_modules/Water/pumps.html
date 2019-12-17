@@ -32,6 +32,12 @@
     </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
+<h3><a href="../../index.html">Table of Contents</a></h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../code_reference.html">Water Package Code Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorial.html">Code Examples and Tutorials</a></li>
+</ul>
+
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <div class="searchformwrapper">
@@ -354,7 +360,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">affinity_data</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">data</span> <span class="o">*</span> <span class="n">percent</span> <span class="k">for</span> <span class="n">data</span> <span class="ow">in</span> <span class="n">pump_data</span><span class="p">])</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">affinity_data</span>
 
-<div class="viewcode-block" id="Pump.plot_curve"><a class="viewcode-back" href="../../code_reference.html#Water.Pump.plot_curve">[docs]</a>    <span class="k">def</span> <span class="nf">plot_curve</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target_flow</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tdh</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vfd</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">eff</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="Pump.plot_curve"><a class="viewcode-back" href="../../code_reference.html#Water.Pump.plot_curve">[docs]</a>    <span class="k">def</span> <span class="nf">plot_curve</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target_flow</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tdh</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vfd</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">eff</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;creates a matplotlib plot of the pump curve.</span>
 <span class="sd">            Default is to plot affinitized curves with full speed curve. </span>
 <span class="sd">            User has option to add system curve and efficiency curve</span>
@@ -369,6 +375,7 @@
 <span class="sd">        :type eff: boolean</span>
 <span class="sd">        :param show: show plot (keep false if using in an .ipynb), *default False*</span>
 <span class="sd">        :type show: boolean</span>
+<span class="sd">        :param \**kwargs: matplotlib.pyplot.plot keyword arguments</span>
 <span class="sd">        :return: pump curve for pump object</span>
 <span class="sd">        :rtype: matplotlib.pyplot plot </span>
 
@@ -417,9 +424,9 @@
         <span class="k">if</span> <span class="n">vfd</span><span class="p">:</span>
             <span class="n">labels</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;60Hz&#39;</span><span class="p">,</span> <span class="s1">&#39;50Hz&#39;</span><span class="p">,</span> <span class="s1">&#39;40Hz&#39;</span><span class="p">,</span> <span class="s1">&#39;30Hz&#39;</span><span class="p">,</span> <span class="s1">&#39;20Hz&#39;</span><span class="p">,</span> <span class="s1">&#39;10Hz&#39;</span><span class="p">]</span> 
             <span class="k">for</span> <span class="n">h</span><span class="p">,</span> <span class="n">l</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vfd_head</span><span class="p">,</span> <span class="n">labels</span><span class="p">):</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">flow</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">l</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">flow</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">l</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">flow</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">head</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;60hz&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">flow</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">head</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;60hz&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">target_flow</span><span class="p">)</span> <span class="ow">and</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">tdh</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">target_flow</span><span class="p">,</span> <span class="n">tdh</span><span class="p">,</span>

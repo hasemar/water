@@ -7,7 +7,22 @@ from __future__ import print_function, division
 from math import pi, acos, sqrt, ceil
 
 def coeffs(num_ERUs):
-    '''assigns C and F coefficients from DOH manual'''
+    '''C and F coefficients from `2019 DOH Water System Design Manual`_ Table 3-1 
+    
+    .. _2019 DOH Water System Design Manual: https://www.doh.wa.gov/Portals/1/Documents/Pubs/331-123.pdf?ver=2019-10-03-153237-220
+
+    :param num_ERUs: number of Equivalent Residential Units
+    :type num_ERUs: int
+    :return: C and F Coefficients
+    :rtype: tuple (C, F)
+
+    :Example:
+
+    >>> from Water import tools
+    >>> ERUs = 1500
+    >>> C, F = tools.coeffs(ERUs)
+
+    '''
     if num_ERUs < 51:
         return 3.0, 0
     elif num_ERUs > 50 and num_ERUs < 101:
@@ -40,9 +55,20 @@ def equalizing_storage(PHD, Qs):
 
 def calc_hp(flow_rate, head, pump_eff=0.6, motor_eff=0.9):
     '''Horsepower Calculations:
-        Returns Water HP, Break HP and Total HP
-        Enter flow and head in gpm and feet H20, and efficiencies
-        Power units in horsepower
+    Returns Water HP, Break HP and Total HP
+    Enter flow and head in gpm and feet H20, and efficiencies
+    Power units in horsepower
+
+    Horse Power Calculation:
+    
+    ..math::
+    
+        hp_{water}=(Q)(TDH)\\bigg{(}\\frac{1\ psi}{2.308\ ft}\\bigg{)}\\bigg{(}\\frac{1\ hp}{1714 (psi\ gpm)}\\bigg{)}
+
+        hp_{break}=\\frac{hp_{water}}{\eta_{pump}} \quad hp_{input}=\\frac{hp_{break}}{\eta_{motor}}
+
+        \\text{where:}\\quad \\eta_{pump}=0.6 \\quad \\eta_{motor}=0.9
+
     '''
     water_hp = (flow_rate*head)/3960
     break_hp = water_hp/pump_eff

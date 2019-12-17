@@ -1,5 +1,5 @@
-Welcome to the Water Documentation!
-=====================================  
+Water Documentation
+==================== 
 
 This Python package was built to aid engineers in the design of common water system assets. 
 It contains several python classes and helper functions that help analyze common scenarios such as pumping power, 
@@ -18,12 +18,9 @@ Currently units are in industry standard form:
 Some helper functions, such as area and volume are not unit specific and as long as you maintain unit consistency
 the units can be what ever you want. This reference will identify when a function will return specific units.
   
-# TODO In the future I would like to make the units "user specifiable".
-
 
 .. toctree::
    :maxdepth: 3
-   :caption: Contents:
 
    code_reference
    tutorial

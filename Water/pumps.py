@@ -299,7 +299,7 @@ class Pump:
             self.affinity_data.append([data * percent for data in pump_data])
         return self.affinity_data
 
-    def plot_curve(self, target_flow=None, tdh=None, vfd=True, eff=False, show=False):
+    def plot_curve(self, target_flow=None, tdh=None, vfd=True, eff=False, show=False, **kwargs):
         '''creates a matplotlib plot of the pump curve.
             Default is to plot affinitized curves with full speed curve. 
             User has option to add system curve and efficiency curve
@@ -314,6 +314,7 @@ class Pump:
         :type eff: boolean
         :param show: show plot (keep false if using in an .ipynb), *default False*
         :type show: boolean
+        :param \**kwargs: matplotlib.pyplot.plot keyword arguments
         :return: pump curve for pump object
         :rtype: matplotlib.pyplot plot 
 
@@ -362,9 +363,9 @@ class Pump:
         if vfd:
             labels = ['60Hz', '50Hz', '40Hz', '30Hz', '20Hz', '10Hz'] 
             for h, l in zip(self.vfd_head, labels):
-                self.ax[0].plot(self.flow, h, label=l)
+                self.ax[0].plot(self.flow, h, label=l, **kwargs)
         else:
-            self.ax[0].plot(self.flow, self.head, label='60hz')
+            self.ax[0].plot(self.flow, self.head, label='60hz', **kwargs)
 
         if np.any(target_flow) and np.any(tdh):
             self.ax[0].plot(target_flow, tdh,

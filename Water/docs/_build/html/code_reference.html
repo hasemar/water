@@ -17,7 +17,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Code Examples and Tutorials" href="tutorial.html" />
-    <link rel="prev" title="Welcome to the Water Documentation!" href="index.html" /> 
+    <link rel="prev" title="Water Documentation" href="index.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
@@ -32,28 +32,29 @@
           <a href="tutorial.html" title="Code Examples and Tutorials"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="index.html" title="Welcome to the Water Documentation!"
+          <a href="index.html" title="Water Documentation"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">Water 1.1.2 documentation</a> &#187;</li> 
       </ul>
     </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="index.html">Table of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">Water Package Code Reference</a><ul>
-<li><a class="reference internal" href="#pipe-class">Pipe Class</a></li>
-<li><a class="reference internal" href="#tank-class">Tank Class</a></li>
-<li><a class="reference internal" href="#pump-class">Pump Class</a></li>
-<li><a class="reference internal" href="#genset-class">Genset Class</a></li>
-<li><a class="reference internal" href="#functions-and-properties">Functions and Properties</a></li>
+<h3><a href="index.html">Table of Contents</a></h3>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Water Package Code Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#pipe-class">Pipe Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#tank-class">Tank Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pump-class">Pump Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#genset-class">Genset Class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#functions-and-properties">Functions and Properties</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html">Code Examples and Tutorials</a></li>
 </ul>
 
   <h4>Previous topic</h4>
   <p class="topless"><a href="index.html"
-                        title="previous chapter">Welcome to the Water Documentation!</a></p>
+                        title="previous chapter">Water Documentation</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="tutorial.html"
                         title="next chapter">Code Examples and Tutorials</a></p>
@@ -509,7 +510,11 @@ relative to whole system</p>
 </div>
 <div class="section" id="pump-class">
 <h2>Pump Class<a class="headerlink" href="#pump-class" title="Permalink to this headline">¶</a></h2>
-<p>Information about Pump Class</p>
+<p>Use the Pump class to help size pumps and compare the pump curve to a system loss curve. You can
+enter load for an existing pump from the built-in pump database or add new pump data. Curves can be
+affinitized to show where the design point would compare to pump-motor speed.</p>
+<p>To see how this class can be used See <a class="reference internal" href="tutorial.html#pump-example"><span class="std std-ref">Pump Class Example</span></a>
+on the tutorials page.</p>
 <hr class="docutils" />
 <dl class="class">
 <dt id="Water.Pump">
@@ -689,7 +694,7 @@ enter pump_id of pump to be deleted</p>
 
 <dl class="method">
 <dt id="Water.Pump.plot_curve">
-<code class="descname">plot_curve</code><span class="sig-paren">(</span><em>target_flow=None</em>, <em>tdh=None</em>, <em>vfd=True</em>, <em>eff=False</em>, <em>show=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Water/pumps.html#Pump.plot_curve"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Water.Pump.plot_curve" title="Permalink to this definition">¶</a></dt>
+<code class="descname">plot_curve</code><span class="sig-paren">(</span><em>target_flow=None</em>, <em>tdh=None</em>, <em>vfd=True</em>, <em>eff=False</em>, <em>show=False</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Water/pumps.html#Pump.plot_curve"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Water.Pump.plot_curve" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="docutils">
 <dt>creates a matplotlib plot of the pump curve.</dt>
 <dd>Default is to plot affinitized curves with full speed curve.
@@ -705,6 +710,7 @@ User has option to add system curve and efficiency curve</dd>
 <li><strong>vfd</strong> (<em>boolean</em>) – turn on/off affinitized pump curves, <em>default True</em></li>
 <li><strong>eff</strong> (<em>boolean</em>) – turn on/off pump efficiency curve, <em>default False</em></li>
 <li><strong>show</strong> (<em>boolean</em>) – show plot (keep false if using in an .ipynb), <em>default False</em></li>
+<li><strong>**kwargs</strong> – matplotlib.pyplot.plot keyword arguments</li>
 </ul>
 </td>
 </tr>
@@ -1010,7 +1016,26 @@ design aspects</p>
 <dl class="function">
 <dt id="tools.coeffs">
 <code class="descclassname">tools.</code><code class="descname">coeffs</code><span class="sig-paren">(</span><em>num_ERUs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tools.html#coeffs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tools.coeffs" title="Permalink to this definition">¶</a></dt>
-<dd><p>assigns C and F coefficients from DOH manual</p>
+<dd><p>C and F coefficients from <a class="reference external" href="https://www.doh.wa.gov/Portals/1/Documents/Pubs/331-123.pdf?ver=2019-10-03-153237-220">2019 DOH Water System Design Manual</a> Table 3-1</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>num_ERUs</strong> (<em>int</em>) – number of Equivalent Residential Units</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">C and F Coefficients</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">tuple (C, F)</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Example:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">Water</span> <span class="k">import</span> <span class="n">tools</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ERUs</span> <span class="o">=</span> <span class="mi">1500</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">C</span><span class="p">,</span> <span class="n">F</span> <span class="o">=</span> <span class="n">tools</span><span class="o">.</span><span class="n">coeffs</span><span class="p">(</span><span class="n">ERUs</span><span class="p">)</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="function">
@@ -1034,6 +1059,15 @@ Also Returns Average Hour and Lowest Hour Demand</p>
 Returns Water HP, Break HP and Total HP
 Enter flow and head in gpm and feet H20, and efficiencies
 Power units in horsepower</p>
+<p>Horse Power Calculation:</p>
+<p>..math:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">hp_</span><span class="p">{</span><span class="n">water</span><span class="p">}</span><span class="o">=</span><span class="p">(</span><span class="n">Q</span><span class="p">)(</span><span class="n">TDH</span><span class="p">)</span>\<span class="n">bigg</span><span class="p">{(}</span>\<span class="n">frac</span><span class="p">{</span><span class="mi">1</span>\ <span class="n">psi</span><span class="p">}{</span><span class="mf">2.308</span>\ <span class="n">ft</span><span class="p">}</span>\<span class="n">bigg</span><span class="p">{)}</span>\<span class="n">bigg</span><span class="p">{(}</span>\<span class="n">frac</span><span class="p">{</span><span class="mi">1</span>\ <span class="n">hp</span><span class="p">}{</span><span class="mi">1714</span> <span class="p">(</span><span class="n">psi</span>\ <span class="n">gpm</span><span class="p">)}</span>\<span class="n">bigg</span><span class="p">{)}</span>
+
+<span class="n">hp_</span><span class="p">{</span><span class="k">break</span><span class="p">}</span><span class="o">=</span>\<span class="n">frac</span><span class="p">{</span><span class="n">hp_</span><span class="p">{</span><span class="n">water</span><span class="p">}}{</span>\<span class="n">eta_</span><span class="p">{</span><span class="n">pump</span><span class="p">}}</span> \<span class="n">quad</span> <span class="n">hp_</span><span class="p">{</span><span class="nb">input</span><span class="p">}</span><span class="o">=</span>\<span class="n">frac</span><span class="p">{</span><span class="n">hp_</span><span class="p">{</span><span class="k">break</span><span class="p">}}{</span>\<span class="n">eta_</span><span class="p">{</span><span class="n">motor</span><span class="p">}}</span>
+
+\<span class="n">text</span><span class="p">{</span><span class="n">where</span><span class="p">:}</span>\<span class="n">quad</span> \<span class="n">eta_</span><span class="p">{</span><span class="n">pump</span><span class="p">}</span><span class="o">=</span><span class="mf">0.6</span> \<span class="n">quad</span> \<span class="n">eta_</span><span class="p">{</span><span class="n">motor</span><span class="p">}</span><span class="o">=</span><span class="mf">0.9</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="function">
@@ -1342,7 +1376,7 @@ used in fluid mechanics in english units</dd>
           <a href="tutorial.html" title="Code Examples and Tutorials"
              >next</a> |</li>
         <li class="right" >
-          <a href="index.html" title="Welcome to the Water Documentation!"
+          <a href="index.html" title="Water Documentation"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">Water 1.1.2 documentation</a> &#187;</li> 
       </ul>

@@ -87,7 +87,7 @@ of a pump, pipe and fittings, and a tank at an elevated location.
 
 -------------------------------------------------------
 
-.. _pump_example:
+.. _pump-example:
 
 Pump Class Examples  
 --------------------  
@@ -151,4 +151,31 @@ Once pump data is loaded into the pump object you can plot it's pump curve.
     pump_2.plot_curve(system_flow, system_head, show=True)
 
 .. image:: pump_ex2.png
+
+-----------------------------------------------------------------------
+
+.. _tank-example:
+
+Tank Class Examples 
+--------------------  
+
+Some examples of using the Tank class
+
+.. _genset-example:
+
+------------------------------------------------------------------------
+
+Genset Class Examples
+----------------------
+
+Some examples of using the Genset Class  
+
+-----------------------------------------------------------------------
+
+Bringing it All Together
+-------------------------
+
+Sizing a pump using the Pipe Class and Pump Class in a Jupyter Notebook
+
+See :doc:`Detailed Pump Sizing <ipynb_pumpsize>` 
 
