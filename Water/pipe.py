@@ -243,7 +243,7 @@ class Pipe:
 
     def major_loss(self, flow):
         '''Uses `Hazen-Williams equation`_ to calculate major head loss for pipe object.  
-
+  
            .. _Hazen-Williams equation: https://en.wikipedia.org/wiki/Hazen%E2%80%93Williams_equation   
 
            .. math:: h_{major} = \\frac{4.52 Q^{1.852}}{C^{1.852} \\  d^{4.8704}} \\cdot L    

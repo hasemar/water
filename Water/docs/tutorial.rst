@@ -177,5 +177,6 @@ Bringing it All Together
 
 Sizing a pump using the Pipe Class and Pump Class in a Jupyter Notebook
 
-See :doc:`Detailed Pump Sizing <ipynb_pumpsize>` 
+See :doc:`Detailed Pump Sizing <detailed_pump_size>` 
 
+ 

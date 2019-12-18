@@ -2,11 +2,8 @@
 Water Package Code Reference
 =============================
 
-.. toctree::
-   :maxdepth: 3
-
 .. automodule:: Water
-
+ 
 Pipe Class
 ==========
 

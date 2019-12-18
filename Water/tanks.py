@@ -90,7 +90,7 @@ class Tank:
    
     def horizontal_vol(self, height):
         '''calculate filled volume of horizontal tank at a specific height
-            .. math:: 
+            .. math::  
             
                 A_w &= \\pi r^2 - r^2 arcos\\big{(}\\frac{(r-h)}{r}\\big{)} + (r-h)\\sqrt{2rh - h^2}
 

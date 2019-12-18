@@ -20,10 +20,10 @@ the units can be what ever you want. This reference will identify when a functio
   
 
 .. toctree::
-   :maxdepth: 3
 
-   code_reference
-   tutorial
+    code_reference
+    tutorial
+    data
 
 
 Indices and tables

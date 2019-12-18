@@ -16,7 +16,7 @@ def coeffs(num_ERUs):
     :return: C and F Coefficients
     :rtype: tuple (C, F)
 
-    :Example:
+    :Example: 
 
     >>> from Water import tools
     >>> ERUs = 1500

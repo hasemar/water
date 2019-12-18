@@ -46,8 +46,11 @@ extensions = [
     'sphinx.ext.mathjax',
     'sphinx.ext.viewcode',
     'sphinx.ext.napoleon',
-    'sphinx.ext.autosectionlabel'
+    'sphinx.ext.autosectionlabel',
+    'nbsphinx'
 ]
+
+exclude_patterns = ['**.ipynb_checkpoints']
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -84,8 +87,8 @@ pygments_style = None
 #
 #html_theme_path = [sphinx_readable_theme.get_html_theme_path()]
 #html_theme = 'readable'
-#
-html_theme = 'sphinxdoc'
+html_theme = 'sphinx_rtd_theme'
+#html_theme = 'sphinxdoc'
 #html_theme = 'python-docs-theme-2018.7'
 #html_theme = 'alabaster'
 # Theme options are theme-specific and customize the look and feel of a theme
@@ -93,11 +96,20 @@ html_theme = 'sphinxdoc'
 # documentation.
 # 
 # page_width used for alabaster theme
-#html_theme_options = {
-#    'sticky_navigation': True,
-#    'page_width': 'auto',
-#}
-
+html_theme_options = {
+    'logo_only': True,
+    'display_version': True,
+    'prev_next_buttons_location': 'bottom',
+    'style_external_links': False,
+    'style_nav_header_background': '#2980B9',
+    # Toc options
+    'collapse_navigation': True,
+    'sticky_navigation': True,
+    'navigation_depth': 4,
+    'includehidden': True,
+    'titles_only': False
+}
+html_logo = 'water_small.png'
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
