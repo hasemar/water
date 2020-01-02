@@ -9,7 +9,7 @@ class Tank:
     :type \**kwargs: dictionary
     :return: Tank object
     :rtype: object
-    :keyword Arguments: 
+    :keyword arguments: 
         :name: (*string*) - tank name 
         :diameter: (*int/float*) - tank diameter in ft  
         :height: (*int/float*) - tank height in ft, *default 0*  
@@ -136,7 +136,7 @@ class Tank:
         :type of_vol: int/float
         :return: percentage of total/system volume
         :rtype: float
-
+        
         '''
         try:
             p = vol/of_vol 

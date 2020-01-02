@@ -163,7 +163,7 @@
 <span class="kn">from</span> <span class="nn">math</span> <span class="k">import</span> <span class="n">pi</span><span class="p">,</span> <span class="n">acos</span><span class="p">,</span> <span class="n">sqrt</span><span class="p">,</span> <span class="n">ceil</span>
 
 <div class="viewcode-block" id="coeffs"><a class="viewcode-back" href="../code_reference.html#tools.coeffs">[docs]</a><span class="k">def</span> <span class="nf">coeffs</span><span class="p">(</span><span class="n">num_ERUs</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;C and F coefficients from `2019 DOH Water System Design Manual`_ Table 3-1 </span>
+    <span class="sd">&#39;&#39;&#39;C and F coefficients from  the `2019 DOH Water System Design Manual`_ Table 3-1 </span>
 <span class="sd">    </span>
 <span class="sd">    .. _2019 DOH Water System Design Manual: https://www.doh.wa.gov/Portals/1/Documents/Pubs/331-123.pdf?ver=2019-10-03-153237-220</span>
 
@@ -193,38 +193,131 @@
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Number of ERU&#39;s must be a real number&quot;</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="PHD"><a class="viewcode-back" href="../code_reference.html#tools.PHD">[docs]</a><span class="k">def</span> <span class="nf">PHD</span><span class="p">(</span><span class="n">MDD</span><span class="p">,</span> <span class="n">num_ERUs</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;Peak Hour Demand:</span>
-<span class="sd">        Enter Max Day Demand and Number of ERU&#39;s</span>
-<span class="sd">        Also Returns Average Hour and Lowest Hour Demand</span>
+    <span class="sd">&#39;&#39;&#39;Peak Hour Demand Calculation from the `2019 DOH Water System Design Manual`_ Equation 3-1 </span>
+<span class="sd">    </span>
+<span class="sd">    .. _2019 DOH Water System Design Manual: https://www.doh.wa.gov/Portals/1/Documents/Pubs/331-123.pdf?ver=2019-10-03-153237-220</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        PHD &amp;= \\frac{ERU_{MDD}}{1440}(C N + F) + 18  </span>
+
+<span class="sd">        \\text{where:}  </span>
+
+<span class="sd">        PHD &amp;= \\text{Peak Hourly Demand, total system (gpm)}  </span>
+
+<span class="sd">        C &amp;= \\text{Coefficent Associated with Ranges of ERUs}  </span>
+
+<span class="sd">        N &amp;= \\text{Number of ERUs based on MDD}  </span>
+
+<span class="sd">        F &amp;= \\text{Factor Associated with Ranges of ERUs}  </span>
+
+<span class="sd">        ERU_{MDD} &amp;= \\text{Maximum Day Demand (gpd/ERU)}  </span>
+
+<span class="sd">    C and F coefficients are automatically calculated within PHD equation</span>
+<span class="sd">        </span>
+<span class="sd">    :param MDD: Maximum Day Demand (gpd/ERU)</span>
+<span class="sd">    :type MDD: int</span>
+<span class="sd">    :param num_ERUs: Number of ERUs based on MDD</span>
+<span class="sd">    :return: Peak Hour Demand (gpm)</span>
+<span class="sd">    :rtype: int/float</span>
+
+
 <span class="sd">    &#39;&#39;&#39;</span>
 
     <span class="n">C</span><span class="p">,</span> <span class="n">F</span> <span class="o">=</span> <span class="n">coeffs</span><span class="p">(</span><span class="n">num_ERUs</span><span class="p">)</span>
     <span class="n">phd</span> <span class="o">=</span> <span class="p">(</span><span class="n">MDD</span><span class="o">/</span><span class="mi">1440</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">C</span><span class="o">*</span><span class="n">num_ERUs</span> <span class="o">+</span> <span class="n">F</span><span class="p">)</span> <span class="o">+</span> <span class="mi">18</span>
-    <span class="n">ahd</span> <span class="o">=</span> <span class="n">phd</span><span class="o">/</span><span class="mf">1.74</span>
-    <span class="n">lhd</span> <span class="o">=</span> <span class="n">ahd</span> <span class="o">*</span> <span class="mf">0.22</span>
 
-    <span class="k">return</span> <span class="p">(</span><span class="n">phd</span><span class="p">,</span> <span class="n">ahd</span><span class="p">,</span> <span class="n">lhd</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">phd</span></div>
 
 <div class="viewcode-block" id="equalizing_storage"><a class="viewcode-back" href="../code_reference.html#tools.equalizing_storage">[docs]</a><span class="k">def</span> <span class="nf">equalizing_storage</span><span class="p">(</span><span class="n">PHD</span><span class="p">,</span> <span class="n">Qs</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;Equalizing Storage Calc from DOH design manual&#39;&#39;&#39;</span>
+    <span class="sd">&#39;&#39;&#39;Equalizing Storage calculation from the `2019 DOH Water System Design Manual`_ Equation 7-1 </span>
+<span class="sd">    </span>
+<span class="sd">    .. _2019 DOH Water System Design Manual: https://www.doh.wa.gov/Portals/1/Documents/Pubs/331-123.pdf?ver=2019-10-03-153237-220</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        ES &amp;= 150(PHD - Q_s)</span>
+
+<span class="sd">        \\text{where:}   </span>
+
+<span class="sd">        ES &amp;= \\text{Equalizing Storage in gallons}  </span>
+
+<span class="sd">    :param PHD: Peak Hour Demand in gallons per minute (gpm)</span>
+<span class="sd">    :type PHD: int/float</span>
+<span class="sd">    :param Qs: total source supply (gpm)</span>
+<span class="sd">    :type Qs: int/float</span>
+<span class="sd">    :return: Equalizing Storage component in gallons</span>
+<span class="sd">    :rtype: int/float</span>
+
+<span class="sd">    &#39;&#39;&#39;</span>
     <span class="k">return</span> <span class="p">(</span><span class="n">PHD</span><span class="o">-</span><span class="n">Qs</span><span class="p">)</span><span class="o">*</span><span class="mi">150</span></div>
 
+<div class="viewcode-block" id="standby_storage"><a class="viewcode-back" href="../code_reference.html#tools.standby_storage">[docs]</a><span class="k">def</span> <span class="nf">standby_storage</span><span class="p">(</span><span class="n">N</span><span class="p">,</span><span class="n">SBi</span><span class="p">,</span> <span class="n">Td</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;Standby Storage calculation from the `2019 DOH Water System Design Manual`_ Equation 7-2 </span>
+<span class="sd">    </span>
+<span class="sd">    .. _2019 DOH Water System Design Manual: https://www.doh.wa.gov/Portals/1/Documents/Pubs/331-123.pdf?ver=2019-10-03-153237-220</span>
+
+<span class="sd">    .. math::</span>
+<span class="sd">        </span>
+<span class="sd">        SB &amp;= (N)(SB_i)(T_d)</span>
+
+<span class="sd">        \\text{where:}</span>
+
+<span class="sd">        SB &amp;= \\text{Total Standby Storage component in gallons}</span>
+
+<span class="sd">    :param N: number of Equivalent Residential Units (ERUs) based on MDD</span>
+<span class="sd">    :type N: int</span>
+<span class="sd">    :param SBi:  locally adopted unit SB volume in gallons per day per ERU (gpd/ERU)</span>
+<span class="sd">    :type SBi: int</span>
+<span class="sd">    :param Td: Number of days selected to meet water system-determined standard of reliability, *default 1* </span>
+<span class="sd">    :type Td: int</span>
+<span class="sd">    :return: Total Standby Storage component in gallons</span>
+<span class="sd">    :rtype: int</span>
+
+<span class="sd">    &#39;&#39;&#39;</span></div>
+
 <div class="viewcode-block" id="calc_hp"><a class="viewcode-back" href="../code_reference.html#tools.calc_hp">[docs]</a><span class="k">def</span> <span class="nf">calc_hp</span><span class="p">(</span><span class="n">flow_rate</span><span class="p">,</span> <span class="n">head</span><span class="p">,</span> <span class="n">pump_eff</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span> <span class="n">motor_eff</span><span class="o">=</span><span class="mf">0.9</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;Horsepower Calculations:</span>
-<span class="sd">    Returns Water HP, Break HP and Total HP</span>
-<span class="sd">    Enter flow and head in gpm and feet H20, and efficiencies</span>
-<span class="sd">    Power units in horsepower</span>
+    <span class="sd">&#39;&#39;&#39;Horsepower Calculations</span>
 
-<span class="sd">    Horse Power Calculation:</span>
+<span class="sd">    .. math::</span>
 <span class="sd">    </span>
-<span class="sd">    ..math::</span>
+<span class="sd">        hp_{water}&amp;=(Q)(TDH)\\bigg{(}\\frac{1\ psi}{2.308\ ft}\\bigg{)}\\bigg{(}\\frac{1\ hp}{1714 (psi\ gpm)}\\bigg{)}</span>
+
+<span class="sd">        hp_{break}&amp;=\\frac{hp_{water}}{\eta_{pump}}</span>
+<span class="sd">        </span>
+<span class="sd">        hp_{input}&amp;=\\frac{hp_{break}}{\eta_{motor}}</span>
+
+<span class="sd">        \\text{where:}\\quad \\eta_{pump} &amp;= \\text{pump efficiency}, \\quad \\eta_{motor} = \\text{motor efficiency}</span>
+
+<span class="sd">    :param flow_rate: pump flow rate in gallons per minute (gpm)</span>
+<span class="sd">    :type flow_rate: int/float</span>
+<span class="sd">    :param head: pump head in feet (ft)</span>
+<span class="sd">    :type head: int/float</span>
+<span class="sd">    :param pump_eff: pump efficiency, *default 0.6*</span>
+<span class="sd">    :type pump_eff: float</span>
+<span class="sd">    :param motor_eff: motor efficiency, *default 0.9*</span>
+<span class="sd">    :type motor_eff: float</span>
+<span class="sd">    :return: (water hp, break hp, input hp)</span>
+<span class="sd">    :rtype: tuple</span>
+
+<span class="sd">    :Example:</span>
+
+<span class="sd">    .. code-block:: python</span>
+
+<span class="sd">        from Water import tools</span>
+
+<span class="sd">        # pumping parameters</span>
+<span class="sd">        flow = 1000   # gpm</span>
+<span class="sd">        head = 500    # ft of water</span>
+
+<span class="sd">        water_hp, break_hp, input_hp = tools.calc_hp(flow, head)</span>
+
+<span class="sd">        print(water_hp, break_hp, input_hp)</span>
+
+<span class="sd">    &gt;&gt;&gt;  126.26262626262626 210.43771043771042 233.81967826412267</span>
 <span class="sd">    </span>
-<span class="sd">        hp_{water}=(Q)(TDH)\\bigg{(}\\frac{1\ psi}{2.308\ ft}\\bigg{)}\\bigg{(}\\frac{1\ hp}{1714 (psi\ gpm)}\\bigg{)}</span>
 
-<span class="sd">        hp_{break}=\\frac{hp_{water}}{\eta_{pump}} \quad hp_{input}=\\frac{hp_{break}}{\eta_{motor}}</span>
-
-<span class="sd">        \\text{where:}\\quad \\eta_{pump}=0.6 \\quad \\eta_{motor}=0.9</span>
-
+<span class="sd">    </span>
 <span class="sd">    &#39;&#39;&#39;</span>
     <span class="n">water_hp</span> <span class="o">=</span> <span class="p">(</span><span class="n">flow_rate</span><span class="o">*</span><span class="n">head</span><span class="p">)</span><span class="o">/</span><span class="mi">3960</span>
     <span class="n">break_hp</span> <span class="o">=</span> <span class="n">water_hp</span><span class="o">/</span><span class="n">pump_eff</span>
@@ -233,43 +326,88 @@
     <span class="k">return</span> <span class="p">(</span><span class="n">water_hp</span><span class="p">,</span> <span class="n">break_hp</span><span class="p">,</span> <span class="n">input_hp</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="velocity"><a class="viewcode-back" href="../code_reference.html#tools.velocity">[docs]</a><span class="k">def</span> <span class="nf">velocity</span><span class="p">(</span><span class="n">flow</span><span class="p">,</span> <span class="n">pipe_diam</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;Velocity Calculations:</span>
-<span class="sd">        Enter flow in gpm and pipe_diameter in inches</span>
-<span class="sd">        Returns velocity in FPS</span>
+    <span class="sd">&#39;&#39;&#39;calculate water velocity through a pipe</span>
+
+<span class="sd">    :param flow: flow in gpm</span>
+<span class="sd">    :type flow: int/float</span>
+<span class="sd">    :param pipe_diam: pipe diameter in inches</span>
+<span class="sd">    :type pipe_diam: float</span>
+<span class="sd">    :return: velocity in feet per second (FPS)</span>
+<span class="sd">    </span>
 <span class="sd">    &#39;&#39;&#39;</span>
-    <span class="n">V</span> <span class="o">=</span> <span class="mf">0.4085</span><span class="o">*</span><span class="n">flow</span><span class="o">/</span><span class="p">(</span><span class="n">pipe_diam</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">Q</span> <span class="o">=</span> <span class="n">gpm2cuftps</span><span class="p">(</span><span class="n">flow</span><span class="p">)</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="n">pipe_diam</span><span class="o">/</span><span class="mi">12</span>
+    <span class="n">V</span> <span class="o">=</span> <span class="p">(</span><span class="mi">4</span><span class="o">*</span><span class="n">Q</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">pi</span><span class="o">*</span><span class="n">d</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">V</span></div>
 
 <div class="viewcode-block" id="flow"><a class="viewcode-back" href="../code_reference.html#tools.flow">[docs]</a><span class="k">def</span> <span class="nf">flow</span><span class="p">(</span><span class="n">velocity</span><span class="p">,</span> <span class="n">pipe_diam</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;Flow Calculation:</span>
-<span class="sd">        Enter velocity in fps and pipe_diam in inches</span>
-<span class="sd">        Returns Flow in gpm</span>
+    <span class="sd">&#39;&#39;&#39;calculate flow through a pipe</span>
+
+<span class="sd">        :param velocity: water velocity in feet per second (FPS)</span>
+<span class="sd">        :type velocity: int/float</span>
+<span class="sd">        :param pipe_diam: pipe diameter in inches</span>
+<span class="sd">        :type pipe_diam: int/float</span>
+<span class="sd">        :return: flow through a pipe in gallons per minute (gpm)</span>
+<span class="sd">        :rtype: float</span>
+
 <span class="sd">    &#39;&#39;&#39;</span>
-    <span class="n">Q</span> <span class="o">=</span> <span class="n">velocity</span> <span class="o">*</span> <span class="n">pipe_diam</span><span class="o">**</span><span class="mi">2</span><span class="o">/</span><span class="mf">0.4085</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="n">pipe_diam</span><span class="o">/</span><span class="mi">12</span>
+    <span class="n">A</span> <span class="o">=</span> <span class="n">pi</span><span class="o">/</span><span class="mi">4</span> <span class="o">*</span> <span class="n">d</span><span class="o">**</span><span class="mi">2</span>
+    <span class="n">Q</span><span class="o">=</span> <span class="n">cuftps2gpm</span><span class="p">(</span><span class="n">velocity</span> <span class="o">*</span> <span class="n">A</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">Q</span></div>
 
 <div class="viewcode-block" id="gpm2cuftps"><a class="viewcode-back" href="../code_reference.html#tools.gpm2cuftps">[docs]</a><span class="k">def</span> <span class="nf">gpm2cuftps</span><span class="p">(</span><span class="n">gpm</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39; gpm to cuft per sec conversion &#39;&#39;&#39;</span>
-    <span class="k">return</span> <span class="n">gpm</span> <span class="o">*</span> <span class="mf">0.002228</span></div>
+    <span class="sd">&#39;&#39;&#39; gallons per minute (gpm) to cubic feet per second (cuft/s) conversion</span>
+<span class="sd">    </span>
+<span class="sd">    :param gpm: gallons per minute (gpm)</span>
+<span class="sd">    :type gpm: int/float</span>
+<span class="sd">    :return: cubic feet per second (cuft/s)</span>
+<span class="sd">    :rtype: float</span>
+<span class="sd">    </span>
+<span class="sd">     &#39;&#39;&#39;</span>
+    <span class="k">return</span> <span class="n">gpm</span> <span class="o">*</span> <span class="mf">0.00222802</span></div>
+
 <div class="viewcode-block" id="cuftps2gpm"><a class="viewcode-back" href="../code_reference.html#tools.cuftps2gpm">[docs]</a><span class="k">def</span> <span class="nf">cuftps2gpm</span><span class="p">(</span><span class="n">cuftps</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39; cuft per sec to gpm conversion&#39;&#39;&#39;</span>
+    <span class="sd">&#39;&#39;&#39; cubic feet per second (cuft/s) to gallons per minute (gpm) conversion</span>
+<span class="sd">    </span>
+<span class="sd">    :param cuftps: cubic feet per second (cuft/s)</span>
+<span class="sd">    :type cuftps: int/float</span>
+<span class="sd">    :return: gallons per minute (gpm)</span>
+<span class="sd">    :rtype: float</span>
+
+<span class="sd">    &#39;&#39;&#39;</span>
     <span class="k">return</span> <span class="n">cuftps</span> <span class="o">*</span> <span class="mf">448.831169</span></div>
 
 <div class="viewcode-block" id="pipeDiameter"><a class="viewcode-back" href="../code_reference.html#tools.pipeDiameter">[docs]</a><span class="k">def</span> <span class="nf">pipeDiameter</span><span class="p">(</span><span class="n">flow</span><span class="p">,</span> <span class="n">velocity</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;pipe diameter calculation:</span>
-<span class="sd">        Enter velocity in fps and flow in gpm</span>
-<span class="sd">        Reutrns diameter in inches</span>
+    <span class="sd">&#39;&#39;&#39;calculation for pipe diameter, given flow and velocity</span>
+
+<span class="sd">    :param flow: flow in gallons per minute (gpm)</span>
+<span class="sd">    :type flow: int/float</span>
+<span class="sd">    :param velocity: velocity in feet per second (FPS)</span>
+<span class="sd">    :type velocity: int/float</span>
+<span class="sd">    :return: pipe diameter in inches</span>
+<span class="sd">    :rtype: float</span>
+<span class="sd">        </span>
 <span class="sd">    &#39;&#39;&#39;</span>
     <span class="n">pipe_diam</span> <span class="o">=</span> <span class="p">(</span><span class="n">flow</span><span class="o">*</span><span class="mf">0.4085</span><span class="o">/</span><span class="n">velocity</span><span class="p">)</span><span class="o">**</span><span class="mf">0.5</span>
 
     <span class="k">return</span> <span class="n">pipe_diam</span></div>
 
 <div class="viewcode-block" id="reynolds"><a class="viewcode-back" href="../code_reference.html#tools.reynolds">[docs]</a><span class="k">def</span> <span class="nf">reynolds</span><span class="p">(</span><span class="n">pipe_diam</span><span class="p">,</span> <span class="n">flow</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vel</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">viscocity</span><span class="o">=</span><span class="mf">1.3081</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;Reynolds Number Calculation:</span>
-<span class="sd">        Enter flow (gpm), pipe diameter(inches)</span>
-<span class="sd">        viscosity in cSt = 1.3081 (default)</span>
+    <span class="sd">&#39;&#39;&#39;Reynolds Number Calculation</span>
+
+<span class="sd">    :param pipe_diam: pipe diameter in inches</span>
+<span class="sd">    :type pipe_diam: int/float</span>
+<span class="sd">    :param flow: flow in gallons per minute (gpm), *default None*</span>
+<span class="sd">    :type flow: int/float</span>
+<span class="sd">    :param vel: velocity in feet per second (FPS), *default None*</span>
+<span class="sd">    :type vel: int/float</span>
+<span class="sd">    :param viscocity: viscocity in cSt *default 1.3081*</span>
+<span class="sd">    :return: Reynolds Number</span>
+<span class="sd">    :rtype: int</span>
+
 <span class="sd">    &#39;&#39;&#39;</span>
     <span class="k">if</span> <span class="n">flow</span><span class="p">:</span>
         <span class="n">re</span> <span class="o">=</span> <span class="p">(</span><span class="n">flow</span><span class="o">*</span><span class="n">pipe_diam</span><span class="o">/</span><span class="mi">12</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">viscocity</span> <span class="o">*</span> <span class="n">pi</span> <span class="o">*</span> <span class="n">pipe_diam</span><span class="o">**</span><span class="mi">2</span><span class="o">/</span><span class="mi">4</span><span class="p">)</span>
@@ -278,136 +416,254 @@
     <span class="k">else</span><span class="p">:</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Must enter flow or velocity&#39;</span><span class="p">)</span>
 
-    <span class="k">if</span> <span class="n">re</span> <span class="o">&gt;</span> <span class="mi">2300</span><span class="p">:</span>
-        <span class="n">laminar</span> <span class="o">=</span> <span class="kc">False</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">laminar</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">re</span><span class="p">)</span> </div>
 
-    <span class="k">return</span> <span class="n">re</span><span class="p">,</span> <span class="n">laminar</span></div>
+<div class="viewcode-block" id="volume_cyl"><a class="viewcode-back" href="../code_reference.html#tools.volume_cyl">[docs]</a><span class="k">def</span> <span class="nf">volume_cyl</span><span class="p">(</span><span class="n">diameter</span><span class="p">,</span> <span class="n">height</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39; calculate the  volume of a cylinder</span>
 
-<div class="viewcode-block" id="volume_cyl"><a class="viewcode-back" href="../code_reference.html#tools.volume_cyl">[docs]</a><span class="k">def</span> <span class="nf">volume_cyl</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">h</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39; volume of a cylinder using diameter</span>
-<span class="sd">        returns volume consistent with inputs</span>
+<span class="sd">    :param diameter: diameter of cylinder</span>
+<span class="sd">    :type diameter: int/float</span>
+<span class="sd">    :param height: height of cylinder</span>
+<span class="sd">    :type height: int/float</span>
+<span class="sd">    :return: volume of a cylinder in consistent units</span>
+<span class="sd">    :rtype: float</span>
+
 <span class="sd">    &#39;&#39;&#39;</span>
-    <span class="k">return</span> <span class="p">(</span><span class="n">pi</span><span class="o">*</span><span class="n">d</span><span class="o">**</span><span class="mi">2</span> <span class="o">/</span> <span class="mi">4</span><span class="p">)</span><span class="o">*</span><span class="n">h</span></div>
+    <span class="k">return</span> <span class="p">(</span><span class="n">pi</span><span class="o">*</span><span class="n">diameter</span><span class="o">**</span><span class="mi">2</span> <span class="o">/</span> <span class="mi">4</span><span class="p">)</span><span class="o">*</span><span class="n">height</span></div>
 
 <div class="viewcode-block" id="volume_box"><a class="viewcode-back" href="../code_reference.html#tools.volume_box">[docs]</a><span class="k">def</span> <span class="nf">volume_box</span><span class="p">(</span><span class="n">length</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39; volume of a box</span>
-<span class="sd">        returns volume in units consistent with inputs</span>
+    <span class="sd">&#39;&#39;&#39; calculate the volume of a box</span>
+<span class="sd">    </span>
+<span class="sd">    :param length: length of box</span>
+<span class="sd">    :type length: int/float</span>
+<span class="sd">    :param width: width of box</span>
+<span class="sd">    :type width: int/float</span>
+<span class="sd">    :param height: height of box</span>
+<span class="sd">    :type height: int/float</span>
+<span class="sd">    :return: volume of a box</span>
+<span class="sd">    :rtype: float</span>
+
 <span class="sd">    &#39;&#39;&#39;</span>
     <span class="k">return</span> <span class="n">length</span><span class="o">*</span><span class="n">width</span><span class="o">*</span><span class="n">height</span></div>
 
 <div class="viewcode-block" id="cuft2gal"><a class="viewcode-back" href="../code_reference.html#tools.cuft2gal">[docs]</a><span class="k">def</span> <span class="nf">cuft2gal</span><span class="p">(</span><span class="n">cubic_feet</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39; cubic feet to gallon conversion&#39;&#39;&#39;</span>
+    <span class="sd">&#39;&#39;&#39; cubic feet to gallon conversion</span>
+<span class="sd">    </span>
+<span class="sd">    :param cubic_feet: cubic feet</span>
+<span class="sd">    :type cubic_feet: int/float</span>
+<span class="sd">    :return: gallons</span>
+<span class="sd">    :rtype: float</span>
+
+<span class="sd">    &#39;&#39;&#39;</span>
     <span class="k">return</span> <span class="n">cubic_feet</span><span class="o">*</span><span class="mf">7.4805</span></div>
 
 <div class="viewcode-block" id="gal2cuft"><a class="viewcode-back" href="../code_reference.html#tools.gal2cuft">[docs]</a><span class="k">def</span> <span class="nf">gal2cuft</span><span class="p">(</span><span class="n">gallons</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39; gallon to cubic feet conversion&#39;&#39;&#39;</span>
+    <span class="sd">&#39;&#39;&#39; gallon to cubic feet conversion</span>
+<span class="sd">    </span>
+<span class="sd">    :param gallons: gallons</span>
+<span class="sd">    :type gallons: int/float</span>
+<span class="sd">    :return: cubic feet</span>
+<span class="sd">    :rtype: float</span>
+
+<span class="sd">    &#39;&#39;&#39;</span>
     <span class="k">return</span> <span class="n">gallons</span><span class="o">/</span><span class="mf">7.4805</span></div>
 
 <div class="viewcode-block" id="gal2acft"><a class="viewcode-back" href="../code_reference.html#tools.gal2acft">[docs]</a><span class="k">def</span> <span class="nf">gal2acft</span><span class="p">(</span><span class="n">gallons</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39; convert gallons to acre-feet &#39;&#39;&#39;</span>
+    <span class="sd">&#39;&#39;&#39;gallons to acre-feet conversion</span>
+<span class="sd">    </span>
+<span class="sd">    :param gallons: gallons</span>
+<span class="sd">    :type gallons: int/float</span>
+<span class="sd">    :return: acre feet</span>
+<span class="sd">    :rtype: float</span>
+
+<span class="sd">    &#39;&#39;&#39;</span>
     <span class="k">return</span> <span class="n">gallons</span><span class="o">/</span><span class="mi">325851</span></div>
 
 <div class="viewcode-block" id="acft2gal"><a class="viewcode-back" href="../code_reference.html#tools.acft2gal">[docs]</a><span class="k">def</span> <span class="nf">acft2gal</span><span class="p">(</span><span class="n">acft</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39; convert acre-feet to gallons &#39;&#39;&#39;</span>
+    <span class="sd">&#39;&#39;&#39;acre-feet to gallons conversion</span>
+<span class="sd">    </span>
+<span class="sd">    :param acft: acre feet </span>
+<span class="sd">    :type acft: int/float</span>
+<span class="sd">    :return: gallons</span>
+<span class="sd">    :rtype: float</span>
+<span class="sd">    </span>
+<span class="sd">    &#39;&#39;&#39;</span>
     <span class="k">return</span> <span class="n">acft</span> <span class="o">*</span> <span class="mi">325851</span></div>
 
 <div class="viewcode-block" id="cuin2gal"><a class="viewcode-back" href="../code_reference.html#tools.cuin2gal">[docs]</a><span class="k">def</span> <span class="nf">cuin2gal</span><span class="p">(</span><span class="n">cubic_inches</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39; convert cubic inches to gallons &#39;&#39;&#39;</span>
+    <span class="sd">&#39;&#39;&#39;cubic inches to gallons conversion</span>
+<span class="sd">    </span>
+<span class="sd">    :param cubic_inches: cubic inches</span>
+<span class="sd">    :type cubic_inches: int/float</span>
+<span class="sd">    :return: gallons</span>
+<span class="sd">    :rtype: float</span>
+<span class="sd">    </span>
+<span class="sd">    &#39;&#39;&#39;</span>
     <span class="k">return</span> <span class="n">cubic_inches</span><span class="o">/</span><span class="mi">231</span></div>
 
 <div class="viewcode-block" id="gal2cuin"><a class="viewcode-back" href="../code_reference.html#tools.gal2cuin">[docs]</a><span class="k">def</span> <span class="nf">gal2cuin</span><span class="p">(</span><span class="n">gallons</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39; converts gallons to cubic inches &#39;&#39;&#39;</span>
+    <span class="sd">&#39;&#39;&#39;gallon to cubic inch conversion</span>
+<span class="sd">    </span>
+<span class="sd">    :param gallons: gallons</span>
+<span class="sd">    :type gallons: int/float</span>
+<span class="sd">    :return: cubic inches</span>
+<span class="sd">    :rtype: float</span>
+
+<span class="sd">     &#39;&#39;&#39;</span>
     <span class="k">return</span> <span class="n">gallons</span> <span class="o">*</span> <span class="mi">231</span></div>
 
-<div class="viewcode-block" id="minor_loss"><a class="viewcode-back" href="../code_reference.html#tools.minor_loss">[docs]</a><span class="k">def</span> <span class="nf">minor_loss</span><span class="p">(</span><span class="n">vel</span><span class="p">,</span> <span class="n">k_val</span> <span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39; minor head loss using FPS &#39;&#39;&#39;</span>
+<div class="viewcode-block" id="minor_loss"><a class="viewcode-back" href="../code_reference.html#tools.minor_loss">[docs]</a><span class="k">def</span> <span class="nf">minor_loss</span><span class="p">(</span><span class="n">velocity</span><span class="p">,</span> <span class="n">k_val</span> <span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39; minor head loss using the `Darcy-Weisbach equation`_  </span>
+<span class="sd">        </span>
+<span class="sd">    .. _Darcy-Weisbach equation: https://en.wikipedia.org/wiki/Darcy%E2%80%93Weisbach_equation   </span>
+
+<span class="sd">    .. math:: h_{minor} = f_D \\cdot \\frac{1}{2g} \\cdot \\frac{v^2}{D}</span>
+<span class="sd">    </span>
+<span class="sd">    :param velocity: velocity in feet per second (FPS)</span>
+<span class="sd">    :param k_val: K value</span>
+<span class="sd">    :type velocity: int/float</span>
+<span class="sd">    :type velocity: int/float</span>
+<span class="sd">    :return: minor head loss in feet</span>
+<span class="sd">    :rtype: float</span>
+
+<span class="sd">     &#39;&#39;&#39;</span>
     <span class="n">g</span> <span class="o">=</span> <span class="mf">32.2</span>
-    <span class="k">return</span> <span class="n">k_val</span> <span class="o">*</span> <span class="n">vel</span><span class="o">**</span><span class="mi">2</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">g</span><span class="p">)</span></div>
-
-<div class="viewcode-block" id="report_losses"><a class="viewcode-back" href="../code_reference.html#tools.report_losses">[docs]</a><span class="k">def</span> <span class="nf">report_losses</span><span class="p">(</span><span class="n">losses</span><span class="p">,</span> <span class="n">flow</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;prints high and low flow head loss for given inputs</span>
-<span class="sd">        report_losses(list, list, str)</span>
-<span class="sd">       if only one value is passed for both losses and flow</span>
-<span class="sd">       it will only report one losses value</span>
-
-<span class="sd">    &#39;&#39;&#39;</span>
-    <span class="k">if</span> <span class="n">losses</span> <span class="ow">is</span> <span class="nb">list</span> <span class="ow">and</span> <span class="n">flow</span> <span class="ow">is</span> <span class="nb">list</span><span class="p">:</span>
-        <span class="n">output</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">: </span><span class="si">{:.2f}</span><span class="s1"> ft @ </span><span class="si">{:.1f}</span><span class="s1"> gpm -- </span><span class="si">{:.2f}</span><span class="s1"> ft @ </span><span class="si">{:.1f}</span><span class="s1"> gpm&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">,</span>
-                                                                           <span class="n">losses</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
-                                                                           <span class="n">flow</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> 
-                                                                           <span class="n">losses</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
-                                                                           <span class="n">flow</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">output</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">: </span><span class="si">{:.2f}</span><span class="s1"> ft @ </span><span class="si">{:.2f}</span><span class="s1"> gpm&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">,</span>
-                                                     <span class="n">losses</span><span class="p">,</span>
-                                                     <span class="n">flow</span><span class="p">)</span>
-
-    <span class="k">return</span> <span class="n">output</span></div>
+    <span class="k">return</span> <span class="n">k_val</span> <span class="o">*</span> <span class="n">velocity</span><span class="o">**</span><span class="mi">2</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">g</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="ft2psi"><a class="viewcode-back" href="../code_reference.html#tools.ft2psi">[docs]</a><span class="k">def</span> <span class="nf">ft2psi</span><span class="p">(</span><span class="n">ft_of_head</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39; convert feet of head to psi &#39;&#39;&#39;</span>
-    <span class="k">return</span> <span class="n">ft_of_head</span> <span class="o">*</span> <span class="mf">0.43333</span></div>
+    <span class="sd">&#39;&#39;&#39;feet of head to pounds per square inch (psi) conversion</span>
+<span class="sd">    </span>
+<span class="sd">    :param ft_of_head: feet of head</span>
+<span class="sd">    :type ft_of_head: int/float</span>
+<span class="sd">    :return: psi</span>
+<span class="sd">    :rtype: float</span>
+
+<span class="sd">     &#39;&#39;&#39;</span>
+    <span class="k">return</span> <span class="n">ft_of_head</span> <span class="o">*</span> <span class="mf">0.433333333</span></div>
 
 <div class="viewcode-block" id="psi2ft"><a class="viewcode-back" href="../code_reference.html#tools.psi2ft">[docs]</a><span class="k">def</span> <span class="nf">psi2ft</span><span class="p">(</span><span class="n">psi</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39; return psi to feet of head &#39;&#39;&#39;</span>
+    <span class="sd">&#39;&#39;&#39; return psi to feet of head</span>
+<span class="sd">    </span>
+<span class="sd">    :param psi: pounds per square feet (psi)</span>
+<span class="sd">    :type psi: int/float</span>
+<span class="sd">    :return: feet of head</span>
+<span class="sd">    :rtype: float</span>
+
+<span class="sd">     &#39;&#39;&#39;</span>
     <span class="k">return</span> <span class="n">psi</span> <span class="o">*</span> <span class="mf">2.308</span></div>
 
-<div class="viewcode-block" id="hpn_size"><a class="viewcode-back" href="../code_reference.html#tools.hpn_size">[docs]</a><span class="k">def</span> <span class="nf">hpn_size</span><span class="p">(</span><span class="n">cut_out</span><span class="p">,</span> <span class="n">cut_in</span><span class="p">,</span> <span class="n">num_cycles</span><span class="p">,</span> <span class="n">max_flow</span><span class="p">,</span> <span class="n">tank_diam</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39; Hydro Pneumatic Tank Sizing</span>
+<div class="viewcode-block" id="hpn_size"><a class="viewcode-back" href="../code_reference.html#tools.hpn_size">[docs]</a><span class="k">def</span> <span class="nf">hpn_size</span><span class="p">(</span><span class="n">cut_out</span><span class="p">,</span> <span class="n">cut_in</span><span class="p">,</span> <span class="n">num_cycles</span><span class="p">,</span> <span class="n">max_flow</span><span class="p">,</span> <span class="n">tank_diam</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="s1">&#39;horiztonal&#39;</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39; hydro-pneumatic tank sizing calculation from the `2019 DOH Water System Design Manual`_ Equations 9-2 and 9-3 </span>
+<span class="sd">    </span>
+<span class="sd">    .. _2019 DOH Water System Design Manual: https://www.doh.wa.gov/Portals/1/Documents/Pubs/331-123.pdf?ver=2019-10-03-153237-220</span>
 
-<span class="sd">        cut_out = nominal pump-off pressure in psi</span>
-<span class="sd">        cut_in = nominal pump-on pressure in psi</span>
-<span class="sd">        num_cycles = max number of cycles/hour/pump</span>
-<span class="sd">        max_flow = estimated max flow from 1 pump</span>
-<span class="sd">        tank_diam = diameter of tank in inches</span>
+<span class="sd">    :param cut_out: nominal pump-off pressure in psi (P_1)</span>
+<span class="sd">    :param cut_in: nominal pump-on pressure in psi (P_2)</span>
+<span class="sd">    :param num_cycles: max number of cycles/hour/pump (Nc)</span>
+<span class="sd">    :parma max_flow: estimated max flow from 1 pump (Qp)</span>
+<span class="sd">    :param tank_diam: diameter of tank in inches</span>
+<span class="sd">    :param shape: tank shape (must be &#39;horizontal&#39; or &#39;vertical&#39;)</span>
+<span class="sd">    :type cut_out: int/float</span>
+<span class="sd">    :type cut_in: int/float</span>
+<span class="sd">    :type num_cycles: int</span>
+<span class="sd">    :type max_flow: int/float</span>
+<span class="sd">    :type tank_diam: int/float</span>
+<span class="sd">    :type shape: string</span>
+<span class="sd">    :return: recommended volume for hydro-pnuematic tank</span>
+<span class="sd">    :rtype: float</span>
+<span class="sd">    </span>
 <span class="sd">    &#39;&#39;&#39;</span>
-    
+    <span class="k">assert</span> <span class="p">(</span><span class="n">shape</span> <span class="o">==</span> <span class="s1">&#39;horizontal&#39;</span> <span class="ow">or</span> <span class="n">shape</span> <span class="o">==</span> <span class="s1">&#39;vertical&#39;</span><span class="p">),</span> <span class="s2">&quot;shape must be horizontal or vertical&quot;</span>
+
     <span class="n">R</span> <span class="o">=</span> <span class="n">tank_diam</span><span class="o">/</span><span class="mi">2</span>
     <span class="n">A_t</span> <span class="o">=</span> <span class="p">(</span><span class="n">pi</span><span class="o">*</span><span class="n">R</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
     <span class="n">A_6</span> <span class="o">=</span> <span class="p">(</span><span class="n">R</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="n">acos</span><span class="p">((</span><span class="n">R</span><span class="o">-</span><span class="mi">6</span><span class="p">)</span><span class="o">/</span><span class="n">R</span><span class="p">)</span> <span class="o">-</span> <span class="p">(</span><span class="n">R</span><span class="o">-</span><span class="mi">6</span><span class="p">)</span> <span class="o">*</span> <span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">R</span><span class="o">*</span><span class="mi">6</span> <span class="o">-</span> <span class="mi">6</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
     <span class="n">MF</span> <span class="o">=</span> <span class="n">A_t</span> <span class="o">/</span> <span class="p">(</span><span class="n">A_t</span> <span class="o">-</span> <span class="n">A_6</span><span class="p">)</span>
     
     <span class="n">V</span> <span class="o">=</span> <span class="p">((</span><span class="n">cut_out</span> <span class="o">+</span> <span class="mf">14.7</span><span class="p">)</span><span class="o">*</span><span class="mi">15</span><span class="o">*</span><span class="n">max_flow</span><span class="o">*</span><span class="n">MF</span><span class="p">)</span><span class="o">/</span><span class="p">((</span><span class="n">cut_out</span><span class="o">-</span><span class="n">cut_in</span><span class="p">)</span><span class="o">*</span><span class="n">num_cycles</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">shape</span> <span class="o">==</span> <span class="s1">&#39;vertical&#39;</span><span class="p">:</span>
+        <span class="n">V</span> <span class="o">+=</span> <span class="mf">0.0204</span> <span class="o">*</span> <span class="n">tank_diam</span><span class="o">**</span><span class="mi">2</span>
+        
     <span class="k">return</span> <span class="n">V</span></div>
 
 <div class="viewcode-block" id="bladder_size"><a class="viewcode-back" href="../code_reference.html#tools.bladder_size">[docs]</a><span class="k">def</span> <span class="nf">bladder_size</span><span class="p">(</span><span class="n">cut_out</span><span class="p">,</span> <span class="n">cut_in</span><span class="p">,</span> <span class="n">num_cycles</span><span class="p">,</span> <span class="n">max_flow</span><span class="p">,</span> <span class="n">bladder_vol</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39; Bladder Tank sizing</span>
+    <span class="sd">&#39;&#39;&#39; Bladder Tank sizing from the `2019 DOH Water System Design Manual`_ Equation 9-1</span>
+<span class="sd">    </span>
+<span class="sd">    .. _2019 DOH Water System Design Manual: https://www.doh.wa.gov/Portals/1/Documents/Pubs/331-123.pdf?ver=2019-10-03-153237-220</span>
 
-<span class="sd">        cut_out = nominal pump-off pressure in psi</span>
-<span class="sd">        cut_in = nominal pump-on pressure in psi</span>
-<span class="sd">        num_cycles = max number of cycles/hour/pump</span>
-<span class="sd">        max_flow = estimated max flow from 1 pump</span>
-<span class="sd">        bladder_vol = volume of bladder tank in gallons</span>
-<span class="sd">        &#39;&#39;&#39;</span>
+<span class="sd">    :param cut_out: nominal pump-off pressure in psi</span>
+<span class="sd">    :param  cut_in: nominal pump-on pressure in psi</span>
+<span class="sd">    :param num_cycles: max number of cycles/hour/pump</span>
+<span class="sd">    :param max_flow: estimated max flow from 1 pump</span>
+<span class="sd">    :param bladder_vol: volume of bladder tank in gallons</span>
+<span class="sd">    :type cut_out: int/float</span>
+<span class="sd">    :type cut_in: int/float</span>
+<span class="sd">    :type num_cycles: int</span>
+<span class="sd">    :type max_flow: int/float</span>
+<span class="sd">    :type bladder_vol: int/float</span>
+<span class="sd">    :return: number of bladder tanks</span>
+<span class="sd">    :rtype: int</span>
+
+<span class="sd">    &#39;&#39;&#39;</span>
     <span class="n">R</span> <span class="o">=</span> <span class="mi">15</span><span class="o">*</span><span class="p">(</span><span class="n">cut_out</span><span class="o">+</span><span class="mf">14.7</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">cut_in</span><span class="o">+</span><span class="mf">14.7</span><span class="p">)</span> <span class="o">/</span> <span class="p">((</span><span class="n">cut_out</span><span class="o">-</span><span class="n">cut_in</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">cut_in</span><span class="o">+</span><span class="mf">9.7</span><span class="p">))</span>
     <span class="n">T</span> <span class="o">=</span> <span class="n">R</span><span class="o">*</span><span class="n">max_flow</span> <span class="o">/</span> <span class="p">(</span><span class="n">num_cycles</span> <span class="o">*</span> <span class="n">bladder_vol</span><span class="p">)</span>
+
     <span class="k">return</span> <span class="n">ceil</span><span class="p">(</span><span class="n">T</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="air_dump_valve_size"><a class="viewcode-back" href="../code_reference.html#tools.air_dump_valve_size">[docs]</a><span class="k">def</span> <span class="nf">air_dump_valve_size</span><span class="p">(</span><span class="n">cut_out</span><span class="p">,</span> <span class="n">cut_in</span><span class="p">,</span> <span class="n">tank_vol</span><span class="p">,</span> <span class="n">evac_time</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">info</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39; Air Dump Valve Sizing :</span>
-<span class="sd">        cut_out = nominal pump off pressure in psi</span>
-<span class="sd">        cut_in = nominal pump on pressure in psi</span>
-<span class="sd">        tank_vol = volume of H-PN tank in gallons</span>
-<span class="sd">        evac_time = time to empty entire tank in minutes (default 5)</span>
-<span class="sd">        info = print report (default false)</span>
-<span class="sd">    &#39;&#39;&#39;</span>
-    <span class="c1"># Constants</span>
-    <span class="n">R</span> <span class="o">=</span> <span class="mf">53.35</span>  <span class="c1"># R constant in ftlb/Rankine</span>
-    <span class="n">T</span> <span class="o">=</span> <span class="mf">527.7</span>  <span class="c1"># Air temp  in Rankine</span>
-    <span class="n">Z</span> <span class="o">=</span> <span class="mi">1</span>
-    <span class="n">C</span> <span class="o">=</span> <span class="mi">356</span>
-    <span class="n">K</span> <span class="o">=</span> <span class="o">.</span><span class="mi">975</span>
-    <span class="n">k_b</span> <span class="o">=</span> <span class="mi">1</span>
-    <span class="n">M</span> <span class="o">=</span> <span class="mf">28.97</span>
+<div class="viewcode-block" id="air_dump_valve_size"><a class="viewcode-back" href="../code_reference.html#tools.air_dump_valve_size">[docs]</a><span class="k">def</span> <span class="nf">air_dump_valve_size</span><span class="p">(</span><span class="n">cut_out</span><span class="p">,</span> <span class="n">cut_in</span><span class="p">,</span> <span class="n">tank_vol</span><span class="p">,</span> <span class="n">evac_time</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">info</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;&quot;Air Dump&quot; valve orifice size calculation. Sizes the minimum theoretical orifice </span>
+<span class="sd">    diameter of an air release valve to evaculate a volume of air in a given period of </span>
+<span class="sd">    time. This function assumes a starting water level in the tank at half full and a</span>
+<span class="sd">    required dump air volume when the tank is empty. </span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        A = \\frac{W}{C K P_1 K_b} \\sqrt{\\frac{T Z}{M}}</span>
+<span class="sd">    </span>
+<span class="sd">    where A = orifice area</span>
+
+<span class="sd">    :param cut_out: nominal pump off pressure in psi</span>
+<span class="sd">    :param cut_in:  nominal pump on pressure in psi</span>
+<span class="sd">    :param tank_vol: volume of H-PN tank in gallons</span>
+<span class="sd">    :param evac_time: time to empty entire tank in minutes *default 5*</span>
+<span class="sd">    :param info: print report *default false*</span>
+<span class="sd">    :param \**kwargs: keyword arguments</span>
+<span class="sd">    :type cut_out: int/float</span>
+<span class="sd">    :type cut_in: int/float</span>
+<span class="sd">    :type tank_vol: int/float</span>
+<span class="sd">    :type evac_time: int</span>
+<span class="sd">    :type info: boolean</span>
+<span class="sd">    :type \**kwargs: dictionary</span>
+<span class="sd">    :return: theoretical orifice size, if info==true then it will print a report</span>
+<span class="sd">    :rtype: float</span>
+<span class="sd">    :keyword arguments:</span>
+<span class="sd">        :R: (*int/float*) -  ideal gas constant in ftlb/Rankine *default 53.35*</span>
+<span class="sd">        :T: (*int/float*) - air temperature in Rankine *default 527.7*</span>
+<span class="sd">        :Z: (*int/float*) - compressibility factor *default 1*</span>
+<span class="sd">        :C: (*int/float*) - gas constant based upon the ratio of specific heats *default 356*</span>
+<span class="sd">        :K: (*int/float*) - coefficient of discharge *default 0.975*</span>
+<span class="sd">        :k_b: (*int/float*) - backpressure correction factor *default 1*</span>
+<span class="sd">        :M: (*int/float*) - molecular weight of of air in lbm/lbmol *default 28.97*</span>
+
+<span class="sd">     &#39;&#39;&#39;</span>
+    <span class="c1"># Keyword arguments</span>
+    <span class="n">R</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;R&#39;</span><span class="p">,</span> <span class="mf">53.35</span><span class="p">)</span>  <span class="c1"># R constant in ftlb/Rankine</span>
+    <span class="n">T</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;T&#39;</span><span class="p">,</span> <span class="mf">527.7</span><span class="p">)</span>  <span class="c1"># Air temp  in Rankine</span>
+    <span class="n">Z</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;Z&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>  
+    <span class="n">C</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="mi">356</span><span class="p">)</span>  <span class="c1"># gas constant</span>
+    <span class="n">K</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;K&#39;</span><span class="p">,</span> <span class="mf">0.975</span><span class="p">)</span>
+    <span class="n">k_b</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;k_b&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">M</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;M&#39;</span><span class="p">,</span> <span class="mf">28.97</span><span class="p">)</span>
+
     <span class="c1"># Calcs</span>
     <span class="n">V_tank</span> <span class="o">=</span> <span class="n">tank_vol</span> <span class="o">/</span> <span class="mf">7.481</span>   <span class="c1"># cuft</span>
     <span class="n">V_air</span> <span class="o">=</span> <span class="n">V_tank</span><span class="o">/</span><span class="mi">2</span>      <span class="c1"># air vol in tank (half full)</span>
     <span class="n">P_avg</span> <span class="o">=</span> <span class="p">(</span><span class="n">cut_out</span> <span class="o">+</span> <span class="n">cut_in</span><span class="p">)</span><span class="o">/</span> <span class="mi">2</span>   <span class="c1"># avg pressure</span>
+
     <span class="c1"># In No-Water Event...</span>
     <span class="n">P_empty</span> <span class="o">=</span> <span class="n">P_avg</span> <span class="o">*</span> <span class="n">V_air</span> <span class="o">/</span> <span class="n">V_tank</span>   <span class="c1"># in psi</span>
     <span class="n">m</span> <span class="o">=</span> <span class="p">(</span><span class="n">P_empty</span><span class="o">*</span><span class="n">V_tank</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">R</span><span class="o">*</span><span class="n">T</span><span class="p">)</span> <span class="o">*</span> <span class="mi">144</span>  <span class="c1"># in lbs of air</span>
+
     <span class="c1"># theoretical orifice dims</span>
     <span class="n">W</span> <span class="o">=</span> <span class="p">(</span><span class="n">m</span><span class="o">/</span><span class="n">evac_time</span><span class="p">)</span> <span class="o">*</span> <span class="mi">60</span>   <span class="c1"># mean dischage in lb/hr</span>
     <span class="n">A</span> <span class="o">=</span> <span class="p">(</span><span class="n">W</span> <span class="o">*</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">T</span><span class="o">*</span><span class="n">Z</span><span class="p">))</span> <span class="o">/</span> <span class="p">(</span><span class="n">C</span> <span class="o">*</span> <span class="n">K</span> <span class="o">*</span> <span class="p">(</span><span class="n">P_empty</span> <span class="o">+</span> <span class="mf">14.7</span><span class="p">)</span> <span class="o">*</span> <span class="n">k_b</span> <span class="o">*</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">M</span><span class="p">))</span>
@@ -428,37 +684,47 @@
         <span class="nb">print</span><span class="p">(</span><span class="n">report</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">D</span></div>
     
-<div class="viewcode-block" id="pressure_relief_valve_size"><a class="viewcode-back" href="../code_reference.html#tools.pressure_relief_valve_size">[docs]</a><span class="k">def</span> <span class="nf">pressure_relief_valve_size</span><span class="p">(</span>
-                                <span class="n">cut_out</span><span class="p">,</span>
-                                <span class="n">tank_vol</span><span class="p">,</span>
-                                <span class="n">capacity</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                                <span class="n">R</span><span class="o">=</span><span class="mf">53.35</span><span class="p">,</span>
-                                <span class="n">T</span><span class="o">=</span><span class="mf">527.7</span><span class="p">,</span>
-                                <span class="n">Z</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-                                <span class="n">C</span><span class="o">=</span><span class="mi">356</span><span class="p">,</span>
-                                <span class="n">K</span><span class="o">=</span><span class="mf">0.878</span><span class="p">,</span>
-                                <span class="n">k_b</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-                                <span class="n">M</span><span class="o">=</span><span class="mf">28.97</span><span class="p">,</span>
-                                <span class="n">info</span><span class="o">=</span><span class="kc">False</span>
-                                <span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39; pressure Relief Valve Sizing :</span>
-<span class="sd">        cut_out = nominal pump off pressure in psi</span>
-<span class="sd">        tank_vol = volume of H-PN tank in gallons</span>
-<span class="sd">        capacity = required relieving capacity in SCFM</span>
-<span class="sd">                if None then it will lenearly interpolate from cut_out press</span>
-<span class="sd">                using WWS standard compressor</span>
+<div class="viewcode-block" id="pressure_relief_valve_size"><a class="viewcode-back" href="../code_reference.html#tools.pressure_relief_valve_size">[docs]</a><span class="k">def</span> <span class="nf">pressure_relief_valve_size</span><span class="p">(</span><span class="n">cut_out</span><span class="p">,</span> <span class="n">tank_vol</span><span class="p">,</span> <span class="n">capacity</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">info</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39; pressure relief valve sizing  calculation for ASME VIII valve on a H-PN tank</span>
 
-<span class="sd">        # Constants (defauts)</span>
-<span class="sd">        R = 53.35  # R constant in ftlb/Rankine</span>
-<span class="sd">        T = 527.7  # Air temp  in Rankine</span>
-<span class="sd">        Z = 1</span>
-<span class="sd">        C = 356</span>
-<span class="sd">        K = .878</span>
-<span class="sd">        k_b = 1</span>
-<span class="sd">        M = 28.97</span>
-<span class="sd">        info = print report (default false)</span>
+<span class="sd">    .. math::</span>
+
+<span class="sd">        A = \\frac{W}{C K P_1 K_b} \\sqrt{\\frac{T Z}{M}}</span>
+<span class="sd">    </span>
+<span class="sd">    where A = orifice area</span>
+
+<span class="sd">    :param cut_out: nominal pump off pressure in psi</span>
+<span class="sd">    :type cut_out: int/float</span>
+<span class="sd">    :param tank_vol: volume of H-PN tank in gallons</span>
+<span class="sd">    :type tank_vol: int/float</span>
+<span class="sd">    :param capacity: required relieving capacity in SCFM *default None* (see note)</span>
+<span class="sd">    :type capacity: int/float </span>
+<span class="sd">    :param info: print a report of the results</span>
+<span class="sd">    :type info: boolean</span>
+<span class="sd">    :param \**kwargs: keyword arguments</span>
+<span class="sd">    :type \**kwargs: dictionary</span>
+<span class="sd">    :return: returns the minimum orifice diameter of a H-PN tank</span>
+<span class="sd">    :rtype: float</span>
+<span class="sd">    :keyword arguments:</span>
+<span class="sd">        :R: (*int/float*) - ideal gas constant in ftlb/Rankine *default 53.35*</span>
+<span class="sd">        :T: (*int/float*) - air temperature in Rankine *default = 527.7*</span>
+<span class="sd">        :Z: (*int/float*) - compressibility factor *default 1*</span>
+<span class="sd">        :K: (*int/float*) - coefficient of discharge *default 0.878*</span>
+<span class="sd">        :k_b: (*int/float*) - backpressure coefficient *default 1*</span>
+<span class="sd">        :M: molecular weight of air in lbm/lbmol *default 28.97* </span>
+
+<span class="sd">    if capacity is **None** then it will use the WWS standard compressor capacity</span>
 
 <span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="n">R</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;R&#39;</span><span class="p">,</span> <span class="mf">53.35</span><span class="p">)</span>
+    <span class="n">T</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;T&#39;</span><span class="p">,</span> <span class="mf">527.7</span><span class="p">)</span>
+    <span class="n">Z</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;Z&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">C</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="mi">356</span><span class="p">)</span>
+    <span class="n">K</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;K&#39;</span><span class="p">,</span> <span class="mf">0.878</span><span class="p">)</span>
+    <span class="n">k_b</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;k_b&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">M</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;M&#39;</span><span class="p">,</span> <span class="mf">28.97</span><span class="p">)</span>
+    
     <span class="n">orifice_area</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;D&#39;</span> <span class="p">:</span> <span class="mf">0.121</span><span class="p">,</span>
                     <span class="s1">&#39;E&#39;</span> <span class="p">:</span> <span class="mf">0.216</span><span class="p">,</span>
                     <span class="s1">&#39;F&#39;</span> <span class="p">:</span> <span class="mf">0.337</span><span class="p">,</span>
@@ -505,13 +771,17 @@
     <span class="k">return</span> <span class="n">A</span></div>
 
 <div class="viewcode-block" id="resistance"><a class="viewcode-back" href="../code_reference.html#tools.resistance">[docs]</a><span class="k">def</span> <span class="nf">resistance</span><span class="p">(</span><span class="n">velocity</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">headloss</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">K</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39; calculates resistance coefficient or headloss</span>
-<span class="sd">        depending on what is given</span>
+    <span class="sd">&#39;&#39;&#39; calculates resistance coefficient or headloss </span>
 
-<span class="sd">        Enter velociy in FPS</span>
-<span class="sd">        Enter headloss in feet</span>
-<span class="sd">        OR</span>
-<span class="sd">        Enter K</span>
+<span class="sd">    :param velocity: velocity in feet per second (FPS) *default None*</span>
+<span class="sd">    :param headloss: head loss in feet of water *default None*</span>
+<span class="sd">    :param K: resistance coefficient *default None*</span>
+<span class="sd">    :type velocity: int/float</span>
+<span class="sd">    :type headloss: int/float</span>
+<span class="sd">    :type K: int/float</span>
+<span class="sd">    :return: resistance coefficient or headloss</span>
+<span class="sd">    :rtype: float</span>
+
 <span class="sd">    &#39;&#39;&#39;</span>
     <span class="n">g</span> <span class="o">=</span> <span class="mf">32.2</span>
     
@@ -525,16 +795,22 @@
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;must enter headloss or K value&#39;</span><span class="p">)</span></div>
         
 <div class="viewcode-block" id="leakage"><a class="viewcode-back" href="../code_reference.html#tools.leakage">[docs]</a><span class="k">def</span> <span class="nf">leakage</span><span class="p">(</span><span class="n">pipe_diam</span><span class="p">,</span> <span class="n">test_pressure</span><span class="p">,</span> <span class="n">linear_feet</span><span class="p">,</span> <span class="n">hydrants</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">interties</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">valves</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">end_caps</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39; calculates allowable leakage for a pressure test:</span>
+    <span class="sd">&#39;&#39;&#39; calculates AWWA allowable leakage for a pressure test on a water main</span>
 
-<span class="sd">        Enter: </span>
-<span class="sd">            pipe diameter in inches</span>
-<span class="sd">            test pressure in psi</span>
-<span class="sd">            linear_feet of pipe run</span>
-<span class="sd">            number of hydrants</span>
-<span class="sd">            number of interties</span>
-<span class="sd">            number of valves</span>
-<span class="sd">            number of end caps</span>
+<span class="sd">        .. math::</span>
+
+<span class="sd">            L = \\frac{N d \\sqrt{P_{test}}}{7400}</span>
+
+<span class="sd">        :param pipe_diam: pipe diameter in inches (in)</span>
+<span class="sd">        :param test_pressure: test pressure in psi</span>
+<span class="sd">        :param linear_feet: length of pipe being tested (ft)</span>
+<span class="sd">        :param hydrants: number of hydrants *default 0*</span>
+<span class="sd">        :param interties: number of interties *default 0*</span>
+<span class="sd">        :param valves: number of valves *default 0*</span>
+<span class="sd">        :param end_caps: number of end caps *default 0*</span>
+<span class="sd">        :return: water leakage in gph and gpm</span>
+<span class="sd">        :rtype: tuple</span>
+
 <span class="sd">    &#39;&#39;&#39;</span>
     <span class="n">lf</span> <span class="o">=</span> <span class="n">linear_feet</span><span class="o">/</span><span class="mi">20</span>
     <span class="n">hyd</span> <span class="o">=</span> <span class="n">hydrants</span> <span class="o">*</span> <span class="mi">5</span>
@@ -547,49 +823,75 @@
     <span class="k">return</span> <span class="n">L_gph</span><span class="p">,</span> <span class="n">L_gpm</span></div>
 
 <div class="viewcode-block" id="makeup_water"><a class="viewcode-back" href="../code_reference.html#tools.makeup_water">[docs]</a><span class="k">def</span> <span class="nf">makeup_water</span><span class="p">(</span><span class="n">diam_before</span><span class="p">,</span> <span class="n">diam_after</span><span class="p">,</span> <span class="n">depth_before</span><span class="p">,</span> <span class="n">depth_after</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39; Enter dimensions of frustrum or cylynder to return volume</span>
+    <span class="sd">&#39;&#39;&#39; Enter dimensions of frustrum or cylynder to return volume. </span>
 <span class="sd">        </span>
-<span class="sd">        Used to estimate the volume of water in a trash can. </span>
-<span class="sd">        Units must be uniform.</span>
-<span class="sd">        Arguments:</span>
-<span class="sd">            diam_before = can diameter before pumping</span>
-<span class="sd">            diam_after = can diameter after pumping</span>
-<span class="sd">            depth_before = water level before pumping</span>
-<span class="sd">            depth_after - water level after pumping</span>
-<span class="sd">        &#39;&#39;&#39;</span>
+<span class="sd">    :param diam_before: container diameter before pumping</span>
+<span class="sd">    :param diam_after: container diameter after pumping</span>
+<span class="sd">    :param depth_before: water level before pumping</span>
+<span class="sd">    :param depth_after: water level after pumping</span>
+<span class="sd">    :type diam_before: int/float:</span>
+<span class="sd">    :type depth_after: int/float</span>
+<span class="sd">    :return: volume of water in a cylindrical or conical container</span>
+<span class="sd">    :rtype: int/float</span>
+
+<span class="sd">    &#39;&#39;&#39;</span>
+
     <span class="n">h</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">depth_before</span> <span class="o">-</span> <span class="n">depth_after</span><span class="p">)</span>
     <span class="n">V</span> <span class="o">=</span> <span class="p">(</span><span class="n">pi</span> <span class="o">*</span> <span class="n">h</span> <span class="o">*</span> <span class="p">(</span><span class="n">diam_before</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">diam_before</span><span class="o">*</span><span class="n">diam_after</span> <span class="o">+</span> <span class="n">diam_after</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span> <span class="o">/</span> <span class="mi">12</span>
     <span class="k">return</span> <span class="n">V</span></div>
 
 <div class="viewcode-block" id="wellhead_CFR"><a class="viewcode-back" href="../code_reference.html#tools.wellhead_CFR">[docs]</a><span class="k">def</span> <span class="nf">wellhead_CFR</span><span class="p">(</span><span class="n">Q</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mf">0.22</span><span class="p">,</span> <span class="n">t_list</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">10</span><span class="p">]):</span>
-    <span class="sd">&#39;&#39;&#39; Returns fixed radius wellhead contribution zones (CFR):</span>
-<span class="sd">        Default is 1 year, 5 year, and 10 year radii</span>
-<span class="sd">        Enter:</span>
-<span class="sd">            Q = pumping rate in cubic ft/yr</span>
-<span class="sd">            H = open interval in ft</span>
-<span class="sd">            n = aquifer porosity (defaults to 0.22)</span>
-<span class="sd">            t = time in years (default list [1,5,10])</span>
+    <span class="sd">&#39;&#39;&#39; Returns fixed radius wellhead contribution zones (CFR) from the </span>
+<span class="sd">    `2019 DOH Water System Design Manual`_ Equation 9-1</span>
+<span class="sd">    </span>
+<span class="sd">    .. _2019 DOH Water System Design Manual: https://www.doh.wa.gov/Portals/1/Documents/Pubs/331-123.pdf?ver=2019-10-03-153237-220</span>
+
+<span class="sd">    :param Q: pumping rate in cubic ft/yr</span>
+<span class="sd">    :param H: well open interval in ft</span>
+<span class="sd">    :param n: aquifer porosity *default 0.22*</span>
+<span class="sd">    :param t_list: times in years *default [1, 5, 10]</span>
+<span class="sd">    :type Q: int/float</span>
+<span class="sd">    :type H: int/float</span>
+<span class="sd">    :type n: float</span>
+<span class="sd">    :type t_list: list</span>
+<span class="sd">    :return: radii of well head contribution zones for listed years</span>
+<span class="sd">    :rtype: list</span>
+
 <span class="sd">    &#39;&#39;&#39;</span>
     <span class="n">r</span> <span class="o">=</span> <span class="p">[</span><span class="n">sqrt</span><span class="p">(</span><span class="n">Q</span><span class="o">*</span><span class="n">t</span><span class="o">/</span><span class="p">(</span><span class="n">pi</span><span class="o">*</span><span class="n">n</span><span class="o">*</span><span class="n">H</span><span class="p">))</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">t_list</span><span class="p">]</span>
 
     <span class="k">return</span> <span class="n">r</span></div>
 
-<div class="viewcode-block" id="max_pump_elevation"><a class="viewcode-back" href="../code_reference.html#tools.max_pump_elevation">[docs]</a><span class="k">def</span> <span class="nf">max_pump_elevation</span><span class="p">(</span><span class="n">elevation</span><span class="p">,</span> <span class="n">NPSHr</span><span class="p">,</span> <span class="n">Losses</span><span class="p">,</span> <span class="n">SF</span><span class="o">=</span><span class="mf">1.5</span><span class="p">):</span>
+<div class="viewcode-block" id="max_pump_elevation"><a class="viewcode-back" href="../code_reference.html#tools.max_pump_elevation">[docs]</a><span class="k">def</span> <span class="nf">max_pump_elevation</span><span class="p">(</span><span class="n">elevation</span><span class="p">,</span> <span class="n">NPSHr</span><span class="p">,</span> <span class="n">Losses</span><span class="p">,</span> <span class="n">SF</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;Returns maximum elevation pump suction can be above water level</span>
 
-<span class="sd">        Negative number indicates ft of head that must be supplied</span>
-<span class="sd">        to suction line.</span>
+<span class="sd">    :param elevation: elevation of pump in ft</span>
+<span class="sd">    :param NPSHr: net positive suction head required in ft</span>
+<span class="sd">    :param Losses: suction side head loss in ft</span>
+<span class="sd">    :param SF: safety factor *default 1.5*</span>
+<span class="sd">    :param \**kwargs: keyword arguments</span>
+<span class="sd">    :type elevation: int/float</span>
+<span class="sd">    :type NPSHr: int/float</span>
+<span class="sd">    :type Losses: int/float</span>
+<span class="sd">    :type SF: int/float</span>
+<span class="sd">    :type \**kwargs: dictionary</span>
+<span class="sd">    :return: maximum pump elevation ft</span>
+<span class="sd">    :rtype: int/float</span>
 
-<span class="sd">        Positive number indicates how far pump can be above water level.</span>
+<span class="sd">    Negative number indicates ft of head that must be supplied</span>
+<span class="sd">    to suction line.</span>
+
+<span class="sd">    Positive number indicates how far pump can be above water level.</span>
+<span class="sd">    </span>
 <span class="sd">    &#39;&#39;&#39;</span>
 
     <span class="c1"># Barometric Pressure Constants</span>
-    <span class="n">Pb</span> <span class="o">=</span> <span class="mf">29.92126</span>   <span class="c1"># in. Hg</span>
-    <span class="n">Tb</span> <span class="o">=</span> <span class="mf">288.15</span>     <span class="c1"># K</span>
-    <span class="n">R</span> <span class="o">=</span> <span class="mf">8.9494596</span><span class="o">*</span><span class="mi">10</span><span class="o">**</span><span class="mi">4</span>  <span class="c1"># lb·ft^2</span>
-    <span class="n">g</span> <span class="o">=</span> <span class="mf">32.17405</span>    <span class="c1">#ft/s^2</span>
-    <span class="n">M</span> <span class="o">=</span> <span class="mf">28.9644</span>   <span class="c1"># lb/lb-mol</span>
-    <span class="n">Pv</span> <span class="o">=</span> <span class="mf">0.75</span>    <span class="c1"># vapor pressure of water at 50F in ft</span>
+    <span class="n">Pb</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;Pb&#39;</span><span class="p">,</span> <span class="mf">29.92126</span><span class="p">)</span>   <span class="c1"># in. Hg</span>
+    <span class="n">Tb</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;Tb&#39;</span><span class="p">,</span> <span class="mf">288.15</span><span class="p">)</span>     <span class="c1"># K</span>
+    <span class="n">R</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;R&#39;</span><span class="p">,</span> <span class="mf">8.9494596</span><span class="o">*</span><span class="mi">10</span><span class="o">**</span><span class="mi">4</span><span class="p">)</span>  <span class="c1"># lb·ft^2</span>
+    <span class="n">g</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;g&#39;</span><span class="p">,</span> <span class="mf">32.17405</span><span class="p">)</span>    <span class="c1">#ft/s^2</span>
+    <span class="n">M</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;M&#39;</span><span class="p">,</span> <span class="mf">28.9644</span><span class="p">)</span>   <span class="c1"># lb/lb-mol</span>
+    <span class="n">Pv</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;Pv&#39;</span><span class="p">,</span> <span class="mf">0.75</span><span class="p">)</span>    <span class="c1"># vapor pressure of water at 50F in ft</span>
     
     <span class="c1"># atm pressure at elevation</span>
     <span class="n">P</span> <span class="o">=</span> <span class="n">Pb</span><span class="o">*</span><span class="n">exp</span><span class="p">((</span><span class="o">-</span><span class="n">g</span><span class="o">*</span><span class="n">M</span><span class="o">*</span><span class="n">elevation</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">R</span><span class="o">*</span><span class="n">Tb</span><span class="p">))</span>
