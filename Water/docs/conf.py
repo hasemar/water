@@ -22,7 +22,7 @@ sys.path.insert(0, os.path.abspath('/home/clarkii/github/water/Water'))
 # -- Project information -----------------------------------------------------
 
 project = 'Water'
-copyright = '2017, Ryan Haseman'
+copyright = '2018, Ryan Haseman'
 author = 'Ryan Haseman'
 
 # The short X.Y version
@@ -148,7 +148,7 @@ latex_elements = {
 
     # The font size ('10pt', '11pt' or '12pt').
     #
-    # 'pointsize': '10pt',
+    #'pointsize': '10pt',
 
     # Additional stuff for the LaTeX preamble.
     #
