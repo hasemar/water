@@ -1,10 +1,11 @@
+# -*- coding: utf-8 -*-
 '''
 Tools to calculate water system
 design aspects
 '''
 
 from __future__ import print_function, division
-from math import pi, acos, sqrt, ceil
+from math import pi, acos, sqrt, ceil, exp
 
 def coeffs(num_ERUs):
     '''C and F coefficients from  the `2019 DOH Water System Design Manual`_ Table 3-1 
