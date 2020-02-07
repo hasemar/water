@@ -25,7 +25,11 @@ on the tutorials page.
 Tank Class
 ==========
 
-Information about Tank Class
+Use the Tank class to create storage tank objects for storage related calculations. 
+Vertical, and Horizontal cylindrical tanks are supported as well as a box reservoir.
+
+To see how this class can be used See :ref:`Tank Class Example <tank-example>` 
+on the tutorials page.
 
 -----------------------------------
 
@@ -56,7 +60,12 @@ on the tutorials page.
 Genset Class
 ============
 
-Information about Genset Class
+Use this class to create generator objects. This allows you to add electrical loads
+such as pump motors and lighting and calculate a total load for a genset.
+Load calculations are basic and should only be used to get a general genset size.
+
+To see how this class can be used See :ref:`Genset Class Example <genset-example>` 
+on the tutorials page. 
 
 ------------------------------------
 

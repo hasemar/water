@@ -187,7 +187,7 @@
 <p>This Python package was built to aid engineers in the design of common water system assets.
 It contains several python classes and helper functions that help analyze common scenarios such as pumping power,
 head loss, storage capacity, and PRV sizing.</p>
-<p>Currently units are in industry standard form:</p>
+<p>Currently units are the U.S. water industry standard form:</p>
 <ul class="simple">
 <li>Distance: feet (ft)</li>
 <li>Head Loss: feet of water  (ft)</li>
@@ -199,6 +199,19 @@ head loss, storage capacity, and PRV sizing.</p>
 </ul>
 <p>Some helper functions, such as area and volume are not unit specific and as long as you maintain unit consistency
 the units can be what ever you want. This reference will identify when a function will return specific units.</p>
+<div class="section" id="requirements">
+<h2>Requirements<a class="headerlink" href="#requirements" title="Permalink to this headline">¶</a></h2>
+<p>Most classes and functions just use the standard built-in libraries for Python 3.4+. However, the Pumps
+class uses the following and are required in order to use it.</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference external" href="https://numpy.org/">Numpy</a></li>
+<li><a class="reference external" href="https://matplotlib.org/users/installing.html">Matplotlib</a></li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="contents">
+<h2>Contents<a class="headerlink" href="#contents" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="code_reference.html">Water Package Code Reference</a><ul>
@@ -224,12 +237,13 @@ the units can be what ever you want. This reference will identify when a functio
 </div>
 </div>
 <div class="section" id="indices-and-tables">
-<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
+<h2>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></li>
 <li><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></li>
 <li><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></li>
 </ul>
+</div>
 </div>
 
 
