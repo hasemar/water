@@ -10,7 +10,8 @@ start at a pump and create your pipe objects based on pipe size and/or material.
 to each pipe object and calculate the major and minor losses through the pipe based on flow.
 
 
-**Example #1:** Calculating the losses from a pump's discharge through a pipe network consisting of the following fittings:
+**Example #1:** Calculating the losses from a pump's discharge through a pipe network consisting of the following fittings: 
+
     - 90 degree elbow, quantity 2
     - through-tee, quantity 1
     - branch-tee, quantity 1
@@ -92,10 +93,10 @@ of a pump, pipe and fittings, and a tank at an elevated location.
 Pump Class Examples  
 --------------------  
 The *Water.Pump* class allows you to create a pump class to help in sizing a pump. 
-The Water package has includes a database of pumps that you can add to.
-Once pump data is loaded into the pump object you can plot it's pump curve.
+The Water package includes a database of pumps that you can add to.
+Once pump data is loaded into the pump object you can plot its pump curve.
 
-**Example #1** Load existing pump data into the a pump object and plot it's curve.
+**Example #1:** Load existing pump data into the a pump object and plot it's curve.
 
 .. code-block:: python
    :linenos:
@@ -115,7 +116,7 @@ Once pump data is loaded into the pump object you can plot it's pump curve.
 
 .. image:: pump_ex1.png
 
-**Example #2** Load new pump data into database, create a system curve and plot affinitized pump curve with the system curve.
+**Example #2:** Load new pump data into database, create a system curve and plot affinitized pump curve with the system curve.
 
 ..  code-block::  python
     :linenos:
@@ -140,7 +141,7 @@ Once pump data is loaded into the pump object you can plot it's pump curve.
     # add pump to database, this will load the parameters into the object variables as well
     pump_2.add_pump(**new_pump_data)
 
-    # create system curve
+    # creating a mock system curve
     system_flow = np.linspace(1, 220, 20)
     
     system_head = []
@@ -159,7 +160,78 @@ Once pump data is loaded into the pump object you can plot it's pump curve.
 Tank Class Examples 
 --------------------  
 
-Some examples of using the Tank class
+You can use the tank class to create tank objects and apply common engineering
+calculations to them. Common tank properties such as total volume, cross sectional area, 
+and useable volume are automatically calculated once the object is instantiated.
+
+**Example #1:**  Create a tank object with the following parameters. 
+
+    - height = 45 feet
+    - diameter = 60 feet
+    - freeboard = 3 feet
+    - dead storage = 2 feet
+    - elevation = 230 feet
+
+.. code-block:: python
+    :linenos:
+
+    from Water import Tank 
+
+    # create a dictionary for the tank parameters
+    tank_data = {
+        'name' : 'Tank 1',
+        'diameter' : 60,
+        'height' : 45,
+        'freeboard' : 3,
+        'deadstorage' : 2,
+        'elevation' : 230
+        }
+    
+    #instantiate object
+    tank_1 = Tank(**tank_data)
+
+    print(tank_1.vol, 'gallons')
+
+*output: 237944.4239 gallons*
+
+**Example #2:**
+
+A shape property can be defined for horizontal tanks to easily calculate water volume.  In this example we will
+graph the volume change as the water level rises in a 10 ft diameter horizontal tank.
+
+.. code-block:: python
+    :linenos:
+    
+    from Water import Tank, tools
+    import matplotlib.pyplot as plt
+
+    # create a dictionary for the tank parameters, note we use the 'length' keyword here
+    tank_data = {
+                'name' : 'Horizontal Tank',
+                'diameter' : 10,
+                'length' : 20,
+                'freeboard' : 1,
+                'deadstorage' : 0,
+                'elevation' : 100,
+                'shape' : 'horizontal'
+                }
+
+    #instantiate object
+    horiz_tank = Tank(**tank_data)
+
+    vols = []
+    for level in range(0, horiz_tank.diameter+1):
+        vols.append(horiz_tank.horizontal_vol(level))
+    print(vols)
+
+    # plot a graph of the volume change while the tank is filling
+    plt.plot(vols)
+    plt.title('Volume Change When Tank is Filling')
+    plt.xlabel('Water Level (ft)')
+    plt.ylabel('Volume of Water (gallons)')
+    plt.show()
+
+.. image:: horiz_tank.png
 
 .. _genset-example:
 

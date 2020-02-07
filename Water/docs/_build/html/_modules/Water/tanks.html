@@ -196,7 +196,7 @@
 <span class="sd">                    &#39;elevation&#39; : 230,</span>
 <span class="sd">                    }</span>
 
-<span class="sd">            tank_1 = Tank(\**kwargs)</span>
+<span class="sd">            tank_1 = Tank(**tank_data)</span>
 
 <span class="sd">            # or tank object can be instantiated with individually specified parameters</span>
 <span class="sd">            tank_2 = Tank(name=&#39;Tank 2&#39;, diameter=30, height=45)</span>
@@ -256,7 +256,7 @@
 
 <span class="sd">        :param height: water level </span>
 <span class="sd">        :type height: int/float</span>
-<span class="sd">        :return: water volume  </span>
+<span class="sd">        :return: water volume in cu. ft.</span>
 <span class="sd">        :rtype: float</span>
 <span class="sd">    </span>
 <span class="sd">        &#39;&#39;&#39;</span>

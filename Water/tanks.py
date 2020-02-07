@@ -38,7 +38,7 @@ class Tank:
                     'elevation' : 230,
                     }
 
-            tank_1 = Tank(\**kwargs)
+            tank_1 = Tank(**tank_data)
 
             # or tank object can be instantiated with individually specified parameters
             tank_2 = Tank(name='Tank 2', diameter=30, height=45)
@@ -98,7 +98,7 @@ class Tank:
 
         :param height: water level 
         :type height: int/float
-        :return: water volume  
+        :return: water volume in cu. ft.
         :rtype: float
     
         '''

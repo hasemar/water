@@ -156,13 +156,14 @@
            <div itemprop="articleBody">
             
   <h1>Source code for tools</h1><div class="highlight"><pre>
-<span></span><span class="sd">&#39;&#39;&#39;</span>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">Tools to calculate water system</span>
 <span class="sd">design aspects</span>
 <span class="sd">&#39;&#39;&#39;</span>
 
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span><span class="p">,</span> <span class="n">division</span>
-<span class="kn">from</span> <span class="nn">math</span> <span class="k">import</span> <span class="n">pi</span><span class="p">,</span> <span class="n">acos</span><span class="p">,</span> <span class="n">sqrt</span><span class="p">,</span> <span class="n">ceil</span>
+<span class="kn">from</span> <span class="nn">math</span> <span class="k">import</span> <span class="n">pi</span><span class="p">,</span> <span class="n">acos</span><span class="p">,</span> <span class="n">sqrt</span><span class="p">,</span> <span class="n">ceil</span><span class="p">,</span> <span class="n">exp</span>
 
 <div class="viewcode-block" id="coeffs"><a class="viewcode-back" href="../code_reference.html#tools.coeffs">[docs]</a><span class="k">def</span> <span class="nf">coeffs</span><span class="p">(</span><span class="n">num_ERUs</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;C and F coefficients from  the `2019 DOH Water System Design Manual`_ Table 3-1 </span>

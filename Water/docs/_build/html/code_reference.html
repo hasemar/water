@@ -486,7 +486,7 @@ on the tutorials page.</p>
             <span class="s1">&#39;elevation&#39;</span> <span class="p">:</span> <span class="mi">230</span><span class="p">,</span>
             <span class="p">}</span>
 
-    <span class="n">tank_1</span> <span class="o">=</span> <span class="n">Tank</span><span class="p">(</span>\<span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="n">tank_1</span> <span class="o">=</span> <span class="n">Tank</span><span class="p">(</span><span class="o">**</span><span class="n">tank_data</span><span class="p">)</span>
 
     <span class="c1"># or tank object can be instantiated with individually specified parameters</span>
     <span class="n">tank_2</span> <span class="o">=</span> <span class="n">Tank</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;Tank 2&#39;</span><span class="p">,</span> <span class="n">diameter</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">45</span><span class="p">)</span>
@@ -525,7 +525,7 @@ on the tutorials page.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>height</strong> (<em>int/float</em>) – water level</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">water volume</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">water volume in cu. ft.</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">float</td>
 </tr>
