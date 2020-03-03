@@ -76,6 +76,7 @@ pipe_dims = {
         1.25 : [1.66, 0.153],
         1.5 : [1.90, 0.179],
         2 : [2.375, 0.23]
+    }
 }
 
 '''fitting dictionary:
@@ -83,6 +84,7 @@ pipe_dims = {
     holds fitting shape and connection type. For each connection 
     type there is a kfactor list [geometry, k1, k_infinity]
 '''
+
 fitting_dict = {
     'elbow_90' : {
         'standard_threaded' : [1, 800, 0.4],
