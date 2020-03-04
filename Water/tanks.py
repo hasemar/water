@@ -192,7 +192,6 @@ class Tank:
         :return: tank object information, if details True it shows storage partition volumes and heights
             relative to whole system
         :rtype: string
-
         '''
         if self.shape == 'horizontal':
             info = '''

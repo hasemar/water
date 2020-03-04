@@ -5,6 +5,7 @@ Genset:
     electrical loads.
 '''
 from __future__ import print_function, division
+from numpy import interp
 
 class Genset:
     '''Defines a Genset object to calculate generator loads. 
@@ -163,6 +164,81 @@ class Genset:
     
         '''
         self.consumption = consumption_list
+
+    def size_lp_tank(self, min_days=4, fire_time=2, safety_factor=4 , **kwargs):
+        '''Size propane tank for a minimum number of daays of continous running. Bottles 
+        will be either 500 gal, 1000 gal or a multiple of 1000 gal bottles depending on
+        the application.
+
+        :param min_days: desired number of days getset should continously run *default 4*
+        :type min_days: int/float
+        :param fire_time: hours of full "fire-flow" load *default 2 hrs*
+        :type fire_time: int/float
+        :param safety_factor: safety factor for full load time *default 4*
+        :type safety_factor: int/float
+        :return: size of propane tank needed to run min_days in gallons
+        :rtype: float
+        :keyword arguments: 
+            :lp_volume: (*int/float*) - volume of propane gas at temp in cubic feet *default 36.39*
+            :lp_energy: (*int/float*) - energy content of propane gas in btu/gal *default 91547*
+            :bottle_vol: (*int/float*) - starting volume of propane bottle in gallons *default 500*
+            :num_bottles: (*int*) - starting number of bottles needed 
+            :temp_factor: (*int*) - vaporization rule of thumb temperature factor *default 2*
+            :fill_factor: (*int*) - vaporization rule of thumb fill factor *default 60*
+
+        '''
+        # propane properties
+        lp_volume = 36.39      # cu. ft/gal
+        lp_energy = 91547 # btu/gal
+        bottle_vol = 500      # gal : start with 500 gal, program will increase if needed
+        num_bottles = 1     # start with 1 bottle, program will define more if needed
+
+        # vaporization rate of propane (rule of thumb)
+        tank_d = [37, 41]      # inches
+        tank_l = [119, 192]    # inches
+        temp_factor = 2
+        fill_factor = 60
+
+        # find normal and full load flows
+        perc_loads = [25, 50, 75, 100]    # % gen capacity
+        norm_flow = interp(self.normal_load, self.consumption, perc_loads)
+        full_flow = interp(self.full_load, self.consumption, perc_loads)
+
+        vap = []
+        for d, l in zip(tank_d, tank_l):
+            vr = d*l*temp_factor*fill_factor
+            vap.append((vr, vr/lp_energy))
+
+        # define propane flows    
+        q_fire = full_flow/lp_volume   # gph
+        q_dom = norm_flow/lp_volume    # gph
+        q_total = self.consumption[-1]/lp_volume  # gph
+        total_btu = lp_energy * q_total   # btu/hr
+
+        # propane volumes
+        v_effective = num_bottles * bottle_vol * 0.6          # gal
+        v_fire = q_fire * fire_time * safety_factor           # gal
+
+        # time to empty
+        t_empty_hr = (v_effective - v_fire)/q_dom           # hrs
+        t_empty_day = t_empty_hr / 24                       # days
+
+        # IF 500 GAL IS NOT SUFFICIENT BUMP TO 1000 GAL BOTTLE
+        if t_empty_day < min_days and vap[0][1] < q_fire:
+            bottle_vol = 1000
+            v_effective = num_bottles * bottle_vol * 0.6
+            t_empty_hr = (v_effective - v_fire)/q_dom
+            t_empty_day = t_empty_hr / 24
+
+        # IF 1 1000 GAL BOTTLE IS NOT SUFFICIENT INCREASE UNTIL IT IS    
+        while t_empty_day < 4 and vap[1][1] < q_fire:
+            num_bottles += 1
+            v_effective = num_bottles * bottle_vol * 0.6
+            t_empty_hr = (v_effective - v_fire)/q_dom
+            t_empty_day = t_empty_hr / 24
+
+        return bottle_vol, num_bottles
+
 
     def change_power_factor(self, factor):
         '''Change the default power factor for the object.

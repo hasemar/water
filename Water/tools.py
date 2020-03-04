@@ -35,7 +35,7 @@ def coeffs(num_ERUs):
     elif num_ERUs > 500:
         return 1.6, 225
     else:
-        print("Number of ERU's must be a real number")
+        print("Number of ERU's must be a positive integer")
 
 def PHD(MDD, num_ERUs):
     '''Peak Hour Demand Calculation from the `2019 DOH Water System Design Manual`_ Equation 3-1 
@@ -755,8 +755,8 @@ if __name__=="__main__":
     print('test script:')
 
     # Peak Hour Demand Calcs
-    phd, ahd, lhd = PHD(100, 75)
-    phd2,_,_ = PHD(50, 200)
+    phd= PHD(100, 75)
+    phd2 = PHD(50, 200)
 
     # Horse Power Calcs
     water_p, break_p, input_p = calc_hp(100, 120, 0.65, 0.95)
@@ -771,11 +771,7 @@ if __name__=="__main__":
     d_func = pipeDiameter(Q,v)
 
     # Reynolds Number
-    Re, Lam = reynolds(d, vel=v)
-    if Lam:
-        condition = 'Laminar'
-    else:
-        condition = 'Turbulent'
+    Re = reynolds(d, vel=v)
 
     # Volume Calculations
     vol1 = volume_cyl(5, 10)
@@ -796,8 +792,6 @@ if __name__=="__main__":
     # output string
     out = '''
         PHD = {0:.2f} gmp
-        AHD = {15:.2f} gmp
-        LHD = {16:.2F} gmp
         PHD2_raw = {1:f}
         hp_w1 = {2:.2f} hp
         hp_b1 = {3:.2f} hp
@@ -809,18 +803,17 @@ if __name__=="__main__":
         calculated flow = {9:.2f} gpm \r
         calculated diameter = {10:.2f} in
         Reynolds Number = {11:.2f}
-        Flow Condition = {12:s}
-        vol1 = {13:f}
-        vol2 = {14:.2f}
-        gallons = {17:.2f}
-        allowable leakage = {18:.2f} gph or {19:.3f} gpm
-        makeup water = {20:.3f} cubic inches or {21:.3f} gals
-        number of bladder tanks = {22:.1f} tanks
+        vol1 = {12:f}
+        vol2 = {13:.2f}
+        gallons = {14:.2f}
+        allowable leakage = {15:.2f} gph or {16:.3f} gpm
+        makeup water = {17:.3f} cubic inches or {18:.3f} gals
+        number of bladder tanks = {19:.1f} tanks
         '''.format(
             phd, phd2, water_p, break_p, input_p,
             water2_p, Q, d, v, q_func, d_func, Re,
-            condition, vol1, vol2, ahd, lhd, gals,
-            leak_gph, leak_gpm, mw, cuin2gal(mw), bt)
+            vol1, vol2, gals, leak_gph, leak_gpm, 
+            mw, cuin2gal(mw), bt)
 
     print(out)
     pressure_relief_valve_size(95, 500, info=True)

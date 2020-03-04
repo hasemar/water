@@ -4,7 +4,7 @@
 '''
 from __future__ import print_function, division
 import matplotlib.pyplot as plt
-import numpy as np
+from numpy import linspace, any, interp
 import sqlite3
 from os import path
 
@@ -293,7 +293,7 @@ class Pump:
         - 20 hz
         - 10 hz
         '''
-        percent_speed = (np.linspace(60,10,6)/60)**pwr
+        percent_speed = (linspace(60,10,6)/60)**pwr
         
         for percent in percent_speed:
             self.affinity_data.append([data * percent for data in pump_data])
@@ -367,7 +367,7 @@ class Pump:
         else:
             self.ax[0].plot(self.flow, self.head, label='60hz', **kwargs)
 
-        if np.any(target_flow) and np.any(tdh):
+        if any(target_flow) and any(tdh):
             self.ax[0].plot(target_flow, tdh,
                             '.-.',
                             color="red", 
@@ -407,7 +407,7 @@ class Pump:
             if flow in self.flow:
                 head = self.head[self.flow.index(flow)]
             else:
-                head = np.interp(flow, self.flow, self.head)
+                head = interp(flow, self.flow, self.head)
         except ValueError:
             print("Value not found, check you numbers")
 
@@ -415,6 +415,8 @@ class Pump:
 
 ########################################
 if __name__=="__main__":
+    from numpy import exp
+
     print('test script:')
 
     pump = Pump()
@@ -422,10 +424,10 @@ if __name__=="__main__":
     pump.load_pump('Goulds', '3657 1.5x2 -6: 3SS')
     pump2.load_pump('Grundfos', 'CM10-2-A-S-G-V-AQQV')
     
-    system_flow = np.linspace(1, 150, 30)
+    system_flow = linspace(1, 150, 30)
     system_head = []
     for flow in system_flow:
-        system_head.append(100 + 20*np.exp(-1/(flow*.005)))
+        system_head.append(100 + 20*exp(-1/(flow*.005)))
 
     design_x = 50
     design_y = 60

@@ -187,12 +187,25 @@ and useable volume are automatically calculated once the object is instantiated.
         'elevation' : 230
         }
     
-    #instantiate object
+    # instantiate object
     tank_1 = Tank(**tank_data)
 
     print(tank_1.vol, 'gallons')
 
-*output: 237944.4239 gallons*
+*output: 951777.695 gallons*
+
+    # you can print out a report of the tank properties using the following
+    >>> print(tank_1.get_info())
+
+    Tank 1 
+
+        Base Elevation:------------- 230 ft   
+        Orientation:---------------- vertical  
+        Tank Height:---------------- 45 ft  
+        Tank Diameter:-------------- 60 ft  
+        Tank cross-sectional area:-- 2827.4 ft^2  
+        Total volume:--------------- 951777.7 gal  
+        Effective volume:----------- 846024.6 gal  
 
 **Example #2:**
 
@@ -240,7 +253,8 @@ graph the volume change as the water level rises in a 10 ft diameter horizontal 
 Genset Class Examples
 ----------------------
 
-Some examples of using the Genset Class  
+The Genset Class enables you to create a genset object and apply various loads to it.
+Methods within the class can calculate run times and load capacities.
 
 -----------------------------------------------------------------------
 

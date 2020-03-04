@@ -427,13 +427,26 @@ and useable volume are automatically calculated once the object is instantiated.
     <span class="s1">&#39;elevation&#39;</span> <span class="p">:</span> <span class="mi">230</span>
     <span class="p">}</span>
 
-<span class="c1">#instantiate object</span>
+<span class="c1"># instantiate object</span>
 <span class="n">tank_1</span> <span class="o">=</span> <span class="n">Tank</span><span class="p">(</span><span class="o">**</span><span class="n">tank_data</span><span class="p">)</span>
 
 <span class="k">print</span><span class="p">(</span><span class="n">tank_1</span><span class="o">.</span><span class="n">vol</span><span class="p">,</span> <span class="s1">&#39;gallons&#39;</span><span class="p">)</span>
 </pre></div>
 </td></tr></table></div>
-<p><em>output: 237944.4239 gallons</em></p>
+<p><em>output: 951777.695 gallons</em></p>
+<blockquote>
+<div><p># you can print out a report of the tank properties using the following
+&gt;&gt;&gt; print(tank_1.get_info())</p>
+<p>Tank 1</p>
+<blockquote>
+<div>Base Elevation:————- 230 ft
+Orientation:—————- vertical
+Tank Height:—————- 45 ft
+Tank Diameter:————– 60 ft
+Tank cross-sectional area:– 2827.4 ft^2
+Total volume:————— 951777.7 gal
+Effective volume:———– 846024.6 gal</div></blockquote>
+</div></blockquote>
 <p><strong>Example #2:</strong></p>
 <p>A shape property can be defined for horizontal tanks to easily calculate water volume.  In this example we will
 graph the volume change as the water level rises in a 10 ft diameter horizontal tank.</p>
@@ -499,7 +512,8 @@ graph the volume change as the water level rises in a 10 ft diameter horizontal 
 <hr class="docutils" id="genset-example" />
 <div class="section" id="genset-class-examples">
 <h2>Genset Class Examples<a class="headerlink" href="#genset-class-examples" title="Permalink to this headline">¶</a></h2>
-<p>Some examples of using the Genset Class</p>
+<p>The Genset Class enables you to create a genset object and apply various loads to it.
+Methods within the class can calculate run times and load capacities.</p>
 </div>
 <hr class="docutils" />
 <div class="section" id="bringing-it-all-together">
