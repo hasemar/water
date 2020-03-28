@@ -1076,6 +1076,55 @@ at 25%, 50%, 75% and 100% capacity.</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="Water.Genset.size_lp_tank">
+<code class="descname">size_lp_tank</code><span class="sig-paren">(</span><em>min_days=4</em>, <em>fire_time=2</em>, <em>safety_factor=4</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Water/genset.html#Genset.size_lp_tank"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Water.Genset.size_lp_tank" title="Permalink to this definition">¶</a></dt>
+<dd><p>Size propane tank for a minimum number of daays of continous running. Bottles
+will be either 500 gal, 1000 gal or a multiple of 1000 gal bottles depending on
+the application.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>min_days</strong> (<em>int/float</em>) – desired number of days getset should continously run <em>default 4</em></li>
+<li><strong>fire_time</strong> (<em>int/float</em>) – hours of full “fire-flow” load <em>default 2 hrs</em></li>
+<li><strong>safety_factor</strong> (int/float <em>default 4</em>) – safety factor for full load time <em>default 4</em></li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">size in gallons and quantity of propane tank needed to run min_days</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">tuple</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Keyword Arguments:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body"><p class="first last"><strong>arguments</strong> – <table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">lp_volume:</th><td class="field-body">(<em>int/float</em>) - volume of propane gas at temp in cubic feet <em>default 36.39</em></td>
+</tr>
+<tr class="field-even field"><th class="field-name">lp_energy:</th><td class="field-body">(<em>int/float</em>) - energy content of propane gas in btu/gal <em>default 91547</em></td>
+</tr>
+<tr class="field-odd field"><th class="field-name">bottle_vol:</th><td class="field-body">(<em>int/float</em>) - starting volume of propane bottle in gallons <em>default 500</em></td>
+</tr>
+<tr class="field-even field"><th class="field-name">num_bottles:</th><td class="field-body">(<em>int</em>) - starting number of bottles needed</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">temp_factor:</th><td class="field-body">(<em>int</em>) - vaporization rule of thumb temperature factor <em>default 2</em></td>
+</tr>
+<tr class="field-even field"><th class="field-name">fill_factor:</th><td class="field-body">(<em>int</em>) - vaporization rule of thumb fill factor <em>default 60</em></td>
+</tr>
+</tbody>
+</table>
+</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
 <dt id="Water.Genset.change_power_factor">
 <code class="descname">change_power_factor</code><span class="sig-paren">(</span><em>factor</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Water/genset.html#Genset.change_power_factor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Water.Genset.change_power_factor" title="Permalink to this definition">¶</a></dt>
 <dd><p>Change the default power factor for the object.</p>
@@ -1885,11 +1934,11 @@ required dump air volume when the tank is empty.</p>
 <li><strong>Q</strong> (<em>int/float</em>) – pumping rate in cubic ft/yr</li>
 <li><strong>H</strong> (<em>int/float</em>) – well open interval in ft</li>
 <li><strong>n</strong> (<em>float</em>) – aquifer porosity <em>default 0.22</em></li>
-<li><strong>t_list</strong> (<em>list</em>) – times in years <a href="#id8"><span class="problematic" id="id9">*</span></a>default [1, 5, 10]</li>
+<li><strong>t_list</strong> (<em>list</em>) – times in years <em>default [1, 5, 10]</em></li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">radii of well head contribution zones for listed years</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">radii of well contribution zones for listed years</p>
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">list</p>
@@ -1919,7 +1968,29 @@ required dump air volume when the tank is empty.</p>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">maximum pump elevation ft</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">int/float</p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">int/float</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Keyword Arguments:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body"><p class="first last"><strong>arguments</strong> – <table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Pb:</th><td class="field-body">(<em>int/float</em>) - barometric pressure in inches Hg <em>default 29.92126</em></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Tb:</th><td class="field-body">(<em>int/float</em>) - temperature in Kelvin <em>default 288.15</em></td>
+</tr>
+<tr class="field-odd field"><th class="field-name">R:</th><td class="field-body">(<em>int/float</em>) - R constant in lbft^2 <em>default 89494.56</em></td>
+</tr>
+<tr class="field-even field"><th class="field-name">g:</th><td class="field-body">(<em>int/float</em>) - gravity in ft/s^2 <em>default 32.17405</em></td>
+</tr>
+<tr class="field-odd field"><th class="field-name">M:</th><td class="field-body">(<em>int/float</em>) - molar weight of air in lb/lb-mol <em>default 28.9644</em></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Pv:</th><td class="field-body">(<em>int/float</em>) - vapor pressure of water at 50F in feet <em>default 0.75</em></td>
+</tr>
+</tbody>
+</table>
+</p>
 </td>
 </tr>
 </tbody>

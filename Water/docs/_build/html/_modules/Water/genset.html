@@ -163,6 +163,7 @@
 <span class="sd">    electrical loads.</span>
 <span class="sd">&#39;&#39;&#39;</span>
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span><span class="p">,</span> <span class="n">division</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="k">import</span> <span class="n">interp</span>
 
 <div class="viewcode-block" id="Genset"><a class="viewcode-back" href="../../code_reference.html#Water.Genset">[docs]</a><span class="k">class</span> <span class="nc">Genset</span><span class="p">:</span>
     <span class="sd">&#39;&#39;&#39;Defines a Genset object to calculate generator loads. </span>
@@ -322,6 +323,79 @@
 <span class="sd">        &#39;&#39;&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">consumption</span> <span class="o">=</span> <span class="n">consumption_list</span></div>
 
+<div class="viewcode-block" id="Genset.size_lp_tank"><a class="viewcode-back" href="../../code_reference.html#Water.Genset.size_lp_tank">[docs]</a>    <span class="k">def</span> <span class="nf">size_lp_tank</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">min_days</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">fire_time</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">safety_factor</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;Size propane tank for a minimum number of daays of continous running. Bottles </span>
+<span class="sd">        will be either 500 gal, 1000 gal or a multiple of 1000 gal bottles depending on</span>
+<span class="sd">        the application.</span>
+
+<span class="sd">        :param min_days: desired number of days getset should continously run *default 4*</span>
+<span class="sd">        :type min_days: int/float</span>
+<span class="sd">        :param fire_time: hours of full &quot;fire-flow&quot; load *default 2 hrs*</span>
+<span class="sd">        :type fire_time: int/float</span>
+<span class="sd">        :param safety_factor: safety factor for full load time *default 4*</span>
+<span class="sd">        :type safety_factor: int/float *default 4*</span>
+<span class="sd">        :return: size in gallons and quantity of propane tank needed to run min_days</span>
+<span class="sd">        :rtype: tuple</span>
+<span class="sd">        :keyword arguments: </span>
+<span class="sd">            :lp_volume: (*int/float*) - volume of propane gas at temp in cubic feet *default 36.39*</span>
+<span class="sd">            :lp_energy: (*int/float*) - energy content of propane gas in btu/gal *default 91547*</span>
+<span class="sd">            :bottle_vol: (*int/float*) - starting volume of propane bottle in gallons *default 500*</span>
+<span class="sd">            :num_bottles: (*int*) - starting number of bottles needed </span>
+<span class="sd">            :temp_factor: (*int*) - vaporization rule of thumb temperature factor *default 2*</span>
+<span class="sd">            :fill_factor: (*int*) - vaporization rule of thumb fill factor *default 60*</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="c1"># propane properties</span>
+        <span class="n">lp_volume</span> <span class="o">=</span> <span class="mf">36.39</span>      <span class="c1"># cu. ft/gal</span>
+        <span class="n">lp_energy</span> <span class="o">=</span> <span class="mi">91547</span> <span class="c1"># btu/gal</span>
+        <span class="n">bottle_vol</span> <span class="o">=</span> <span class="mi">500</span>      <span class="c1"># gal : start with 500 gal, program will increase if needed</span>
+        <span class="n">num_bottles</span> <span class="o">=</span> <span class="mi">1</span>     <span class="c1"># start with 1 bottle, program will define more if needed</span>
+
+        <span class="c1"># vaporization rate of propane (rule of thumb)</span>
+        <span class="n">tank_d</span> <span class="o">=</span> <span class="p">[</span><span class="mi">37</span><span class="p">,</span> <span class="mi">41</span><span class="p">]</span>      <span class="c1"># inches</span>
+        <span class="n">tank_l</span> <span class="o">=</span> <span class="p">[</span><span class="mi">119</span><span class="p">,</span> <span class="mi">192</span><span class="p">]</span>    <span class="c1"># inches</span>
+        <span class="n">temp_factor</span> <span class="o">=</span> <span class="mi">2</span>
+        <span class="n">fill_factor</span> <span class="o">=</span> <span class="mi">60</span>
+
+        <span class="c1"># find normal and full load flows</span>
+        <span class="n">perc_loads</span> <span class="o">=</span> <span class="p">[</span><span class="mi">25</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">75</span><span class="p">,</span> <span class="mi">100</span><span class="p">]</span>    <span class="c1"># % gen capacity</span>
+        <span class="n">norm_flow</span> <span class="o">=</span> <span class="n">interp</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">normal_load</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">consumption</span><span class="p">,</span> <span class="n">perc_loads</span><span class="p">)</span>
+        <span class="n">full_flow</span> <span class="o">=</span> <span class="n">interp</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">full_load</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">consumption</span><span class="p">,</span> <span class="n">perc_loads</span><span class="p">)</span>
+
+        <span class="n">vap</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">d</span><span class="p">,</span> <span class="n">l</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">tank_d</span><span class="p">,</span> <span class="n">tank_l</span><span class="p">):</span>
+            <span class="n">vr</span> <span class="o">=</span> <span class="n">d</span><span class="o">*</span><span class="n">l</span><span class="o">*</span><span class="n">temp_factor</span><span class="o">*</span><span class="n">fill_factor</span>
+            <span class="n">vap</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">vr</span><span class="p">,</span> <span class="n">vr</span><span class="o">/</span><span class="n">lp_energy</span><span class="p">))</span>
+
+        <span class="c1"># define propane flows    </span>
+        <span class="n">q_fire</span> <span class="o">=</span> <span class="n">full_flow</span><span class="o">/</span><span class="n">lp_volume</span>   <span class="c1"># gph</span>
+        <span class="n">q_dom</span> <span class="o">=</span> <span class="n">norm_flow</span><span class="o">/</span><span class="n">lp_volume</span>    <span class="c1"># gph</span>
+        <span class="n">q_total</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">consumption</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">/</span><span class="n">lp_volume</span>  <span class="c1"># gph</span>
+        <span class="n">total_btu</span> <span class="o">=</span> <span class="n">lp_energy</span> <span class="o">*</span> <span class="n">q_total</span>   <span class="c1"># btu/hr</span>
+
+        <span class="c1"># propane volumes</span>
+        <span class="n">v_effective</span> <span class="o">=</span> <span class="n">num_bottles</span> <span class="o">*</span> <span class="n">bottle_vol</span> <span class="o">*</span> <span class="mf">0.6</span>          <span class="c1"># gal</span>
+        <span class="n">v_fire</span> <span class="o">=</span> <span class="n">q_fire</span> <span class="o">*</span> <span class="n">fire_time</span> <span class="o">*</span> <span class="n">safety_factor</span>           <span class="c1"># gal</span>
+
+        <span class="c1"># time to empty</span>
+        <span class="n">t_empty_hr</span> <span class="o">=</span> <span class="p">(</span><span class="n">v_effective</span> <span class="o">-</span> <span class="n">v_fire</span><span class="p">)</span><span class="o">/</span><span class="n">q_dom</span>           <span class="c1"># hrs</span>
+        <span class="n">t_empty_day</span> <span class="o">=</span> <span class="n">t_empty_hr</span> <span class="o">/</span> <span class="mi">24</span>                       <span class="c1"># days</span>
+
+        <span class="c1"># IF 500 GAL IS NOT SUFFICIENT BUMP TO 1000 GAL BOTTLE</span>
+        <span class="k">if</span> <span class="n">t_empty_day</span> <span class="o">&lt;</span> <span class="n">min_days</span> <span class="ow">and</span> <span class="n">vap</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">q_fire</span><span class="p">:</span>
+            <span class="n">bottle_vol</span> <span class="o">=</span> <span class="mi">1000</span>
+            <span class="n">v_effective</span> <span class="o">=</span> <span class="n">num_bottles</span> <span class="o">*</span> <span class="n">bottle_vol</span> <span class="o">*</span> <span class="mf">0.6</span>
+            <span class="n">t_empty_hr</span> <span class="o">=</span> <span class="p">(</span><span class="n">v_effective</span> <span class="o">-</span> <span class="n">v_fire</span><span class="p">)</span><span class="o">/</span><span class="n">q_dom</span>
+            <span class="n">t_empty_day</span> <span class="o">=</span> <span class="n">t_empty_hr</span> <span class="o">/</span> <span class="mi">24</span>
+
+        <span class="c1"># IF 1 1000 GAL BOTTLE IS NOT SUFFICIENT INCREASE UNTIL IT IS    </span>
+        <span class="k">while</span> <span class="n">t_empty_day</span> <span class="o">&lt;</span> <span class="mi">4</span> <span class="ow">and</span> <span class="n">vap</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">q_fire</span><span class="p">:</span>
+            <span class="n">num_bottles</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">v_effective</span> <span class="o">=</span> <span class="n">num_bottles</span> <span class="o">*</span> <span class="n">bottle_vol</span> <span class="o">*</span> <span class="mf">0.6</span>
+            <span class="n">t_empty_hr</span> <span class="o">=</span> <span class="p">(</span><span class="n">v_effective</span> <span class="o">-</span> <span class="n">v_fire</span><span class="p">)</span><span class="o">/</span><span class="n">q_dom</span>
+            <span class="n">t_empty_day</span> <span class="o">=</span> <span class="n">t_empty_hr</span> <span class="o">/</span> <span class="mi">24</span>
+
+        <span class="k">return</span> <span class="n">bottle_vol</span><span class="p">,</span> <span class="n">num_bottles</span></div>
+
 <div class="viewcode-block" id="Genset.change_power_factor"><a class="viewcode-back" href="../../code_reference.html#Water.Genset.change_power_factor">[docs]</a>    <span class="k">def</span> <span class="nf">change_power_factor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">factor</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;Change the default power factor for the object.</span>
 
@@ -378,6 +452,7 @@
     <span class="nb">print</span><span class="p">(</span><span class="n">gen</span><span class="o">.</span><span class="n">full_load</span><span class="p">,</span> <span class="n">gen</span><span class="o">.</span><span class="n">normal_load</span><span class="p">)</span>
 
     <span class="nb">print</span><span class="p">(</span><span class="n">gen</span><span class="o">.</span><span class="n">power_factors</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">gen</span><span class="o">.</span><span class="n">size_lp_tank</span><span class="p">())</span>
 </pre></div>
 
            </div>

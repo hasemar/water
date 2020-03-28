@@ -165,7 +165,7 @@ class Genset:
         '''
         self.consumption = consumption_list
 
-    def size_lp_tank(self, min_days=4, fire_time=2, safety_factor=4 , **kwargs):
+    def size_lp_tank(self, min_days=4, fire_time=2, safety_factor=4, **kwargs):
         '''Size propane tank for a minimum number of daays of continous running. Bottles 
         will be either 500 gal, 1000 gal or a multiple of 1000 gal bottles depending on
         the application.
@@ -175,9 +175,9 @@ class Genset:
         :param fire_time: hours of full "fire-flow" load *default 2 hrs*
         :type fire_time: int/float
         :param safety_factor: safety factor for full load time *default 4*
-        :type safety_factor: int/float
-        :return: size of propane tank needed to run min_days in gallons
-        :rtype: float
+        :type safety_factor: int/float *default 4*
+        :return: size in gallons and quantity of propane tank needed to run min_days
+        :rtype: tuple
         :keyword arguments: 
             :lp_volume: (*int/float*) - volume of propane gas at temp in cubic feet *default 36.39*
             :lp_energy: (*int/float*) - energy content of propane gas in btu/gal *default 91547*
@@ -185,7 +185,6 @@ class Genset:
             :num_bottles: (*int*) - starting number of bottles needed 
             :temp_factor: (*int*) - vaporization rule of thumb temperature factor *default 2*
             :fill_factor: (*int*) - vaporization rule of thumb fill factor *default 60*
-
         '''
         # propane properties
         lp_volume = 36.39      # cu. ft/gal
@@ -238,7 +237,6 @@ class Genset:
             t_empty_day = t_empty_hr / 24
 
         return bottle_vol, num_bottles
-
 
     def change_power_factor(self, factor):
         '''Change the default power factor for the object.
@@ -296,3 +294,4 @@ if __name__ == "__main__":
     print(gen.full_load, gen.normal_load)
 
     print(gen.power_factors)
+    print(gen.size_lp_tank())

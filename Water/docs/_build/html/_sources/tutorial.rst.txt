@@ -194,18 +194,19 @@ and useable volume are automatically calculated once the object is instantiated.
 
 *output: 951777.695 gallons*
 
-    # you can print out a report of the tank properties using the following
+You can print out a report of the tank properties using the following  
+
     >>> print(tank_1.get_info())
 
     Tank 1 
 
-        Base Elevation:------------- 230 ft   
-        Orientation:---------------- vertical  
-        Tank Height:---------------- 45 ft  
-        Tank Diameter:-------------- 60 ft  
-        Tank cross-sectional area:-- 2827.4 ft^2  
-        Total volume:--------------- 951777.7 gal  
-        Effective volume:----------- 846024.6 gal  
+        | Base Elevation:------------- 230 ft 
+        | Orientation:---------------- vertical  
+        | Tank Height:---------------- 45 ft  
+        | Tank Diameter:-------------- 60 ft  
+        | Tank cross-sectional area:-- 2827.4 ft^2  
+        | Total volume:--------------- 951777.7 gal  
+        | Effective volume:----------- 846024.6 gal  
 
 **Example #2:**
 
@@ -255,6 +256,24 @@ Genset Class Examples
 
 The Genset Class enables you to create a genset object and apply various loads to it.
 Methods within the class can calculate run times and load capacities.
+
+**Note:**  This should be used for getting "in the ballpark" only. Most genset manufacturer's 
+provide sizing tools to help specify generators.
+
+**Example #1:**  Create a genset object for the folloing loads.
+
+    | 1 - 5 hp pump with 460v 3ph motor for domestic use
+    | 1 - 7.5 hp pump with 460v 3ph motor for domestic use
+    | 2 - 25 hp pumps with 460v 3ph motor for fire-flow use
+    | 200 watts for pump house lighting
+    | 2 kw for controls, outlets and heater power
+
+.. code-block:: python
+    :linenos:
+
+    from Water import Genset
+
+    
 
 -----------------------------------------------------------------------
 

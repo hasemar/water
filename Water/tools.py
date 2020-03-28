@@ -694,12 +694,12 @@ def wellhead_CFR(Q, H, n=0.22, t_list=[1,5,10]):
     :param Q: pumping rate in cubic ft/yr
     :param H: well open interval in ft
     :param n: aquifer porosity *default 0.22*
-    :param t_list: times in years *default [1, 5, 10]
+    :param t_list: times in years *default [1, 5, 10]*
     :type Q: int/float
     :type H: int/float
     :type n: float
     :type t_list: list
-    :return: radii of well head contribution zones for listed years
+    :return: radii of well contribution zones for listed years
     :rtype: list
 
     '''
@@ -722,7 +722,14 @@ def max_pump_elevation(elevation, NPSHr, Losses, SF=1.5, **kwargs):
     :type \**kwargs: dictionary
     :return: maximum pump elevation ft
     :rtype: int/float
-
+    :keyword arguments:
+        :Pb: (*int/float*) - barometric pressure in inches Hg *default 29.92126*
+        :Tb: (*int/float*) - temperature in Kelvin *default 288.15*
+        :R: (*int/float*) - R constant in lbft^2 *default 89494.56*
+        :g: (*int/float*) - gravity in ft/s^2 *default 32.17405*
+        :M: (*int/float*) - molar weight of air in lb/lb-mol *default 28.9644*
+        :Pv: (*int/float*) - vapor pressure of water at 50F in feet *default 0.75*
+        
     Negative number indicates ft of head that must be supplied
     to suction line.
 

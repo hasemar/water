@@ -434,18 +434,23 @@ and useable volume are automatically calculated once the object is instantiated.
 </pre></div>
 </td></tr></table></div>
 <p><em>output: 951777.695 gallons</em></p>
+<p>You can print out a report of the tank properties using the following</p>
 <blockquote>
-<div><p># you can print out a report of the tank properties using the following
-&gt;&gt;&gt; print(tank_1.get_info())</p>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">tank_1</span><span class="o">.</span><span class="n">get_info</span><span class="p">())</span>
+</pre></div>
+</div>
 <p>Tank 1</p>
 <blockquote>
-<div>Base Elevation:————- 230 ft
-Orientation:—————- vertical
-Tank Height:—————- 45 ft
-Tank Diameter:————– 60 ft
-Tank cross-sectional area:– 2827.4 ft^2
-Total volume:————— 951777.7 gal
-Effective volume:———– 846024.6 gal</div></blockquote>
+<div><div class="line-block">
+<div class="line">Base Elevation:————- 230 ft</div>
+<div class="line">Orientation:—————- vertical</div>
+<div class="line">Tank Height:—————- 45 ft</div>
+<div class="line">Tank Diameter:————– 60 ft</div>
+<div class="line">Tank cross-sectional area:– 2827.4 ft^2</div>
+<div class="line">Total volume:————— 951777.7 gal</div>
+<div class="line">Effective volume:———– 846024.6 gal</div>
+</div>
+</div></blockquote>
 </div></blockquote>
 <p><strong>Example #2:</strong></p>
 <p>A shape property can be defined for horizontal tanks to easily calculate water volume.  In this example we will
@@ -514,6 +519,21 @@ graph the volume change as the water level rises in a 10 ft diameter horizontal 
 <h2>Genset Class Examples<a class="headerlink" href="#genset-class-examples" title="Permalink to this headline">¶</a></h2>
 <p>The Genset Class enables you to create a genset object and apply various loads to it.
 Methods within the class can calculate run times and load capacities.</p>
+<p><strong>Note:</strong>  This should be used for getting “in the ballpark” only. Most genset manufacturer’s
+provide sizing tools to help specify generators.</p>
+<p><strong>Example #1:</strong>  Create a genset object for the folloing loads.</p>
+<blockquote>
+<div><div class="line-block">
+<div class="line">1 - 5 hp pump with 460v 3ph motor for domestic use</div>
+<div class="line">1 - 7.5 hp pump with 460v 3ph motor for domestic use</div>
+<div class="line">2 - 25 hp pumps with 460v 3ph motor for fire-flow use</div>
+<div class="line">200 watts for pump house lighting</div>
+<div class="line">2 kw for controls, outlets and heater power</div>
+</div>
+</div></blockquote>
+<div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">Water</span> <span class="kn">import</span> <span class="n">Genset</span>
+</pre></div>
+</td></tr></table></div>
 </div>
 <hr class="docutils" />
 <div class="section" id="bringing-it-all-together">
