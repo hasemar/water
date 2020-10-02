@@ -262,7 +262,7 @@ provide sizing tools to help specify generators.
 
 **Example #1:**  Create a genset object for the folloing loads.
 
-    | 1 - 5 hp pump with 460v 3ph motor for domestic use
+    | 1 - 5 hp pump with 480v 3ph motor for domestic use
     | 1 - 7.5 hp pump with 460v 3ph motor for domestic use
     | 2 - 25 hp pumps with 460v 3ph motor for fire-flow use
     | 200 watts for pump house lighting
@@ -273,6 +273,18 @@ provide sizing tools to help specify generators.
 
     from Water import Genset
 
+    gen = Genset(480, 3, 100)
+    # adding domestic pumps    
+    gen.add_motor_load(power=5, units='hp', fire=False)
+    gen.add_motor_load(7.5) 
+
+    # adding fire flow pumps    
+    gen.add_motor_load(25, fire=True)
+    gen.add_motor_load(25, fire=True)
+
+    # adding lighting other resistive loads  
+    gen.add_resistive_load(200, units='watts') 
+    gen.add_resistive_load(2, units='kw')
     
 
 -----------------------------------------------------------------------

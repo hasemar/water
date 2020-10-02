@@ -524,14 +524,40 @@ provide sizing tools to help specify generators.</p>
 <p><strong>Example #1:</strong>  Create a genset object for the folloing loads.</p>
 <blockquote>
 <div><div class="line-block">
-<div class="line">1 - 5 hp pump with 460v 3ph motor for domestic use</div>
+<div class="line">1 - 5 hp pump with 480v 3ph motor for domestic use</div>
 <div class="line">1 - 7.5 hp pump with 460v 3ph motor for domestic use</div>
 <div class="line">2 - 25 hp pumps with 460v 3ph motor for fire-flow use</div>
 <div class="line">200 watts for pump house lighting</div>
 <div class="line">2 kw for controls, outlets and heater power</div>
 </div>
 </div></blockquote>
-<div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">Water</span> <span class="kn">import</span> <span class="n">Genset</span>
+<div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">Water</span> <span class="kn">import</span> <span class="n">Genset</span>
+
+<span class="n">gen</span> <span class="o">=</span> <span class="n">Genset</span><span class="p">(</span><span class="mi">480</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+<span class="c1"># adding domestic pumps</span>
+<span class="n">gen</span><span class="o">.</span><span class="n">add_motor_load</span><span class="p">(</span><span class="n">power</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;hp&#39;</span><span class="p">,</span> <span class="n">fire</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="n">gen</span><span class="o">.</span><span class="n">add_motor_load</span><span class="p">(</span><span class="mf">7.5</span><span class="p">)</span>
+
+<span class="c1"># adding fire flow pumps</span>
+<span class="n">gen</span><span class="o">.</span><span class="n">add_motor_load</span><span class="p">(</span><span class="mi">25</span><span class="p">,</span> <span class="n">fire</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">gen</span><span class="o">.</span><span class="n">add_motor_load</span><span class="p">(</span><span class="mi">25</span><span class="p">,</span> <span class="n">fire</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+<span class="c1"># adding lighting other resistive loads</span>
+<span class="n">gen</span><span class="o">.</span><span class="n">add_resistive_load</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;watts&#39;</span><span class="p">)</span>
+<span class="n">gen</span><span class="o">.</span><span class="n">add_resistive_load</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;kw&#39;</span><span class="p">)</span>
 </pre></div>
 </td></tr></table></div>
 </div>
