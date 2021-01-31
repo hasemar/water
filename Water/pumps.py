@@ -9,7 +9,7 @@ import sqlite3
 from os import path
 
 BASE_DIR = path.dirname(path.abspath(__file__))
-db_path = path.join(BASE_DIR, "pumps.db")
+db_path = path.join(BASE_DIR, "water.db")
 
 class Pump:
     '''Defines Pump object to plot and/or affinitized pump curve and performance  
@@ -33,7 +33,7 @@ class Pump:
         self.ax = None
         self.affinity_data = []
 
-    def check_pump(self, pump_model, impeller=None):
+    def search_pump(self, pump_model, impeller=None):
         '''Checks sqlite database for existing pump record
 
            :param pump_model: pump model
@@ -113,7 +113,7 @@ class Pump:
         conn = sqlite3.connect(db_path)
         c = conn.cursor()
         # check if pump currently exists in database
-        exists = self.check_pump(self.model, self.impeller)
+        exists = self.search_pump(self.model, self.impeller)
         
         if len(exists) == 0:
             sqlinsert = '''INSERT INTO 
@@ -205,7 +205,7 @@ class Pump:
            >>> pump_2.load_pump('Goulds', '3657 1.5x2 -6: 3SS')
 
            '''
-        multiples = self.check_pump(model, impeller)
+        multiples = self.search_pump(model, impeller)
         print(multiples)
         if len(multiples) == 0:
             print('Pump does not exist in database.')

@@ -8,6 +8,11 @@ and calculate losses.
 
 from __future__ import print_function
 import Water.tools as tools
+import sqlite3
+from os import path
+
+BASE_DIR = path.dirname(path.abspath(__file__))
+db_path = path.join(BASE_DIR, "water.db")
 
 
 c_dict = {
@@ -204,7 +209,74 @@ class Pipe:
     def c_factor(self):
         ''':pipe material C-factor property'''
         return c_dict[self.kind]
+
+    def search_material(self, material, coefficient=None):
+        '''Checks sqlite database for existing material record
+
+           :param material: pipe material
+           :param coefficient: Hazen Williams coefficient for major pipe losses
+           :type material: string
+           :type coefficient: int
+           :return: record(s) if one exists 
+           :rtype: list
+           
+           '''
+        conn = sqlite3.connect(db_path)
+        c = conn.cursor()
+        existing_params = {'material' : material, 'coefficient' : coefficient}
+        
+        if coefficient:
+            sqlquery='''SELECT *
+                        FROM 
+                            hazen
+                        WHERE material=:material AND coefficient=:coefficient'''
+        else:
+            sqlquery='''SELECT * 
+                        FROM 
+                            hazen 
+                        WHERE material=:material''' 
+        
+        c.execute(sqlquery, existing_params)
+        result = c.fetchall()        
+        conn.commit()
+        conn.close()
     
+        return result
+    
+    def add_material(self, material, coefficient):
+        '''Adds a record to the hazen williams coefficient table of the sqlite db
+
+            :param material: pipe material
+           :param coefficient: Hazen Williams coefficient for major pipe losses
+           :type material: string
+           :type coefficient: int
+        '''
+
+        conn = sqlite3.connect(db_path)
+        c = conn.cursor()
+        # check if material currently exists in database
+        exists = self.search_material(material, coefficient)
+        
+        if len(exists) == 0:
+            sqlinsert = '''INSERT INTO 
+                            hazen(
+                                material,
+                                coefficient) 
+                            values(
+                                :material,
+                                :coefficient)'''
+
+            params = {'material' : material, 'coefficient': coefficient}
+            
+            print('Material added to hazen table in database')
+            c.execute(sqlinsert, params)
+            conn.commit()
+            conn.close()
+        else:
+            print('Material exists in the database, check below for specific parameters: ')
+            for each_mat in exists:
+                print(each_mat)
+        
     def fitting(self, fitting_type=None, con_type=None, qty=1, Kvalue=None):
         '''Adds fitting to Pipe object's fitting_list to add to head loss
         
