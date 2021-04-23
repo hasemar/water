@@ -14,13 +14,20 @@ db_path = path.join(BASE_DIR, "water.db")
 class Pump:
     '''Defines Pump object to plot and/or affinitized pump curve and performance  
        
+       :param target_flow: target flow (gpm), *default None*
+       :type target_flow: int
+       :param target_head: target head (feet of water) *default None*
+       :type target_head: int
+
        :Example:  
 
        >>> from Water import Pump
-       >>> pump_1 = Pump()
-
+       >>> pump_1 = Pump(target_flow=100, target_head=250)
+       
     '''     
-    def __init__(self):
+    def __init__(self, target_flow=None, target_head=None):
+        self.target_flow = target_flow
+        self.target_head = target_head
         self.flow = []
         self.head = []
         self.eff = []
