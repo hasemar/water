@@ -166,9 +166,7 @@
 <span class="kn">from</span> <span class="nn">math</span> <span class="k">import</span> <span class="n">pi</span><span class="p">,</span> <span class="n">acos</span><span class="p">,</span> <span class="n">sqrt</span><span class="p">,</span> <span class="n">ceil</span><span class="p">,</span> <span class="n">exp</span>
 
 <div class="viewcode-block" id="coeffs"><a class="viewcode-back" href="../code_reference.html#tools.coeffs">[docs]</a><span class="k">def</span> <span class="nf">coeffs</span><span class="p">(</span><span class="n">num_ERUs</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;C and F coefficients from  the `2019 DOH Water System Design Manual`_ Table 3-1 </span>
-<span class="sd">    </span>
-<span class="sd">    .. _2019 DOH Water System Design Manual: https://www.doh.wa.gov/Portals/1/Documents/Pubs/331-123.pdf?ver=2019-10-03-153237-220</span>
+    <span class="sd">&#39;&#39;&#39;C and F coefficients from  the `2019 DOH Water System Design Manual Table 3-1 &lt;https://www.doh.wa.gov/Portals/1/Documents/Pubs/331-123.pdf?ver=2019-10-03-153237-220#page=51&gt;`__ </span>
 
 <span class="sd">    :param num_ERUs: number of Equivalent Residential Units</span>
 <span class="sd">    :type num_ERUs: int</span>
@@ -178,7 +176,7 @@
 <span class="sd">    :Example: </span>
 
 <span class="sd">    &gt;&gt;&gt; from Water import tools</span>
-<span class="sd">    &gt;&gt;&gt; ERUs = 1500</span>
+<span class="sd">    &gt;&gt;&gt; ERUs = 1500A = \\pi d^2 / 4</span>
 <span class="sd">    &gt;&gt;&gt; C, F = tools.coeffs(ERUs)</span>
 
 <span class="sd">    &#39;&#39;&#39;</span>
@@ -193,12 +191,10 @@
     <span class="k">elif</span> <span class="n">num_ERUs</span> <span class="o">&gt;</span> <span class="mi">500</span><span class="p">:</span>
         <span class="k">return</span> <span class="mf">1.6</span><span class="p">,</span> <span class="mi">225</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Number of ERU&#39;s must be a positive integer&quot;</span><span class="p">)</span></div>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Number of ERU&#39;s must be a positive integer&quot;</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="PHD"><a class="viewcode-back" href="../code_reference.html#tools.PHD">[docs]</a><span class="k">def</span> <span class="nf">PHD</span><span class="p">(</span><span class="n">MDD</span><span class="p">,</span> <span class="n">num_ERUs</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;Peak Hour Demand Calculation from the `2019 DOH Water System Design Manual`_ Equation 3-1 </span>
-<span class="sd">    </span>
-<span class="sd">    .. _2019 DOH Water System Design Manual: https://www.doh.wa.gov/Portals/1/Documents/Pubs/331-123.pdf?ver=2019-10-03-153237-220</span>
+    <span class="sd">&#39;&#39;&#39;Peak Hour Demand Calculation from the `2019 DOH Water System Design Manual Table 3-1 &lt;https://www.doh.wa.gov/Portals/1/Documents/Pubs/331-123.pdf?ver=2019-10-03-153237-220#page=51&gt;`__ </span>
 
 <span class="sd">    .. math::</span>
 
@@ -233,9 +229,7 @@
     <span class="k">return</span> <span class="n">phd</span></div>
 
 <div class="viewcode-block" id="equalizing_storage"><a class="viewcode-back" href="../code_reference.html#tools.equalizing_storage">[docs]</a><span class="k">def</span> <span class="nf">equalizing_storage</span><span class="p">(</span><span class="n">PHD</span><span class="p">,</span> <span class="n">Qs</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;Equalizing Storage calculation from the `2019 DOH Water System Design Manual`_ Equation 7-1 </span>
-<span class="sd">    </span>
-<span class="sd">    .. _2019 DOH Water System Design Manual: https://www.doh.wa.gov/Portals/1/Documents/Pubs/331-123.pdf?ver=2019-10-03-153237-220</span>
+    <span class="sd">&#39;&#39;&#39;Equalizing Storage calculation from the `2019 DOH Water System Design Manual Equation 7-1 &lt;https://www.doh.wa.gov/Portals/1/Documents/Pubs/331-123.pdf?ver=2019-10-03-153237-220#page=190&gt;`__</span>
 
 <span class="sd">    .. math::</span>
 
@@ -249,17 +243,15 @@
 <span class="sd">    :type PHD: int/float</span>
 <span class="sd">    :param Qs: total source supply (gpm)</span>
 <span class="sd">    :type Qs: int/float</span>
-<span class="sd">    :return: Equalizing Storage component in gallons</span>
+<span class="sd">    :return: Equalizing Storage (gal)</span>
 <span class="sd">    :rtype: int/float</span>
 
 <span class="sd">    &#39;&#39;&#39;</span>
     <span class="k">return</span> <span class="p">(</span><span class="n">PHD</span><span class="o">-</span><span class="n">Qs</span><span class="p">)</span><span class="o">*</span><span class="mi">150</span></div>
 
 <div class="viewcode-block" id="standby_storage"><a class="viewcode-back" href="../code_reference.html#tools.standby_storage">[docs]</a><span class="k">def</span> <span class="nf">standby_storage</span><span class="p">(</span><span class="n">N</span><span class="p">,</span><span class="n">SBi</span><span class="p">,</span> <span class="n">Td</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;Standby Storage calculation from the `2019 DOH Water System Design Manual`_ Equation 7-2 </span>
-<span class="sd">    </span>
-<span class="sd">    .. _2019 DOH Water System Design Manual: https://www.doh.wa.gov/Portals/1/Documents/Pubs/331-123.pdf?ver=2019-10-03-153237-220</span>
-
+    <span class="sd">&#39;&#39;&#39;Standby Storage calculation from the `2019 DOH Water System Design Manual Equation 7-2 &lt;https://www.doh.wa.gov/Portals/1/Documents/Pubs/331-123.pdf?ver=2019-10-03-153237-220#page=191&gt;`__</span>
+<span class="sd"> </span>
 <span class="sd">    .. math::</span>
 <span class="sd">        </span>
 <span class="sd">        SB &amp;= (N)(SB_i)(T_d)</span>
@@ -274,13 +266,13 @@
 <span class="sd">    :type SBi: int</span>
 <span class="sd">    :param Td: Number of days selected to meet water system-determined standard of reliability, *default 1* </span>
 <span class="sd">    :type Td: int</span>
-<span class="sd">    :return: Total Standby Storage component in gallons</span>
+<span class="sd">    :return: Total Standby Storage (gal)</span>
 <span class="sd">    :rtype: int</span>
 
 <span class="sd">    &#39;&#39;&#39;</span></div>
 
 <div class="viewcode-block" id="calc_hp"><a class="viewcode-back" href="../code_reference.html#tools.calc_hp">[docs]</a><span class="k">def</span> <span class="nf">calc_hp</span><span class="p">(</span><span class="n">flow_rate</span><span class="p">,</span> <span class="n">head</span><span class="p">,</span> <span class="n">pump_eff</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span> <span class="n">motor_eff</span><span class="o">=</span><span class="mf">0.9</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;Horsepower Calculations</span>
+    <span class="sd">&#39;&#39;&#39;Horsepower calculation for pumping water</span>
 
 <span class="sd">    .. math::</span>
 <span class="sd">    </span>
@@ -329,13 +321,17 @@
     <span class="k">return</span> <span class="p">(</span><span class="n">water_hp</span><span class="p">,</span> <span class="n">break_hp</span><span class="p">,</span> <span class="n">input_hp</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="velocity"><a class="viewcode-back" href="../code_reference.html#tools.velocity">[docs]</a><span class="k">def</span> <span class="nf">velocity</span><span class="p">(</span><span class="n">flow</span><span class="p">,</span> <span class="n">pipe_diam</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;calculate water velocity through a pipe</span>
+    <span class="sd">&#39;&#39;&#39;calculate velocity through a pipe</span>
 
-<span class="sd">    :param flow: flow in gpm</span>
+<span class="sd">    .. math::</span>
+
+<span class="sd">        v = \\frac{Q}{A}</span>
+
+<span class="sd">    :param flow: flow (gpm)</span>
 <span class="sd">    :type flow: int/float</span>
-<span class="sd">    :param pipe_diam: pipe diameter in inches</span>
+<span class="sd">    :param pipe_diam: pipe diameter (inches)</span>
 <span class="sd">    :type pipe_diam: float</span>
-<span class="sd">    :return: velocity in feet per second (FPS)</span>
+<span class="sd">    :return: velocity (fps)</span>
 <span class="sd">    </span>
 <span class="sd">    &#39;&#39;&#39;</span>
     <span class="n">Q</span> <span class="o">=</span> <span class="n">gpm2cuftps</span><span class="p">(</span><span class="n">flow</span><span class="p">)</span>
@@ -345,14 +341,18 @@
     <span class="k">return</span> <span class="n">V</span></div>
 
 <div class="viewcode-block" id="flow"><a class="viewcode-back" href="../code_reference.html#tools.flow">[docs]</a><span class="k">def</span> <span class="nf">flow</span><span class="p">(</span><span class="n">velocity</span><span class="p">,</span> <span class="n">pipe_diam</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;calculate flow through a pipe</span>
+    <span class="sd">&#39;&#39;&#39;Calculate volumetric flowrate through a pipe</span>
 
-<span class="sd">        :param velocity: water velocity in feet per second (FPS)</span>
-<span class="sd">        :type velocity: int/float</span>
-<span class="sd">        :param pipe_diam: pipe diameter in inches</span>
-<span class="sd">        :type pipe_diam: int/float</span>
-<span class="sd">        :return: flow through a pipe in gallons per minute (gpm)</span>
-<span class="sd">        :rtype: float</span>
+<span class="sd">    .. math::</span>
+
+<span class="sd">        Q = v A</span>
+
+<span class="sd">    :param velocity: velocity (fps)</span>
+<span class="sd">    :type velocity: int/float</span>
+<span class="sd">    :param pipe_diam: pipe diameter (inches)</span>
+<span class="sd">    :type pipe_diam: int/float</span>
+<span class="sd">    :return: flow through a pipe (gpm)</span>
+<span class="sd">    :rtype: float</span>
 
 <span class="sd">    &#39;&#39;&#39;</span>
     <span class="n">d</span> <span class="o">=</span> <span class="n">pipe_diam</span><span class="o">/</span><span class="mi">12</span>
@@ -362,7 +362,7 @@
     <span class="k">return</span> <span class="n">Q</span></div>
 
 <div class="viewcode-block" id="gpm2cuftps"><a class="viewcode-back" href="../code_reference.html#tools.gpm2cuftps">[docs]</a><span class="k">def</span> <span class="nf">gpm2cuftps</span><span class="p">(</span><span class="n">gpm</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39; gallons per minute (gpm) to cubic feet per second (cuft/s) conversion</span>
+    <span class="sd">&#39;&#39;&#39; Convert gallons per minute (gpm) to cubic feet per second (cuft/s)</span>
 <span class="sd">    </span>
 <span class="sd">    :param gpm: gallons per minute (gpm)</span>
 <span class="sd">    :type gpm: int/float</span>
@@ -373,7 +373,7 @@
     <span class="k">return</span> <span class="n">gpm</span> <span class="o">*</span> <span class="mf">0.00222802</span></div>
 
 <div class="viewcode-block" id="cuftps2gpm"><a class="viewcode-back" href="../code_reference.html#tools.cuftps2gpm">[docs]</a><span class="k">def</span> <span class="nf">cuftps2gpm</span><span class="p">(</span><span class="n">cuftps</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39; cubic feet per second (cuft/s) to gallons per minute (gpm) conversion</span>
+    <span class="sd">&#39;&#39;&#39; Convert cubic feet per second (cuft/s) to gallons per minute (gpm)</span>
 <span class="sd">    </span>
 <span class="sd">    :param cuftps: cubic feet per second (cuft/s)</span>
 <span class="sd">    :type cuftps: int/float</span>
@@ -384,8 +384,12 @@
     <span class="k">return</span> <span class="n">cuftps</span> <span class="o">*</span> <span class="mf">448.831169</span></div>
 
 <div class="viewcode-block" id="pipeDiameter"><a class="viewcode-back" href="../code_reference.html#tools.pipeDiameter">[docs]</a><span class="k">def</span> <span class="nf">pipeDiameter</span><span class="p">(</span><span class="n">flow</span><span class="p">,</span> <span class="n">velocity</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39;calculation for pipe diameter, given flow and velocity</span>
+    <span class="sd">&#39;&#39;&#39;Returns pipe diameter, given flow and velocity</span>
+<span class="sd">    </span>
+<span class="sd">    .. math::</span>
 
+<span class="sd">        d = \\sqrt{\\frac{4 Q}{\\pi v}}</span>
+<span class="sd">        </span>
 <span class="sd">    :param flow: flow in gallons per minute (gpm)</span>
 <span class="sd">    :type flow: int/float</span>
 <span class="sd">    :param velocity: velocity in feet per second (FPS)</span>
@@ -394,35 +398,43 @@
 <span class="sd">    :rtype: float</span>
 <span class="sd">        </span>
 <span class="sd">    &#39;&#39;&#39;</span>
-    <span class="n">pipe_diam</span> <span class="o">=</span> <span class="p">(</span><span class="n">flow</span><span class="o">*</span><span class="mf">0.4085</span><span class="o">/</span><span class="n">velocity</span><span class="p">)</span><span class="o">**</span><span class="mf">0.5</span>
+    <span class="n">pipe_diam</span> <span class="o">=</span> <span class="n">sqrt</span><span class="p">(</span><span class="mi">4</span><span class="o">*</span><span class="n">gpm2cuftps</span><span class="p">(</span><span class="n">flow</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">velocity</span><span class="o">*</span><span class="n">pi</span><span class="p">))</span>
+    <span class="n">pipe_diam</span> <span class="o">=</span> <span class="n">pipe_diam</span> <span class="o">*</span> <span class="mi">12</span>
 
     <span class="k">return</span> <span class="n">pipe_diam</span></div>
 
-<div class="viewcode-block" id="reynolds"><a class="viewcode-back" href="../code_reference.html#tools.reynolds">[docs]</a><span class="k">def</span> <span class="nf">reynolds</span><span class="p">(</span><span class="n">pipe_diam</span><span class="p">,</span> <span class="n">flow</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vel</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">viscocity</span><span class="o">=</span><span class="mf">1.3081</span><span class="p">):</span>
+<div class="viewcode-block" id="reynolds"><a class="viewcode-back" href="../code_reference.html#tools.reynolds">[docs]</a><span class="k">def</span> <span class="nf">reynolds</span><span class="p">(</span><span class="n">pipe_diam</span><span class="p">,</span> <span class="n">flow</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vel</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">viscocity</span><span class="o">=</span><span class="mf">1.407E-5</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;Reynolds Number Calculation</span>
 
-<span class="sd">    :param pipe_diam: pipe diameter in inches</span>
+<span class="sd">    .. math:: </span>
+
+<span class="sd">        Re = \\frac{\\mu D_h}{\\nu}</span>
+
+<span class="sd">    :param pipe_diam: pipe diameter (inches)</span>
 <span class="sd">    :type pipe_diam: int/float</span>
-<span class="sd">    :param flow: flow in gallons per minute (gpm), *default None*</span>
+<span class="sd">    :param flow: flow (gpm), *default None*</span>
 <span class="sd">    :type flow: int/float</span>
-<span class="sd">    :param vel: velocity in feet per second (FPS), *default None*</span>
+<span class="sd">    :param vel: velocity (fps), *default None*</span>
 <span class="sd">    :type vel: int/float</span>
-<span class="sd">    :param viscocity: viscocity in cSt *default 1.3081*</span>
+<span class="sd">    :param viscocity: kinematic viscocity of water (ft^2/s) *default 1.407E-5 ft^2/s*</span>
 <span class="sd">    :return: Reynolds Number</span>
 <span class="sd">    :rtype: int</span>
 
 <span class="sd">    &#39;&#39;&#39;</span>
-    <span class="k">if</span> <span class="n">flow</span><span class="p">:</span>
-        <span class="n">re</span> <span class="o">=</span> <span class="p">(</span><span class="n">flow</span><span class="o">*</span><span class="n">pipe_diam</span><span class="o">/</span><span class="mi">12</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">viscocity</span> <span class="o">*</span> <span class="n">pi</span> <span class="o">*</span> <span class="n">pipe_diam</span><span class="o">**</span><span class="mi">2</span><span class="o">/</span><span class="mi">4</span><span class="p">)</span>
-    <span class="k">elif</span> <span class="n">vel</span><span class="p">:</span>
-        <span class="n">re</span> <span class="o">=</span> <span class="p">(</span><span class="n">pipe_diam</span><span class="o">/</span><span class="mi">12</span><span class="p">)</span><span class="o">*</span><span class="n">vel</span><span class="o">/</span><span class="n">viscocity</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Must enter flow or velocity&#39;</span><span class="p">)</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="n">pipe_diam</span><span class="o">/</span><span class="mi">12</span>
 
-    <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">re</span><span class="p">)</span> </div>
+    <span class="k">if</span> <span class="n">flow</span><span class="p">:</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="n">velocity</span><span class="p">(</span><span class="n">flow</span><span class="p">,</span> <span class="n">pipe_diam</span><span class="p">)</span>
+        <span class="n">re</span> <span class="o">=</span> <span class="n">d</span> <span class="o">*</span> <span class="n">v</span> <span class="o">/</span> <span class="n">viscocity</span>
+    <span class="k">elif</span> <span class="n">vel</span><span class="p">:</span>
+        <span class="n">re</span> <span class="o">=</span> <span class="n">d</span> <span class="o">*</span> <span class="n">vel</span> <span class="o">/</span> <span class="n">viscocity</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;Must enter flow or velocity&#39;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">re</span> </div>
 
 <div class="viewcode-block" id="volume_cyl"><a class="viewcode-back" href="../code_reference.html#tools.volume_cyl">[docs]</a><span class="k">def</span> <span class="nf">volume_cyl</span><span class="p">(</span><span class="n">diameter</span><span class="p">,</span> <span class="n">height</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39; calculate the  volume of a cylinder</span>
+    <span class="sd">&#39;&#39;&#39; calculate the volume of a cylinder</span>
 
 <span class="sd">    :param diameter: diameter of cylinder</span>
 <span class="sd">    :type diameter: int/float</span>
@@ -443,7 +455,7 @@
 <span class="sd">    :type width: int/float</span>
 <span class="sd">    :param height: height of box</span>
 <span class="sd">    :type height: int/float</span>
-<span class="sd">    :return: volume of a box</span>
+<span class="sd">    :return: volume of a box in consistent units</span>
 <span class="sd">    :rtype: float</span>
 
 <span class="sd">    &#39;&#39;&#39;</span>
@@ -522,11 +534,11 @@
 
 <span class="sd">    .. math:: h_{minor} = f_D \\cdot \\frac{1}{2g} \\cdot \\frac{v^2}{D}</span>
 <span class="sd">    </span>
-<span class="sd">    :param velocity: velocity in feet per second (FPS)</span>
+<span class="sd">    :param velocity: velocity (fps)</span>
 <span class="sd">    :param k_val: K value</span>
 <span class="sd">    :type velocity: int/float</span>
 <span class="sd">    :type velocity: int/float</span>
-<span class="sd">    :return: minor head loss in feet</span>
+<span class="sd">    :return: minor head loss (ft)</span>
 <span class="sd">    :rtype: float</span>
 
 <span class="sd">     &#39;&#39;&#39;</span>
@@ -553,18 +565,16 @@
 <span class="sd">    :rtype: float</span>
 
 <span class="sd">     &#39;&#39;&#39;</span>
-    <span class="k">return</span> <span class="n">psi</span> <span class="o">*</span> <span class="mf">2.308</span></div>
+    <span class="k">return</span> <span class="n">psi</span> <span class="o">*</span> <span class="mf">2.3077</span></div>
 
 <div class="viewcode-block" id="hpn_size"><a class="viewcode-back" href="../code_reference.html#tools.hpn_size">[docs]</a><span class="k">def</span> <span class="nf">hpn_size</span><span class="p">(</span><span class="n">cut_out</span><span class="p">,</span> <span class="n">cut_in</span><span class="p">,</span> <span class="n">num_cycles</span><span class="p">,</span> <span class="n">max_flow</span><span class="p">,</span> <span class="n">tank_diam</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="s1">&#39;horiztonal&#39;</span><span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39; hydro-pneumatic tank sizing calculation from the `2019 DOH Water System Design Manual`_ Equations 9-2 and 9-3 </span>
+    <span class="sd">&#39;&#39;&#39; Conventional hydro-pneumatic tank sizing calculation from the `2019 DOH Water System Design Manual Equations 9-2 and 9-3 &lt;https://www.doh.wa.gov/Portals/1/Documents/Pubs/331-123.pdf?ver=2019-10-03-153237-220#page=230&gt;`__</span>
 <span class="sd">    </span>
-<span class="sd">    .. _2019 DOH Water System Design Manual: https://www.doh.wa.gov/Portals/1/Documents/Pubs/331-123.pdf?ver=2019-10-03-153237-220</span>
-
-<span class="sd">    :param cut_out: nominal pump-off pressure in psi (P_1)</span>
-<span class="sd">    :param cut_in: nominal pump-on pressure in psi (P_2)</span>
-<span class="sd">    :param num_cycles: max number of cycles/hour/pump (Nc)</span>
-<span class="sd">    :parma max_flow: estimated max flow from 1 pump (Qp)</span>
-<span class="sd">    :param tank_diam: diameter of tank in inches</span>
+<span class="sd">    :param cut_out: P :sub:`1` nominal pump-off pressure (psi) </span>
+<span class="sd">    :param cut_in: P :sub:`2` nominal pump-on pressure (psi)</span>
+<span class="sd">    :param num_cycles: max number of cycles/hour/pump (Nc) </span>
+<span class="sd">    :param max_flow: estimated max flow from 1 pump (Qp)</span>
+<span class="sd">    :param tank_diam: diameter of tank (inches)</span>
 <span class="sd">    :param shape: tank shape (must be &#39;horizontal&#39; or &#39;vertical&#39;)</span>
 <span class="sd">    :type cut_out: int/float</span>
 <span class="sd">    :type cut_in: int/float</span>
@@ -937,6 +947,7 @@
 
     <span class="c1"># Reynolds Number</span>
     <span class="n">Re</span> <span class="o">=</span> <span class="n">reynolds</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">vel</span><span class="o">=</span><span class="n">v</span><span class="p">)</span>
+    <span class="n">Re_q</span> <span class="o">=</span> <span class="n">reynolds</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">flow</span><span class="o">=</span><span class="n">Q</span><span class="p">)</span>
 
     <span class="c1"># Volume Calculations</span>
     <span class="n">vol1</span> <span class="o">=</span> <span class="n">volume_cyl</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
@@ -967,18 +978,19 @@
 <span class="s1">        calculated velocity = </span><span class="si">{8:.2f}</span><span class="s1"> fps</span>
 <span class="s1">        calculated flow = </span><span class="si">{9:.2f}</span><span class="s1"> gpm </span><span class="se">\r</span><span class="s1"></span>
 <span class="s1">        calculated diameter = </span><span class="si">{10:.2f}</span><span class="s1"> in</span>
-<span class="s1">        Reynolds Number = </span><span class="si">{11:.2f}</span><span class="s1"></span>
-<span class="s1">        vol1 = </span><span class="si">{12:f}</span><span class="s1"></span>
-<span class="s1">        vol2 = </span><span class="si">{13:.2f}</span><span class="s1"></span>
-<span class="s1">        gallons = </span><span class="si">{14:.2f}</span><span class="s1"></span>
-<span class="s1">        allowable leakage = </span><span class="si">{15:.2f}</span><span class="s1"> gph or </span><span class="si">{16:.3f}</span><span class="s1"> gpm</span>
-<span class="s1">        makeup water = </span><span class="si">{17:.3f}</span><span class="s1"> cubic inches or </span><span class="si">{18:.3f}</span><span class="s1"> gals</span>
-<span class="s1">        number of bladder tanks = </span><span class="si">{19:.1f}</span><span class="s1"> tanks</span>
+<span class="s1">        Reynolds Number = </span><span class="si">{11:.0f}</span><span class="s1"></span>
+<span class="s1">        Reynolds Number given flow = </span><span class="si">{12:.0f}</span><span class="s1">  </span>
+<span class="s1">        vol1 = </span><span class="si">{13:f}</span><span class="s1"></span>
+<span class="s1">        vol2 = </span><span class="si">{14:.2f}</span><span class="s1"></span>
+<span class="s1">        gallons = </span><span class="si">{15:.2f}</span><span class="s1"></span>
+<span class="s1">        allowable leakage = </span><span class="si">{16:.2f}</span><span class="s1"> gph or </span><span class="si">{17:.3f}</span><span class="s1"> gpm</span>
+<span class="s1">        makeup water = </span><span class="si">{18:.3f}</span><span class="s1"> cubic inches or </span><span class="si">{19:.3f}</span><span class="s1"> gals</span>
+<span class="s1">        number of bladder tanks = </span><span class="si">{20:.1f}</span><span class="s1"> tanks</span>
 <span class="s1">        &#39;&#39;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
             <span class="n">phd</span><span class="p">,</span> <span class="n">phd2</span><span class="p">,</span> <span class="n">water_p</span><span class="p">,</span> <span class="n">break_p</span><span class="p">,</span> <span class="n">input_p</span><span class="p">,</span>
             <span class="n">water2_p</span><span class="p">,</span> <span class="n">Q</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">q_func</span><span class="p">,</span> <span class="n">d_func</span><span class="p">,</span> <span class="n">Re</span><span class="p">,</span>
-            <span class="n">vol1</span><span class="p">,</span> <span class="n">vol2</span><span class="p">,</span> <span class="n">gals</span><span class="p">,</span> <span class="n">leak_gph</span><span class="p">,</span> <span class="n">leak_gpm</span><span class="p">,</span> 
-            <span class="n">mw</span><span class="p">,</span> <span class="n">cuin2gal</span><span class="p">(</span><span class="n">mw</span><span class="p">),</span> <span class="n">bt</span><span class="p">)</span>
+            <span class="n">Re_q</span><span class="p">,</span> <span class="n">vol1</span><span class="p">,</span> <span class="n">vol2</span><span class="p">,</span> <span class="n">gals</span><span class="p">,</span> <span class="n">leak_gph</span><span class="p">,</span>
+            <span class="n">leak_gpm</span><span class="p">,</span> <span class="n">mw</span><span class="p">,</span> <span class="n">cuin2gal</span><span class="p">(</span><span class="n">mw</span><span class="p">),</span> <span class="n">bt</span><span class="p">)</span>
 
     <span class="nb">print</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
     <span class="n">pressure_relief_valve_size</span><span class="p">(</span><span class="mi">95</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="n">info</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>

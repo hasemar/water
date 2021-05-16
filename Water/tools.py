@@ -8,9 +8,7 @@ from __future__ import print_function, division
 from math import pi, acos, sqrt, ceil, exp
 
 def coeffs(num_ERUs):
-    '''C and F coefficients from  the `2019 DOH Water System Design Manual`_ Table 3-1 
-    
-    .. _2019 DOH Water System Design Manual: https://www.doh.wa.gov/Portals/1/Documents/Pubs/331-123.pdf?ver=2019-10-03-153237-220
+    '''C and F coefficients from  the `2019 DOH Water System Design Manual Table 3-1 <https://www.doh.wa.gov/Portals/1/Documents/Pubs/331-123.pdf?ver=2019-10-03-153237-220#page=51>`__ 
 
     :param num_ERUs: number of Equivalent Residential Units
     :type num_ERUs: int
@@ -20,7 +18,7 @@ def coeffs(num_ERUs):
     :Example: 
 
     >>> from Water import tools
-    >>> ERUs = 1500
+    >>> ERUs = 1500A = \\pi d^2 / 4
     >>> C, F = tools.coeffs(ERUs)
 
     '''
@@ -35,12 +33,10 @@ def coeffs(num_ERUs):
     elif num_ERUs > 500:
         return 1.6, 225
     else:
-        print("Number of ERU's must be a positive integer")
+        raise Exception("Number of ERU's must be a positive integer")
 
 def PHD(MDD, num_ERUs):
-    '''Peak Hour Demand Calculation from the `2019 DOH Water System Design Manual`_ Equation 3-1 
-    
-    .. _2019 DOH Water System Design Manual: https://www.doh.wa.gov/Portals/1/Documents/Pubs/331-123.pdf?ver=2019-10-03-153237-220
+    '''Peak Hour Demand Calculation from the `2019 DOH Water System Design Manual Table 3-1 <https://www.doh.wa.gov/Portals/1/Documents/Pubs/331-123.pdf?ver=2019-10-03-153237-220#page=51>`__ 
 
     .. math::
 
@@ -75,9 +71,7 @@ def PHD(MDD, num_ERUs):
     return phd
 
 def equalizing_storage(PHD, Qs):
-    '''Equalizing Storage calculation from the `2019 DOH Water System Design Manual`_ Equation 7-1 
-    
-    .. _2019 DOH Water System Design Manual: https://www.doh.wa.gov/Portals/1/Documents/Pubs/331-123.pdf?ver=2019-10-03-153237-220
+    '''Equalizing Storage calculation from the `2019 DOH Water System Design Manual Equation 7-1 <https://www.doh.wa.gov/Portals/1/Documents/Pubs/331-123.pdf?ver=2019-10-03-153237-220#page=190>`__
 
     .. math::
 
@@ -91,17 +85,15 @@ def equalizing_storage(PHD, Qs):
     :type PHD: int/float
     :param Qs: total source supply (gpm)
     :type Qs: int/float
-    :return: Equalizing Storage component in gallons
+    :return: Equalizing Storage (gal)
     :rtype: int/float
 
     '''
     return (PHD-Qs)*150
 
 def standby_storage(N,SBi, Td=1):
-    '''Standby Storage calculation from the `2019 DOH Water System Design Manual`_ Equation 7-2 
-    
-    .. _2019 DOH Water System Design Manual: https://www.doh.wa.gov/Portals/1/Documents/Pubs/331-123.pdf?ver=2019-10-03-153237-220
-
+    '''Standby Storage calculation from the `2019 DOH Water System Design Manual Equation 7-2 <https://www.doh.wa.gov/Portals/1/Documents/Pubs/331-123.pdf?ver=2019-10-03-153237-220#page=191>`__
+ 
     .. math::
         
         SB &= (N)(SB_i)(T_d)
@@ -116,13 +108,13 @@ def standby_storage(N,SBi, Td=1):
     :type SBi: int
     :param Td: Number of days selected to meet water system-determined standard of reliability, *default 1* 
     :type Td: int
-    :return: Total Standby Storage component in gallons
+    :return: Total Standby Storage (gal)
     :rtype: int
 
     '''
 
 def calc_hp(flow_rate, head, pump_eff=0.6, motor_eff=0.9):
-    '''Horsepower Calculations
+    '''Horsepower calculation for pumping water
 
     .. math::
     
@@ -171,13 +163,17 @@ def calc_hp(flow_rate, head, pump_eff=0.6, motor_eff=0.9):
     return (water_hp, break_hp, input_hp)
 
 def velocity(flow, pipe_diam):
-    '''calculate water velocity through a pipe
+    '''calculate velocity through a pipe
 
-    :param flow: flow in gpm
+    .. math::
+
+        v = \\frac{Q}{A}
+
+    :param flow: flow (gpm)
     :type flow: int/float
-    :param pipe_diam: pipe diameter in inches
+    :param pipe_diam: pipe diameter (inches)
     :type pipe_diam: float
-    :return: velocity in feet per second (FPS)
+    :return: velocity (fps)
     
     '''
     Q = gpm2cuftps(flow)
@@ -187,14 +183,18 @@ def velocity(flow, pipe_diam):
     return V
 
 def flow(velocity, pipe_diam):
-    '''calculate flow through a pipe
+    '''Calculate volumetric flowrate through a pipe
 
-        :param velocity: water velocity in feet per second (FPS)
-        :type velocity: int/float
-        :param pipe_diam: pipe diameter in inches
-        :type pipe_diam: int/float
-        :return: flow through a pipe in gallons per minute (gpm)
-        :rtype: float
+    .. math::
+
+        Q = v A
+
+    :param velocity: velocity (fps)
+    :type velocity: int/float
+    :param pipe_diam: pipe diameter (inches)
+    :type pipe_diam: int/float
+    :return: flow through a pipe (gpm)
+    :rtype: float
 
     '''
     d = pipe_diam/12
@@ -204,7 +204,7 @@ def flow(velocity, pipe_diam):
     return Q
 
 def gpm2cuftps(gpm):
-    ''' gallons per minute (gpm) to cubic feet per second (cuft/s) conversion
+    ''' Convert gallons per minute (gpm) to cubic feet per second (cuft/s)
     
     :param gpm: gallons per minute (gpm)
     :type gpm: int/float
@@ -215,7 +215,7 @@ def gpm2cuftps(gpm):
     return gpm * 0.00222802
 
 def cuftps2gpm(cuftps):
-    ''' cubic feet per second (cuft/s) to gallons per minute (gpm) conversion
+    ''' Convert cubic feet per second (cuft/s) to gallons per minute (gpm)
     
     :param cuftps: cubic feet per second (cuft/s)
     :type cuftps: int/float
@@ -226,8 +226,12 @@ def cuftps2gpm(cuftps):
     return cuftps * 448.831169
 
 def pipeDiameter(flow, velocity):
-    '''calculation for pipe diameter, given flow and velocity
+    '''Returns pipe diameter, given flow and velocity
+    
+    .. math::
 
+        d = \\sqrt{\\frac{4 Q}{\\pi v}}
+        
     :param flow: flow in gallons per minute (gpm)
     :type flow: int/float
     :param velocity: velocity in feet per second (FPS)
@@ -236,35 +240,43 @@ def pipeDiameter(flow, velocity):
     :rtype: float
         
     '''
-    pipe_diam = (flow*0.4085/velocity)**0.5
+    pipe_diam = sqrt(4*gpm2cuftps(flow)/(velocity*pi))
+    pipe_diam = pipe_diam * 12
 
     return pipe_diam
 
-def reynolds(pipe_diam, flow=None, vel=None, viscocity=1.3081):
+def reynolds(pipe_diam, flow=None, vel=None, viscocity=1.407E-5):
     '''Reynolds Number Calculation
 
-    :param pipe_diam: pipe diameter in inches
+    .. math:: 
+
+        Re = \\frac{\\mu D_h}{\\nu}
+
+    :param pipe_diam: pipe diameter (inches)
     :type pipe_diam: int/float
-    :param flow: flow in gallons per minute (gpm), *default None*
+    :param flow: flow (gpm), *default None*
     :type flow: int/float
-    :param vel: velocity in feet per second (FPS), *default None*
+    :param vel: velocity (fps), *default None*
     :type vel: int/float
-    :param viscocity: viscocity in cSt *default 1.3081*
+    :param viscocity: kinematic viscocity of water (ft^2/s) *default 1.407E-5 ft^2/s*
     :return: Reynolds Number
     :rtype: int
 
     '''
-    if flow:
-        re = (flow*pipe_diam/12) / (viscocity * pi * pipe_diam**2/4)
-    elif vel:
-        re = (pipe_diam/12)*vel/viscocity
-    else:
-        print('Must enter flow or velocity')
+    d = pipe_diam/12
 
-    return int(re) 
+    if flow:
+        v = velocity(flow, pipe_diam)
+        re = d * v / viscocity
+    elif vel:
+        re = d * vel / viscocity
+    else:
+        raise Exception('Must enter flow or velocity')
+
+    return re 
 
 def volume_cyl(diameter, height):
-    ''' calculate the  volume of a cylinder
+    ''' calculate the volume of a cylinder
 
     :param diameter: diameter of cylinder
     :type diameter: int/float
@@ -285,7 +297,7 @@ def volume_box(length, width, height):
     :type width: int/float
     :param height: height of box
     :type height: int/float
-    :return: volume of a box
+    :return: volume of a box in consistent units
     :rtype: float
 
     '''
@@ -364,11 +376,11 @@ def minor_loss(velocity, k_val ):
 
     .. math:: h_{minor} = f_D \\cdot \\frac{1}{2g} \\cdot \\frac{v^2}{D}
     
-    :param velocity: velocity in feet per second (FPS)
+    :param velocity: velocity (fps)
     :param k_val: K value
     :type velocity: int/float
     :type velocity: int/float
-    :return: minor head loss in feet
+    :return: minor head loss (ft)
     :rtype: float
 
      '''
@@ -395,18 +407,16 @@ def psi2ft(psi):
     :rtype: float
 
      '''
-    return psi * 2.308
+    return psi * 2.3077
 
 def hpn_size(cut_out, cut_in, num_cycles, max_flow, tank_diam, shape='horiztonal'):
-    ''' hydro-pneumatic tank sizing calculation from the `2019 DOH Water System Design Manual`_ Equations 9-2 and 9-3 
+    ''' Conventional hydro-pneumatic tank sizing calculation from the `2019 DOH Water System Design Manual Equations 9-2 and 9-3 <https://www.doh.wa.gov/Portals/1/Documents/Pubs/331-123.pdf?ver=2019-10-03-153237-220#page=230>`__
     
-    .. _2019 DOH Water System Design Manual: https://www.doh.wa.gov/Portals/1/Documents/Pubs/331-123.pdf?ver=2019-10-03-153237-220
-
-    :param cut_out: nominal pump-off pressure in psi (P_1)
-    :param cut_in: nominal pump-on pressure in psi (P_2)
-    :param num_cycles: max number of cycles/hour/pump (Nc)
-    :parma max_flow: estimated max flow from 1 pump (Qp)
-    :param tank_diam: diameter of tank in inches
+    :param cut_out: P :sub:`1` nominal pump-off pressure (psi) 
+    :param cut_in: P :sub:`2` nominal pump-on pressure (psi)
+    :param num_cycles: max number of cycles/hour/pump (Nc) 
+    :param max_flow: estimated max flow from 1 pump (Qp)
+    :param tank_diam: diameter of tank (inches)
     :param shape: tank shape (must be 'horizontal' or 'vertical')
     :type cut_out: int/float
     :type cut_in: int/float
@@ -779,6 +789,7 @@ if __name__=="__main__":
 
     # Reynolds Number
     Re = reynolds(d, vel=v)
+    Re_q = reynolds(d, flow=Q)
 
     # Volume Calculations
     vol1 = volume_cyl(5, 10)
@@ -809,18 +820,19 @@ if __name__=="__main__":
         calculated velocity = {8:.2f} fps
         calculated flow = {9:.2f} gpm \r
         calculated diameter = {10:.2f} in
-        Reynolds Number = {11:.2f}
-        vol1 = {12:f}
-        vol2 = {13:.2f}
-        gallons = {14:.2f}
-        allowable leakage = {15:.2f} gph or {16:.3f} gpm
-        makeup water = {17:.3f} cubic inches or {18:.3f} gals
-        number of bladder tanks = {19:.1f} tanks
+        Reynolds Number = {11:.0f}
+        Reynolds Number given flow = {12:.0f}  
+        vol1 = {13:f}
+        vol2 = {14:.2f}
+        gallons = {15:.2f}
+        allowable leakage = {16:.2f} gph or {17:.3f} gpm
+        makeup water = {18:.3f} cubic inches or {19:.3f} gals
+        number of bladder tanks = {20:.1f} tanks
         '''.format(
             phd, phd2, water_p, break_p, input_p,
             water2_p, Q, d, v, q_func, d_func, Re,
-            vol1, vol2, gals, leak_gph, leak_gpm, 
-            mw, cuin2gal(mw), bt)
+            Re_q, vol1, vol2, gals, leak_gph,
+            leak_gpm, mw, cuin2gal(mw), bt)
 
     print(out)
     pressure_relief_valve_size(95, 500, info=True)

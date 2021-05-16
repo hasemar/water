@@ -78,7 +78,7 @@ class Genset:
 
         :param power: motor power
         :param units: units of power ('hp' or 'kw'), *default hp*
-        :param fire: enable fire-flow load, *default False*
+        :param fire: set as a fire-flow load, *default False*
         :type power: int/float
         :type units: string
         :type fire: boolean
@@ -155,7 +155,7 @@ class Genset:
         Consumption values are in scfm and represent fuel consumed 
         at 25%, 50%, 75% and 100% capacity.
 
-        :param consumption_list: fuel consumption at different capacities, in scfm
+        :param consumption_list: fuel consumption at different capacities (scfm)
         :type consumption_list: list
 
         :Example: 
@@ -188,9 +188,9 @@ class Genset:
         '''
         # propane properties
         lp_volume = 36.39      # cu. ft/gal
-        lp_energy = 91547 # btu/gal
-        bottle_vol = 500      # gal : start with 500 gal, program will increase if needed
-        num_bottles = 1     # start with 1 bottle, program will define more if needed
+        lp_energy = 91547      # btu/gal
+        bottle_vol = 500       # gal : start with 500 gal, program will increase if needed
+        num_bottles = 1        # start with 1 bottle, program will define more if needed
 
         # vaporization rate of propane (rule of thumb)
         tank_d = [37, 41]      # inches

@@ -236,7 +236,7 @@
 
 <span class="sd">        :param power: motor power</span>
 <span class="sd">        :param units: units of power (&#39;hp&#39; or &#39;kw&#39;), *default hp*</span>
-<span class="sd">        :param fire: enable fire-flow load, *default False*</span>
+<span class="sd">        :param fire: set as a fire-flow load, *default False*</span>
 <span class="sd">        :type power: int/float</span>
 <span class="sd">        :type units: string</span>
 <span class="sd">        :type fire: boolean</span>
@@ -313,7 +313,7 @@
 <span class="sd">        Consumption values are in scfm and represent fuel consumed </span>
 <span class="sd">        at 25%, 50%, 75% and 100% capacity.</span>
 
-<span class="sd">        :param consumption_list: fuel consumption at different capacities, in scfm</span>
+<span class="sd">        :param consumption_list: fuel consumption at different capacities (scfm)</span>
 <span class="sd">        :type consumption_list: list</span>
 
 <span class="sd">        :Example: </span>
@@ -346,9 +346,9 @@
 <span class="sd">        &#39;&#39;&#39;</span>
         <span class="c1"># propane properties</span>
         <span class="n">lp_volume</span> <span class="o">=</span> <span class="mf">36.39</span>      <span class="c1"># cu. ft/gal</span>
-        <span class="n">lp_energy</span> <span class="o">=</span> <span class="mi">91547</span> <span class="c1"># btu/gal</span>
-        <span class="n">bottle_vol</span> <span class="o">=</span> <span class="mi">500</span>      <span class="c1"># gal : start with 500 gal, program will increase if needed</span>
-        <span class="n">num_bottles</span> <span class="o">=</span> <span class="mi">1</span>     <span class="c1"># start with 1 bottle, program will define more if needed</span>
+        <span class="n">lp_energy</span> <span class="o">=</span> <span class="mi">91547</span>      <span class="c1"># btu/gal</span>
+        <span class="n">bottle_vol</span> <span class="o">=</span> <span class="mi">500</span>       <span class="c1"># gal : start with 500 gal, program will increase if needed</span>
+        <span class="n">num_bottles</span> <span class="o">=</span> <span class="mi">1</span>        <span class="c1"># start with 1 bottle, program will define more if needed</span>
 
         <span class="c1"># vaporization rate of propane (rule of thumb)</span>
         <span class="n">tank_d</span> <span class="o">=</span> <span class="p">[</span><span class="mi">37</span><span class="p">,</span> <span class="mi">41</span><span class="p">]</span>      <span class="c1"># inches</span>

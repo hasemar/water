@@ -264,6 +264,54 @@ on the tutorials page.</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="Water.Pipe.search_material">
+<code class="descname">search_material</code><span class="sig-paren">(</span><em>material</em>, <em>coefficient=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Water/pipe.html#Pipe.search_material"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Water.Pipe.search_material" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks sqlite database for existing material record</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>material</strong> (<em>string</em>) – pipe material</li>
+<li><strong>coefficient</strong> (<em>int</em>) – Hazen Williams coefficient for major pipe losses</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">record(s) if one exists</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">list</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Water.Pipe.add_material">
+<code class="descname">add_material</code><span class="sig-paren">(</span><em>material</em>, <em>coefficient</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Water/pipe.html#Pipe.add_material"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Water.Pipe.add_material" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds a record to the hazen williams coefficient table of the sqlite db</p>
+<blockquote>
+<div><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">param material:</th><td class="field-body">pipe material</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>coefficient</strong> (<em>int</em>) – Hazen Williams coefficient for major pipe losses</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
 <dt id="Water.Pipe.fitting">
 <code class="descname">fitting</code><span class="sig-paren">(</span><em>fitting_type=None</em>, <em>con_type=None</em>, <em>qty=1</em>, <em>Kvalue=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Water/pipe.html#Pipe.fitting"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Water.Pipe.fitting" title="Permalink to this definition">¶</a></dt>
 <dd><p>Adds fitting to Pipe object’s fitting_list to add to head loss</p>
@@ -640,8 +688,8 @@ on the tutorials page.</p>
 </pre></div>
 </div>
 <dl class="method">
-<dt id="Water.Pump.check_pump">
-<code class="descname">check_pump</code><span class="sig-paren">(</span><em>pump_model</em>, <em>impeller=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Water/pumps.html#Pump.check_pump"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Water.Pump.check_pump" title="Permalink to this definition">¶</a></dt>
+<dt id="Water.Pump.search_pump">
+<code class="descname">search_pump</code><span class="sig-paren">(</span><em>pump_model</em>, <em>impeller=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Water/pumps.html#Pump.search_pump"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Water.Pump.search_pump" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks sqlite database for existing pump record</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -982,7 +1030,7 @@ in kilovolt-amps</p>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>power</strong> (<em>int/float</em>) – motor power</li>
 <li><strong>units</strong> (<em>string</em>) – units of power (‘hp’ or ‘kw’), <em>default hp</em></li>
-<li><strong>fire</strong> (<em>boolean</em>) – enable fire-flow load, <em>default False</em></li>
+<li><strong>fire</strong> (<em>boolean</em>) – set as a fire-flow load, <em>default False</em></li>
 </ul>
 </td>
 </tr>
@@ -1064,7 +1112,7 @@ at 25%, 50%, 75% and 100% capacity.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>consumption_list</strong> (<em>list</em>) – fuel consumption at different capacities, in scfm</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>consumption_list</strong> (<em>list</em>) – fuel consumption at different capacities (scfm)</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Example:</th><td class="field-body"></td>
 </tr>
@@ -1175,7 +1223,7 @@ design aspects</p>
 <dl class="function">
 <dt id="tools.coeffs">
 <code class="descclassname">tools.</code><code class="descname">coeffs</code><span class="sig-paren">(</span><em>num_ERUs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tools.html#coeffs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tools.coeffs" title="Permalink to this definition">¶</a></dt>
-<dd><p>C and F coefficients from  the <a class="reference external" href="https://www.doh.wa.gov/Portals/1/Documents/Pubs/331-123.pdf?ver=2019-10-03-153237-220">2019 DOH Water System Design Manual</a> Table 3-1</p>
+<dd><p>C and F coefficients from  the <a class="reference external" href="https://www.doh.wa.gov/Portals/1/Documents/Pubs/331-123.pdf?ver=2019-10-03-153237-220#page=51">2019 DOH Water System Design Manual Table 3-1</a></p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -1191,7 +1239,7 @@ design aspects</p>
 </tbody>
 </table>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">Water</span> <span class="k">import</span> <span class="n">tools</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">ERUs</span> <span class="o">=</span> <span class="mi">1500</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ERUs</span> <span class="o">=</span> <span class="mi">1500</span><span class="n">A</span> <span class="o">=</span> \<span class="n">pi</span> <span class="n">d</span><span class="o">^</span><span class="mi">2</span> <span class="o">/</span> <span class="mi">4</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">C</span><span class="p">,</span> <span class="n">F</span> <span class="o">=</span> <span class="n">tools</span><span class="o">.</span><span class="n">coeffs</span><span class="p">(</span><span class="n">ERUs</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -1200,7 +1248,7 @@ design aspects</p>
 <dl class="function">
 <dt id="tools.PHD">
 <code class="descclassname">tools.</code><code class="descname">PHD</code><span class="sig-paren">(</span><em>MDD</em>, <em>num_ERUs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tools.html#PHD"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tools.PHD" title="Permalink to this definition">¶</a></dt>
-<dd><p>Peak Hour Demand Calculation from the <a class="reference external" href="https://www.doh.wa.gov/Portals/1/Documents/Pubs/331-123.pdf?ver=2019-10-03-153237-220">2019 DOH Water System Design Manual</a> Equation 3-1</p>
+<dd><p>Peak Hour Demand Calculation from the <a class="reference external" href="https://www.doh.wa.gov/Portals/1/Documents/Pubs/331-123.pdf?ver=2019-10-03-153237-220#page=51">2019 DOH Water System Design Manual Table 3-1</a></p>
 <div class="math notranslate nohighlight">
 \[ \begin{align}\begin{aligned}PHD &amp;= \frac{ERU_{MDD}}{1440}(C N + F) + 18\\\text{where:}\\PHD &amp;= \text{Peak Hourly Demand, total system (gpm)}\\C &amp;= \text{Coefficent Associated with Ranges of ERUs}\\N &amp;= \text{Number of ERUs based on MDD}\\F &amp;= \text{Factor Associated with Ranges of ERUs}\\ERU_{MDD} &amp;= \text{Maximum Day Demand (gpd/ERU)}\end{aligned}\end{align} \]</div>
 <p>C and F coefficients are automatically calculated within PHD equation</p>
@@ -1227,7 +1275,7 @@ design aspects</p>
 <dl class="function">
 <dt id="tools.equalizing_storage">
 <code class="descclassname">tools.</code><code class="descname">equalizing_storage</code><span class="sig-paren">(</span><em>PHD</em>, <em>Qs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tools.html#equalizing_storage"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tools.equalizing_storage" title="Permalink to this definition">¶</a></dt>
-<dd><p>Equalizing Storage calculation from the <a class="reference external" href="https://www.doh.wa.gov/Portals/1/Documents/Pubs/331-123.pdf?ver=2019-10-03-153237-220">2019 DOH Water System Design Manual</a> Equation 7-1</p>
+<dd><p>Equalizing Storage calculation from the <a class="reference external" href="https://www.doh.wa.gov/Portals/1/Documents/Pubs/331-123.pdf?ver=2019-10-03-153237-220#page=190">2019 DOH Water System Design Manual Equation 7-1</a></p>
 <div class="math notranslate nohighlight">
 \[ \begin{align}\begin{aligned}ES &amp;= 150(PHD - Q_s)\\\text{where:}\\ES &amp;= \text{Equalizing Storage in gallons}\end{aligned}\end{align} \]</div>
 <table class="docutils field-list" frame="void" rules="none">
@@ -1240,7 +1288,7 @@ design aspects</p>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Equalizing Storage component in gallons</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Equalizing Storage (gal)</p>
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">int/float</p>
@@ -1253,7 +1301,7 @@ design aspects</p>
 <dl class="function">
 <dt id="tools.standby_storage">
 <code class="descclassname">tools.</code><code class="descname">standby_storage</code><span class="sig-paren">(</span><em>N</em>, <em>SBi</em>, <em>Td=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tools.html#standby_storage"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tools.standby_storage" title="Permalink to this definition">¶</a></dt>
-<dd><p>Standby Storage calculation from the <a class="reference external" href="https://www.doh.wa.gov/Portals/1/Documents/Pubs/331-123.pdf?ver=2019-10-03-153237-220">2019 DOH Water System Design Manual</a> Equation 7-2</p>
+<dd><p>Standby Storage calculation from the <a class="reference external" href="https://www.doh.wa.gov/Portals/1/Documents/Pubs/331-123.pdf?ver=2019-10-03-153237-220#page=191">2019 DOH Water System Design Manual Equation 7-2</a></p>
 <div class="math notranslate nohighlight">
 \[ \begin{align}\begin{aligned}SB &amp;= (N)(SB_i)(T_d)\\\text{where:}\\SB &amp;= \text{Total Standby Storage component in gallons}\end{aligned}\end{align} \]</div>
 <table class="docutils field-list" frame="void" rules="none">
@@ -1267,7 +1315,7 @@ design aspects</p>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Total Standby Storage component in gallons</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Total Standby Storage (gal)</p>
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">int</p>
@@ -1280,7 +1328,7 @@ design aspects</p>
 <dl class="function">
 <dt id="tools.calc_hp">
 <code class="descclassname">tools.</code><code class="descname">calc_hp</code><span class="sig-paren">(</span><em>flow_rate</em>, <em>head</em>, <em>pump_eff=0.6</em>, <em>motor_eff=0.9</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tools.html#calc_hp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tools.calc_hp" title="Permalink to this definition">¶</a></dt>
-<dd><p>Horsepower Calculations</p>
+<dd><p>Horsepower calculation for pumping water</p>
 <div class="math notranslate nohighlight">
 \[ \begin{align}\begin{aligned}hp_{water}&amp;=(Q)(TDH)\bigg{(}\frac{1\ psi}{2.308\ ft}\bigg{)}\bigg{(}\frac{1\ hp}{1714 (psi\ gpm)}\bigg{)}\\hp_{break}&amp;=\frac{hp_{water}}{\eta_{pump}}\\hp_{input}&amp;=\frac{hp_{break}}{\eta_{motor}}\\\text{where:}\quad \eta_{pump} &amp;= \text{pump efficiency}, \quad \eta_{motor} = \text{motor efficiency}\end{aligned}\end{align} \]</div>
 <table class="docutils field-list" frame="void" rules="none">
@@ -1324,18 +1372,20 @@ design aspects</p>
 <dl class="function">
 <dt id="tools.velocity">
 <code class="descclassname">tools.</code><code class="descname">velocity</code><span class="sig-paren">(</span><em>flow</em>, <em>pipe_diam</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tools.html#velocity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tools.velocity" title="Permalink to this definition">¶</a></dt>
-<dd><p>calculate water velocity through a pipe</p>
+<dd><p>calculate velocity through a pipe</p>
+<div class="math notranslate nohighlight">
+\[v = \frac{Q}{A}\]</div>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>flow</strong> (<em>int/float</em>) – flow in gpm</li>
-<li><strong>pipe_diam</strong> (<em>float</em>) – pipe diameter in inches</li>
+<li><strong>flow</strong> (<em>int/float</em>) – flow (gpm)</li>
+<li><strong>pipe_diam</strong> (<em>float</em>) – pipe diameter (inches)</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">velocity in feet per second (FPS)</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">velocity (fps)</p>
 </td>
 </tr>
 </tbody>
@@ -1345,18 +1395,20 @@ design aspects</p>
 <dl class="function">
 <dt id="tools.flow">
 <code class="descclassname">tools.</code><code class="descname">flow</code><span class="sig-paren">(</span><em>velocity</em>, <em>pipe_diam</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tools.html#flow"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tools.flow" title="Permalink to this definition">¶</a></dt>
-<dd><p>calculate flow through a pipe</p>
+<dd><p>Calculate volumetric flowrate through a pipe</p>
+<div class="math notranslate nohighlight">
+\[Q = v A\]</div>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>velocity</strong> (<em>int/float</em>) – water velocity in feet per second (FPS)</li>
-<li><strong>pipe_diam</strong> (<em>int/float</em>) – pipe diameter in inches</li>
+<li><strong>velocity</strong> (<em>int/float</em>) – velocity (fps)</li>
+<li><strong>pipe_diam</strong> (<em>int/float</em>) – pipe diameter (inches)</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">flow through a pipe in gallons per minute (gpm)</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">flow through a pipe (gpm)</p>
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">float</p>
@@ -1369,7 +1421,7 @@ design aspects</p>
 <dl class="function">
 <dt id="tools.gpm2cuftps">
 <code class="descclassname">tools.</code><code class="descname">gpm2cuftps</code><span class="sig-paren">(</span><em>gpm</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tools.html#gpm2cuftps"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tools.gpm2cuftps" title="Permalink to this definition">¶</a></dt>
-<dd><p>gallons per minute (gpm) to cubic feet per second (cuft/s) conversion</p>
+<dd><p>Convert gallons per minute (gpm) to cubic feet per second (cuft/s)</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -1387,7 +1439,7 @@ design aspects</p>
 <dl class="function">
 <dt id="tools.cuftps2gpm">
 <code class="descclassname">tools.</code><code class="descname">cuftps2gpm</code><span class="sig-paren">(</span><em>cuftps</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tools.html#cuftps2gpm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tools.cuftps2gpm" title="Permalink to this definition">¶</a></dt>
-<dd><p>cubic feet per second (cuft/s) to gallons per minute (gpm) conversion</p>
+<dd><p>Convert cubic feet per second (cuft/s) to gallons per minute (gpm)</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -1405,7 +1457,9 @@ design aspects</p>
 <dl class="function">
 <dt id="tools.pipeDiameter">
 <code class="descclassname">tools.</code><code class="descname">pipeDiameter</code><span class="sig-paren">(</span><em>flow</em>, <em>velocity</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tools.html#pipeDiameter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tools.pipeDiameter" title="Permalink to this definition">¶</a></dt>
-<dd><p>calculation for pipe diameter, given flow and velocity</p>
+<dd><p>Returns pipe diameter, given flow and velocity</p>
+<div class="math notranslate nohighlight">
+\[d = \sqrt{\frac{4 Q}{\pi v}}\]</div>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -1428,17 +1482,19 @@ design aspects</p>
 
 <dl class="function">
 <dt id="tools.reynolds">
-<code class="descclassname">tools.</code><code class="descname">reynolds</code><span class="sig-paren">(</span><em>pipe_diam</em>, <em>flow=None</em>, <em>vel=None</em>, <em>viscocity=1.3081</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tools.html#reynolds"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tools.reynolds" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">tools.</code><code class="descname">reynolds</code><span class="sig-paren">(</span><em>pipe_diam</em>, <em>flow=None</em>, <em>vel=None</em>, <em>viscocity=1.407e-05</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tools.html#reynolds"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tools.reynolds" title="Permalink to this definition">¶</a></dt>
 <dd><p>Reynolds Number Calculation</p>
+<div class="math notranslate nohighlight">
+\[Re = \frac{\mu D_h}{\nu}\]</div>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>pipe_diam</strong> (<em>int/float</em>) – pipe diameter in inches</li>
-<li><strong>flow</strong> (<em>int/float</em>) – flow in gallons per minute (gpm), <em>default None</em></li>
-<li><strong>vel</strong> (<em>int/float</em>) – velocity in feet per second (FPS), <em>default None</em></li>
-<li><strong>viscocity</strong> – viscocity in cSt <em>default 1.3081</em></li>
+<li><strong>pipe_diam</strong> (<em>int/float</em>) – pipe diameter (inches)</li>
+<li><strong>flow</strong> (<em>int/float</em>) – flow (gpm), <em>default None</em></li>
+<li><strong>vel</strong> (<em>int/float</em>) – velocity (fps), <em>default None</em></li>
+<li><strong>viscocity</strong> – kinematic viscocity of water (ft^2/s) <em>default 1.407E-5 ft^2/s</em></li>
 </ul>
 </td>
 </tr>
@@ -1455,7 +1511,7 @@ design aspects</p>
 <dl class="function">
 <dt id="tools.volume_cyl">
 <code class="descclassname">tools.</code><code class="descname">volume_cyl</code><span class="sig-paren">(</span><em>diameter</em>, <em>height</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tools.html#volume_cyl"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tools.volume_cyl" title="Permalink to this definition">¶</a></dt>
-<dd><p>calculate the  volume of a cylinder</p>
+<dd><p>calculate the volume of a cylinder</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -1491,7 +1547,7 @@ design aspects</p>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">volume of a box</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">volume of a box in consistent units</p>
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">float</p>
@@ -1620,12 +1676,12 @@ design aspects</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>velocity</strong> (<em>int/float</em>) – velocity in feet per second (FPS)</li>
+<li><strong>velocity</strong> (<em>int/float</em>) – velocity (fps)</li>
 <li><strong>k_val</strong> – K value</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">minor head loss in feet</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">minor head loss (ft)</p>
 </td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">float</p>
@@ -1674,27 +1730,25 @@ design aspects</p>
 <dl class="function">
 <dt id="tools.hpn_size">
 <code class="descclassname">tools.</code><code class="descname">hpn_size</code><span class="sig-paren">(</span><em>cut_out</em>, <em>cut_in</em>, <em>num_cycles</em>, <em>max_flow</em>, <em>tank_diam</em>, <em>shape='horiztonal'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tools.html#hpn_size"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tools.hpn_size" title="Permalink to this definition">¶</a></dt>
-<dd><p>hydro-pneumatic tank sizing calculation from the <a class="reference external" href="https://www.doh.wa.gov/Portals/1/Documents/Pubs/331-123.pdf?ver=2019-10-03-153237-220">2019 DOH Water System Design Manual</a> Equations 9-2 and 9-3</p>
+<dd><p>Conventional hydro-pneumatic tank sizing calculation from the <a class="reference external" href="https://www.doh.wa.gov/Portals/1/Documents/Pubs/331-123.pdf?ver=2019-10-03-153237-220#page=230">2019 DOH Water System Design Manual Equations 9-2 and 9-3</a></p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>cut_out</strong> (<em>int/float</em>) – nominal pump-off pressure in psi (P_1)</li>
-<li><strong>cut_in</strong> (<em>int/float</em>) – nominal pump-on pressure in psi (P_2)</li>
+<li><strong>cut_out</strong> (<em>int/float</em>) – P <sub>1</sub> nominal pump-off pressure (psi)</li>
+<li><strong>cut_in</strong> (<em>int/float</em>) – P <sub>2</sub> nominal pump-on pressure (psi)</li>
 <li><strong>num_cycles</strong> (<em>int</em>) – max number of cycles/hour/pump (Nc)</li>
-<li><strong>tank_diam</strong> (<em>int/float</em>) – diameter of tank in inches</li>
+<li><strong>max_flow</strong> (<em>int/float</em>) – estimated max flow from 1 pump (Qp)</li>
+<li><strong>tank_diam</strong> (<em>int/float</em>) – diameter of tank (inches)</li>
 <li><strong>shape</strong> (<em>string</em>) – tank shape (must be ‘horizontal’ or ‘vertical’)</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Parma max_flow:</th><td class="field-body"><p class="first">estimated max flow from 1 pump (Qp)</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">recommended volume for hydro-pnuematic tank</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">recommended volume for hydro-pnuematic tank</p>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">float</p>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">float</p>
 </td>
 </tr>
 </tbody>

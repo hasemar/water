@@ -14,7 +14,7 @@ from os import path
 BASE_DIR = path.dirname(path.abspath(__file__))
 db_path = path.join(BASE_DIR, "water.db")
 
-
+# dictionary of C-factor values used in Hazen-Williams equation
 c_dict = {
     'PVC' : 150,
     'DI' : 130,
@@ -24,7 +24,7 @@ c_dict = {
     'PE 4710' : 140,
     'GALVANIZED PIPE' : 120
 }
-
+# pipe dimension dictionary {sch:{nominal size:[OD, wall thickness}}  (inches)
 pipe_dims = {
     40 : {
         1 : [1.315, 0.133],

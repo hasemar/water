@@ -166,8 +166,13 @@
 
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
 <span class="kn">import</span> <span class="nn">Water.tools</span> <span class="k">as</span> <span class="nn">tools</span>
+<span class="kn">import</span> <span class="nn">sqlite3</span>
+<span class="kn">from</span> <span class="nn">os</span> <span class="k">import</span> <span class="n">path</span>
 
+<span class="n">BASE_DIR</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="vm">__file__</span><span class="p">))</span>
+<span class="n">db_path</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">BASE_DIR</span><span class="p">,</span> <span class="s2">&quot;water.db&quot;</span><span class="p">)</span>
 
+<span class="c1"># dictionary of C-factor values used in Hazen-Williams equation</span>
 <span class="n">c_dict</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s1">&#39;PVC&#39;</span> <span class="p">:</span> <span class="mi">150</span><span class="p">,</span>
     <span class="s1">&#39;DI&#39;</span> <span class="p">:</span> <span class="mi">130</span><span class="p">,</span>
@@ -177,7 +182,7 @@
     <span class="s1">&#39;PE 4710&#39;</span> <span class="p">:</span> <span class="mi">140</span><span class="p">,</span>
     <span class="s1">&#39;GALVANIZED PIPE&#39;</span> <span class="p">:</span> <span class="mi">120</span>
 <span class="p">}</span>
-
+<span class="c1"># pipe dimension dictionary {sch:{nominal size:[OD, wall thickness}}  (inches)</span>
 <span class="n">pipe_dims</span> <span class="o">=</span> <span class="p">{</span>
     <span class="mi">40</span> <span class="p">:</span> <span class="p">{</span>
         <span class="mi">1</span> <span class="p">:</span> <span class="p">[</span><span class="mf">1.315</span><span class="p">,</span> <span class="mf">0.133</span><span class="p">],</span>
@@ -362,7 +367,74 @@
     <span class="k">def</span> <span class="nf">c_factor</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;:pipe material C-factor property&#39;&#39;&#39;</span>
         <span class="k">return</span> <span class="n">c_dict</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">kind</span><span class="p">]</span>
+
+<div class="viewcode-block" id="Pipe.search_material"><a class="viewcode-back" href="../../code_reference.html#Water.Pipe.search_material">[docs]</a>    <span class="k">def</span> <span class="nf">search_material</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">material</span><span class="p">,</span> <span class="n">coefficient</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;Checks sqlite database for existing material record</span>
+
+<span class="sd">           :param material: pipe material</span>
+<span class="sd">           :param coefficient: Hazen Williams coefficient for major pipe losses</span>
+<span class="sd">           :type material: string</span>
+<span class="sd">           :type coefficient: int</span>
+<span class="sd">           :return: record(s) if one exists </span>
+<span class="sd">           :rtype: list</span>
+<span class="sd">           </span>
+<span class="sd">           &#39;&#39;&#39;</span>
+        <span class="n">conn</span> <span class="o">=</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">db_path</span><span class="p">)</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+        <span class="n">existing_params</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;material&#39;</span> <span class="p">:</span> <span class="n">material</span><span class="p">,</span> <span class="s1">&#39;coefficient&#39;</span> <span class="p">:</span> <span class="n">coefficient</span><span class="p">}</span>
+        
+        <span class="k">if</span> <span class="n">coefficient</span><span class="p">:</span>
+            <span class="n">sqlquery</span><span class="o">=</span><span class="s1">&#39;&#39;&#39;SELECT *</span>
+<span class="s1">                        FROM </span>
+<span class="s1">                            hazen</span>
+<span class="s1">                        WHERE material=:material AND coefficient=:coefficient&#39;&#39;&#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">sqlquery</span><span class="o">=</span><span class="s1">&#39;&#39;&#39;SELECT * </span>
+<span class="s1">                        FROM </span>
+<span class="s1">                            hazen </span>
+<span class="s1">                        WHERE material=:material&#39;&#39;&#39;</span> 
+        
+        <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">sqlquery</span><span class="p">,</span> <span class="n">existing_params</span><span class="p">)</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()</span>        
+        <span class="n">conn</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+        <span class="n">conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
     
+        <span class="k">return</span> <span class="n">result</span></div>
+    
+<div class="viewcode-block" id="Pipe.add_material"><a class="viewcode-back" href="../../code_reference.html#Water.Pipe.add_material">[docs]</a>    <span class="k">def</span> <span class="nf">add_material</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">material</span><span class="p">,</span> <span class="n">coefficient</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;Adds a record to the hazen williams coefficient table of the sqlite db</span>
+
+<span class="sd">            :param material: pipe material</span>
+<span class="sd">           :param coefficient: Hazen Williams coefficient for major pipe losses</span>
+<span class="sd">           :type material: string</span>
+<span class="sd">           :type coefficient: int</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+
+        <span class="n">conn</span> <span class="o">=</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">db_path</span><span class="p">)</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+        <span class="c1"># check if material currently exists in database</span>
+        <span class="n">exists</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">search_material</span><span class="p">(</span><span class="n">material</span><span class="p">,</span> <span class="n">coefficient</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">exists</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">sqlinsert</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39;INSERT INTO </span>
+<span class="s1">                            hazen(</span>
+<span class="s1">                                material,</span>
+<span class="s1">                                coefficient) </span>
+<span class="s1">                            values(</span>
+<span class="s1">                                :material,</span>
+<span class="s1">                                :coefficient)&#39;&#39;&#39;</span>
+
+            <span class="n">params</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;material&#39;</span> <span class="p">:</span> <span class="n">material</span><span class="p">,</span> <span class="s1">&#39;coefficient&#39;</span><span class="p">:</span> <span class="n">coefficient</span><span class="p">}</span>
+            
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Material added to hazen table in database&#39;</span><span class="p">)</span>
+            <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">sqlinsert</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
+            <span class="n">conn</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+            <span class="n">conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Material exists in the database, check below for specific parameters: &#39;</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">each_mat</span> <span class="ow">in</span> <span class="n">exists</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">each_mat</span><span class="p">)</span></div>
+        
 <div class="viewcode-block" id="Pipe.fitting"><a class="viewcode-back" href="../../code_reference.html#Water.Pipe.fitting">[docs]</a>    <span class="k">def</span> <span class="nf">fitting</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fitting_type</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">con_type</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">qty</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">Kvalue</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;Adds fitting to Pipe object&#39;s fitting_list to add to head loss</span>
 <span class="sd">        </span>

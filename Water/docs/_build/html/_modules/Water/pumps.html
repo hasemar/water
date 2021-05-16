@@ -167,7 +167,7 @@
 <span class="kn">from</span> <span class="nn">os</span> <span class="k">import</span> <span class="n">path</span>
 
 <span class="n">BASE_DIR</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="vm">__file__</span><span class="p">))</span>
-<span class="n">db_path</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">BASE_DIR</span><span class="p">,</span> <span class="s2">&quot;pumps.db&quot;</span><span class="p">)</span>
+<span class="n">db_path</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">BASE_DIR</span><span class="p">,</span> <span class="s2">&quot;water.db&quot;</span><span class="p">)</span>
 
 <div class="viewcode-block" id="Pump"><a class="viewcode-back" href="../../code_reference.html#Water.Pump">[docs]</a><span class="k">class</span> <span class="nc">Pump</span><span class="p">:</span>
     <span class="sd">&#39;&#39;&#39;Defines Pump object to plot and/or affinitized pump curve and performance  </span>
@@ -191,7 +191,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">ax</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">affinity_data</span> <span class="o">=</span> <span class="p">[]</span>
 
-<div class="viewcode-block" id="Pump.check_pump"><a class="viewcode-back" href="../../code_reference.html#Water.Pump.check_pump">[docs]</a>    <span class="k">def</span> <span class="nf">check_pump</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pump_model</span><span class="p">,</span> <span class="n">impeller</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="Pump.search_pump"><a class="viewcode-back" href="../../code_reference.html#Water.Pump.search_pump">[docs]</a>    <span class="k">def</span> <span class="nf">search_pump</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pump_model</span><span class="p">,</span> <span class="n">impeller</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;Checks sqlite database for existing pump record</span>
 
 <span class="sd">           :param pump_model: pump model</span>
@@ -271,7 +271,7 @@
         <span class="n">conn</span> <span class="o">=</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">db_path</span><span class="p">)</span>
         <span class="n">c</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
         <span class="c1"># check if pump currently exists in database</span>
-        <span class="n">exists</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_pump</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">impeller</span><span class="p">)</span>
+        <span class="n">exists</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">search_pump</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">impeller</span><span class="p">)</span>
         
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">exists</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">sqlinsert</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39;INSERT INTO </span>
@@ -363,7 +363,7 @@
 <span class="sd">           &gt;&gt;&gt; pump_2.load_pump(&#39;Goulds&#39;, &#39;3657 1.5x2 -6: 3SS&#39;)</span>
 
 <span class="sd">           &#39;&#39;&#39;</span>
-        <span class="n">multiples</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_pump</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">impeller</span><span class="p">)</span>
+        <span class="n">multiples</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">search_pump</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">impeller</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="n">multiples</span><span class="p">)</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">multiples</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Pump does not exist in database.&#39;</span><span class="p">)</span>
