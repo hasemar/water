@@ -116,7 +116,10 @@ fitting_dict = {
         'mitered_5' : [1.5, 800, 0.25]
     },
     'elbow_45' : {
-        'standard' : [1, 500, 0.20],
+        'stardard_threaded' : [1, 500, 0.2],
+        'stardard_glued' : [1, 500, 0.2],
+        'standard_flanged' : [1, 500, 0.2],
+        'standard' : [1, 500, 0.2],
         'long_radius' : [1.5, 500, 0.15],
         'mitered_1' : [None, 500, 0.25],
         'mitered_2' : [None, 500, 0.15]
