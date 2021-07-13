@@ -164,6 +164,7 @@
 
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span><span class="p">,</span> <span class="n">division</span>
 <span class="kn">from</span> <span class="nn">math</span> <span class="k">import</span> <span class="n">pi</span><span class="p">,</span> <span class="n">acos</span><span class="p">,</span> <span class="n">sqrt</span><span class="p">,</span> <span class="n">ceil</span><span class="p">,</span> <span class="n">exp</span>
+<span class="kn">from</span> <span class="nn">Water</span> <span class="k">import</span> <span class="n">Imperial_properties</span> <span class="k">as</span> <span class="n">WATER</span>
 
 <div class="viewcode-block" id="coeffs"><a class="viewcode-back" href="../code_reference.html#tools.coeffs">[docs]</a><span class="k">def</span> <span class="nf">coeffs</span><span class="p">(</span><span class="n">num_ERUs</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;C and F coefficients from  the `2019 DOH Water System Design Manual Table 3-1 &lt;https://www.doh.wa.gov/Portals/1/Documents/Pubs/331-123.pdf?ver=2019-10-03-153237-220#page=51&gt;`__ </span>
@@ -403,7 +404,7 @@
 
     <span class="k">return</span> <span class="n">pipe_diam</span></div>
 
-<div class="viewcode-block" id="reynolds"><a class="viewcode-back" href="../code_reference.html#tools.reynolds">[docs]</a><span class="k">def</span> <span class="nf">reynolds</span><span class="p">(</span><span class="n">pipe_diam</span><span class="p">,</span> <span class="n">flow</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vel</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">viscocity</span><span class="o">=</span><span class="mf">1.407E-5</span><span class="p">):</span>
+<div class="viewcode-block" id="reynolds"><a class="viewcode-back" href="../code_reference.html#tools.reynolds">[docs]</a><span class="k">def</span> <span class="nf">reynolds</span><span class="p">(</span><span class="n">pipe_diam</span><span class="p">,</span> <span class="n">flow</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vel</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">viscocity</span><span class="o">=</span><span class="n">WATER</span><span class="o">.</span><span class="n">kinematic_viscosity</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;Reynolds Number Calculation</span>
 
 <span class="sd">    .. math:: </span>
@@ -528,12 +529,12 @@
     <span class="k">return</span> <span class="n">gallons</span> <span class="o">*</span> <span class="mi">231</span></div>
 
 <div class="viewcode-block" id="minor_loss"><a class="viewcode-back" href="../code_reference.html#tools.minor_loss">[docs]</a><span class="k">def</span> <span class="nf">minor_loss</span><span class="p">(</span><span class="n">velocity</span><span class="p">,</span> <span class="n">k_val</span> <span class="p">):</span>
-    <span class="sd">&#39;&#39;&#39; minor head loss using the `Darcy-Weisbach equation`_  </span>
+    <span class="sd">&#39;&#39;&#39; Uses `Minor Loss Equation`_ to calculate minor head loss through fittings in fittings_list.  </span>
 <span class="sd">        </span>
-<span class="sd">    .. _Darcy-Weisbach equation: https://en.wikipedia.org/wiki/Darcy%E2%80%93Weisbach_equation   </span>
+<span class="sd">        .. _Minor Loss Equation: https://en.wikipedia.org/wiki/Minor_losses_in_pipe_flow#Minor_Losses   </span>
 
-<span class="sd">    .. math:: h_{minor} = f_D \\cdot \\frac{1}{2g} \\cdot \\frac{v^2}{D}</span>
-<span class="sd">    </span>
+<span class="sd">        .. math:: h_{minor} = K_L\\cdot \\frac{v^2}{2g}      </span>
+
 <span class="sd">    :param velocity: velocity (fps)</span>
 <span class="sd">    :param k_val: K value</span>
 <span class="sd">    :type velocity: int/float</span>
@@ -542,8 +543,14 @@
 <span class="sd">    :rtype: float</span>
 
 <span class="sd">     &#39;&#39;&#39;</span>
-    <span class="n">g</span> <span class="o">=</span> <span class="mf">32.2</span>
-    <span class="k">return</span> <span class="n">k_val</span> <span class="o">*</span> <span class="n">velocity</span><span class="o">**</span><span class="mi">2</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">g</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">k_val</span> <span class="o">*</span> <span class="n">velocity</span><span class="o">**</span><span class="mi">2</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">WATER</span><span class="o">.</span><span class="n">g</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="kinetic_loss"><a class="viewcode-back" href="../code_reference.html#tools.kinetic_loss">[docs]</a><span class="k">def</span> <span class="nf">kinetic_loss</span><span class="p">(</span><span class="n">velocity</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;calculate the kinetic loss term in the bernoulli equation</span>
+<span class="sd">        </span>
+<span class="sd">        ..math:: \\frac{v^2}{2g}</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">return</span> <span class="n">velocity</span><span class="o">**</span><span class="mi">2</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">WATER</span><span class="o">.</span><span class="n">g</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="ft2psi"><a class="viewcode-back" href="../code_reference.html#tools.ft2psi">[docs]</a><span class="k">def</span> <span class="nf">ft2psi</span><span class="p">(</span><span class="n">ft_of_head</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;feet of head to pounds per square inch (psi) conversion</span>
@@ -796,13 +803,12 @@
 <span class="sd">    :rtype: float</span>
 
 <span class="sd">    &#39;&#39;&#39;</span>
-    <span class="n">g</span> <span class="o">=</span> <span class="mf">32.2</span>
     
     <span class="k">if</span> <span class="n">headloss</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">K</span><span class="p">:</span>
-        <span class="n">K</span> <span class="o">=</span> <span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">g</span><span class="o">*</span><span class="n">headloss</span><span class="p">)</span><span class="o">/</span><span class="n">velocity</span><span class="o">**</span><span class="mi">2</span>
+        <span class="n">K</span> <span class="o">=</span> <span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">WATER</span><span class="o">.</span><span class="n">g</span><span class="o">*</span><span class="n">headloss</span><span class="p">)</span><span class="o">/</span><span class="n">velocity</span><span class="o">**</span><span class="mi">2</span>
         <span class="k">return</span> <span class="n">K</span>
     <span class="k">elif</span> <span class="n">K</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">headloss</span><span class="p">:</span>
-        <span class="n">headloss</span> <span class="o">=</span> <span class="n">K</span> <span class="o">*</span> <span class="p">(</span><span class="n">velocity</span><span class="o">**</span><span class="mi">2</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">g</span><span class="p">))</span>
+        <span class="n">headloss</span> <span class="o">=</span> <span class="n">K</span> <span class="o">*</span> <span class="p">(</span><span class="n">velocity</span><span class="o">**</span><span class="mi">2</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">WATER</span><span class="o">.</span><span class="n">g</span><span class="p">))</span>
         <span class="k">return</span> <span class="n">headloss</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;must enter headloss or K value&#39;</span><span class="p">)</span></div>
@@ -938,8 +944,8 @@
     <span class="n">water2_p</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">calc_hp</span><span class="p">(</span><span class="mi">230</span><span class="p">,</span><span class="mi">50</span><span class="p">)</span>
 
     <span class="c1"># Flow and Velocity Calcs</span>
-    <span class="n">Q</span> <span class="o">=</span> <span class="mi">150</span> <span class="c1"># gpm</span>
-    <span class="n">d</span> <span class="o">=</span> <span class="mi">3</span>  <span class="c1"># inches</span>
+    <span class="n">Q</span> <span class="o">=</span> <span class="mi">50</span> <span class="c1"># gpm</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="mi">6</span>  <span class="c1"># inches</span>
 
     <span class="n">v</span> <span class="o">=</span> <span class="n">velocity</span><span class="p">(</span><span class="n">Q</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span>
     <span class="n">q_func</span> <span class="o">=</span> <span class="n">flow</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span>
@@ -967,7 +973,7 @@
 
     <span class="c1"># output string</span>
     <span class="n">out</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39;</span>
-<span class="s1">        PHD = </span><span class="si">{0:.2f}</span><span class="s1"> gmp</span>
+<span class="s1">        PHD = </span><span class="si">{0:.2f}</span><span class="s1"> gpm</span>
 <span class="s1">        PHD2_raw = </span><span class="si">{1:f}</span><span class="s1"></span>
 <span class="s1">        hp_w1 = </span><span class="si">{2:.2f}</span><span class="s1"> hp</span>
 <span class="s1">        hp_b1 = </span><span class="si">{3:.2f}</span><span class="s1"> hp</span>

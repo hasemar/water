@@ -162,39 +162,42 @@
 <span class="sd">    used in fluid mechanics in SI units</span>
 <span class="sd">&#39;&#39;&#39;</span>
 
-<span class="c1"># H20 properties in SI units @ 20 deg celcius</span>
+<span class="c1"># H20 properties in SI units @ 10 deg celcius</span>
 
-<span class="n">density</span> <span class="o">=</span> <span class="mi">1000</span>                  <span class="c1"># kg/m^3</span>
+<span class="n">density</span> <span class="o">=</span> <span class="mf">999.7</span>                  <span class="c1"># kg/m^3</span>
 <span class="n">specific_weight</span> <span class="o">=</span> <span class="mi">9807</span>          <span class="c1"># N/m*3</span>
-<span class="n">dynamic_viscosity</span> <span class="o">=</span> <span class="mf">1.002e-3</span>    <span class="c1"># N*sec/m^2</span>
-<span class="n">kinematic_viscosity</span> <span class="o">=</span> <span class="mf">1.004e-6</span>  <span class="c1"># m^2/s</span>
+<span class="n">dynamic_viscosity</span> <span class="o">=</span> <span class="mf">1.31e-3</span>    <span class="c1"># N*sec/m^2</span>
+<span class="n">kinematic_viscosity</span> <span class="o">=</span> <span class="mf">1.31e-6</span>  <span class="c1"># m^2/s</span>
 <span class="n">boiling_point</span> <span class="o">=</span> <span class="mi">100</span>             <span class="c1"># C </span>
 <span class="n">freezing_point</span> <span class="o">=</span> <span class="mi">0</span>               <span class="c1"># C</span>
-<span class="n">vapor_pressure</span> <span class="o">=</span> <span class="mf">2.338e3</span>        <span class="c1"># N/m*2 (absolute)</span>
+<span class="n">vapor_pressure</span> <span class="o">=</span> <span class="mf">1.23e3</span>        <span class="c1"># N/m*2 (absolute)</span>
 <span class="n">speed_of_sound</span> <span class="o">=</span> <span class="mi">1481</span>           <span class="c1"># m/s</span>
+<span class="n">g</span> <span class="o">=</span> <span class="mf">9.81</span>                        <span class="c1"># m/s^2</span>
 
 <div class="viewcode-block" id="unit_info"><a class="viewcode-back" href="../code_reference.html#SI_properties.unit_info">[docs]</a><span class="k">def</span> <span class="nf">unit_info</span><span class="p">():</span>
     <span class="sd">&#39;&#39;&#39;Displays default unit information</span>
 
-<span class="sd">    - density = 1000 kg/m^3</span>
+<span class="sd">    - density = 999.7 kg/m^3</span>
 <span class="sd">    - specific_weight = 9807 N/m*3</span>
-<span class="sd">    - dynamic_viscosity = 1.002e-3  N*sec/m^2</span>
-<span class="sd">    - kinematic_viscosity = 1.004e-6  m^2/s</span>
+<span class="sd">    - dynamic_viscosity = 1.31e-3  N*sec/m^2</span>
+<span class="sd">    - kinematic_viscosity = 1.31e-6  m^2/s</span>
 <span class="sd">    - boiling_point = 100 C </span>
 <span class="sd">    - freezing_point = 0 C</span>
-<span class="sd">    - vapor_pressure = 2.338e3 N/m*2 (absolute)</span>
+<span class="sd">    - vapor_pressure = 1.23e3 N/m*2 (absolute)</span>
 <span class="sd">    - speed_of_sound = 1481 m/s</span>
+<span class="sd">    - g = 9.81 m/s^2</span>
 
 <span class="sd">    &#39;&#39;&#39;</span>
     <span class="n">info</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39;</span>
-<span class="s1">            density = 1000 kg/m^3</span>
+<span class="s1">            density = 999.7 kg/m^3</span>
 <span class="s1">            specific_weight = 9807 N/m*3</span>
-<span class="s1">            dynamic_viscosity = 1.002e-3 N*sec/m^2</span>
-<span class="s1">            kinematic_viscosity = 1.004e-6 m^2/s</span>
+<span class="s1">            dynamic_viscosity = 1.31e-3 N*sec/m^2</span>
+<span class="s1">            kinematic_viscosity = 1.31e-6 m^2/s</span>
 <span class="s1">            boiling_point = 100 C </span>
 <span class="s1">            melting_point = 0 C</span>
-<span class="s1">            vapor_pressure = 2.338e3 Pa (absolute)</span>
+<span class="s1">            vapor_pressure = 1.23e3 Pa (absolute)</span>
 <span class="s1">            speed_of_sound = 1481 m/s</span>
+<span class="s1">            g = 9.81 m/s^2</span>
 <span class="s1">        &#39;&#39;&#39;</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">info</span><span class="p">)</span>
     <span class="k">return</span></div>

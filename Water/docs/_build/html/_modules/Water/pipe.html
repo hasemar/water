@@ -274,7 +274,10 @@
         <span class="s1">&#39;mitered_5&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="mf">1.5</span><span class="p">,</span> <span class="mi">800</span><span class="p">,</span> <span class="mf">0.25</span><span class="p">]</span>
     <span class="p">},</span>
     <span class="s1">&#39;elbow_45&#39;</span> <span class="p">:</span> <span class="p">{</span>
-        <span class="s1">&#39;standard&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="mf">0.20</span><span class="p">],</span>
+        <span class="s1">&#39;stardard_threaded&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">],</span>
+        <span class="s1">&#39;stardard_glued&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">],</span>
+        <span class="s1">&#39;standard_flanged&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">],</span>
+        <span class="s1">&#39;standard&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">],</span>
         <span class="s1">&#39;long_radius&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="mf">1.5</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="mf">0.15</span><span class="p">],</span>
         <span class="s1">&#39;mitered_1&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="mf">0.25</span><span class="p">],</span>
         <span class="s1">&#39;mitered_2&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="mf">0.15</span><span class="p">]</span>
@@ -517,11 +520,11 @@
         <span class="k">return</span> <span class="n">h</span></div>
 
 <div class="viewcode-block" id="Pipe.minor_loss"><a class="viewcode-back" href="../../code_reference.html#Water.Pipe.minor_loss">[docs]</a>    <span class="k">def</span> <span class="nf">minor_loss</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">flow</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39;Uses `Darcy-Weisbach equation`_ to calculate minor head loss through fittings in fittings_list.  </span>
+        <span class="sd">&#39;&#39;&#39;Uses `Minor Loss Equation`_ to calculate minor head loss through fittings in fittings_list.  </span>
 <span class="sd">        </span>
-<span class="sd">           .. _Darcy-Weisbach equation: https://en.wikipedia.org/wiki/Darcy%E2%80%93Weisbach_equation   </span>
+<span class="sd">           .. _Minor Loss Equation: https://en.wikipedia.org/wiki/Minor_losses_in_pipe_flow#Minor_Losses   </span>
 
-<span class="sd">           .. math:: h_{minor} = f_D \\cdot \\frac{1}{2g} \\cdot \\frac{v^2}{D}     </span>
+<span class="sd">           .. math:: h_{minor} = K_L\\cdot \\frac{v^2}{2g}      </span>
 
 <span class="sd">           :param flow: flow in gallons per minute (gpm)  </span>
 <span class="sd">           :type flow: int  </span>

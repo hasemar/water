@@ -172,13 +172,20 @@
 <div class="viewcode-block" id="Pump"><a class="viewcode-back" href="../../code_reference.html#Water.Pump">[docs]</a><span class="k">class</span> <span class="nc">Pump</span><span class="p">:</span>
     <span class="sd">&#39;&#39;&#39;Defines Pump object to plot and/or affinitized pump curve and performance  </span>
 <span class="sd">       </span>
+<span class="sd">       :param target_flow: target flow (gpm), *default None*</span>
+<span class="sd">       :type target_flow: int</span>
+<span class="sd">       :param target_head: target head (feet of water) *default None*</span>
+<span class="sd">       :type target_head: int</span>
+
 <span class="sd">       :Example:  </span>
 
 <span class="sd">       &gt;&gt;&gt; from Water import Pump</span>
-<span class="sd">       &gt;&gt;&gt; pump_1 = Pump()</span>
-
+<span class="sd">       &gt;&gt;&gt; pump_1 = Pump(target_flow=100, target_head=250)</span>
+<span class="sd">       </span>
 <span class="sd">    &#39;&#39;&#39;</span>     
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target_flow</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">target_head</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">target_flow</span> <span class="o">=</span> <span class="n">target_flow</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">target_head</span> <span class="o">=</span> <span class="n">target_head</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">flow</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">head</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">eff</span> <span class="o">=</span> <span class="p">[]</span>

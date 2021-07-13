@@ -6,6 +6,7 @@ design aspects
 
 from __future__ import print_function, division
 from math import pi, acos, sqrt, ceil, exp
+from Water import Imperial_properties as WATER
 
 def coeffs(num_ERUs):
     '''C and F coefficients from  the `2019 DOH Water System Design Manual Table 3-1 <https://www.doh.wa.gov/Portals/1/Documents/Pubs/331-123.pdf?ver=2019-10-03-153237-220#page=51>`__ 
@@ -245,7 +246,7 @@ def pipeDiameter(flow, velocity):
 
     return pipe_diam
 
-def reynolds(pipe_diam, flow=None, vel=None, viscocity=1.407E-5):
+def reynolds(pipe_diam, flow=None, vel=None, viscocity=WATER.kinematic_viscosity):
     '''Reynolds Number Calculation
 
     .. math:: 
@@ -370,12 +371,12 @@ def gal2cuin(gallons):
     return gallons * 231
 
 def minor_loss(velocity, k_val ):
-    ''' minor head loss using the `Darcy-Weisbach equation`_  
+    ''' Uses `Minor Loss Equation`_ to calculate minor head loss through fittings in fittings_list.  
         
-    .. _Darcy-Weisbach equation: https://en.wikipedia.org/wiki/Darcy%E2%80%93Weisbach_equation   
+        .. _Minor Loss Equation: https://en.wikipedia.org/wiki/Minor_losses_in_pipe_flow#Minor_Losses   
 
-    .. math:: h_{minor} = f_D \\cdot \\frac{1}{2g} \\cdot \\frac{v^2}{D}
-    
+        .. math:: h_{minor} = K_L\\cdot \\frac{v^2}{2g}      
+
     :param velocity: velocity (fps)
     :param k_val: K value
     :type velocity: int/float
@@ -384,8 +385,14 @@ def minor_loss(velocity, k_val ):
     :rtype: float
 
      '''
-    g = 32.2
-    return k_val * velocity**2/(2*g)
+    return k_val * velocity**2/(2*WATER.g)
+
+def kinetic_loss(velocity):
+    '''calculate the kinetic loss term in the bernoulli equation
+        
+        ..math:: \\frac{v^2}{2g}
+    '''
+    return velocity**2/(2*WATER.g)
 
 def ft2psi(ft_of_head):
     '''feet of head to pounds per square inch (psi) conversion
@@ -638,13 +645,12 @@ def resistance(velocity=None, headloss=None, K=None):
     :rtype: float
 
     '''
-    g = 32.2
     
     if headloss and not K:
-        K = (2*g*headloss)/velocity**2
+        K = (2*WATER.g*headloss)/velocity**2
         return K
     elif K and not headloss:
-        headloss = K * (velocity**2/(2*g))
+        headloss = K * (velocity**2/(2*WATER.g))
         return headloss
     else:
         print('must enter headloss or K value')
@@ -780,8 +786,8 @@ if __name__=="__main__":
     water2_p, _, _ = calc_hp(230,50)
 
     # Flow and Velocity Calcs
-    Q = 150 # gpm
-    d = 3  # inches
+    Q = 50 # gpm
+    d = 6  # inches
 
     v = velocity(Q, d)
     q_func = flow(v, d)
@@ -809,7 +815,7 @@ if __name__=="__main__":
 
     # output string
     out = '''
-        PHD = {0:.2f} gmp
+        PHD = {0:.2f} gpm
         PHD2_raw = {1:f}
         hp_w1 = {2:.2f} hp
         hp_b1 = {3:.2f} hp

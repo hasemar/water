@@ -165,36 +165,39 @@
 <span class="c1"># H20 properties in imperial units @ 50 deg celcius</span>
 
 <span class="n">density</span> <span class="o">=</span> <span class="mf">1.94</span>                  <span class="c1"># slugs/ft^3</span>
-<span class="n">specific_weight</span> <span class="o">=</span> <span class="mf">62.41</span>         <span class="c1"># lb/ft^3</span>
+<span class="n">specific_weight</span> <span class="o">=</span> <span class="mf">62.4</span>         <span class="c1"># lbf/ft^3</span>
 <span class="n">dynamic_viscosity</span> <span class="o">=</span> <span class="mf">2.73e-5</span>     <span class="c1"># lb*s/ft^2</span>
 <span class="n">kinematic_viscosity</span> <span class="o">=</span> <span class="mf">1.407e-5</span>  <span class="c1"># ft^2/s</span>
 <span class="n">boiling_point</span> <span class="o">=</span> <span class="mi">212</span>             <span class="c1"># F </span>
 <span class="n">freezing_point</span> <span class="o">=</span> <span class="mi">32</span>              <span class="c1"># F</span>
 <span class="n">vapor_pressure</span> <span class="o">=</span> <span class="mf">1.781e-1</span>       <span class="c1"># psi (absolute)</span>
 <span class="n">speed_of_sound</span> <span class="o">=</span> <span class="mi">4748</span>           <span class="c1"># ft/s</span>
+<span class="n">g</span> <span class="o">=</span> <span class="mf">32.2</span>                        <span class="c1"># ft/s^2</span>
 
 <div class="viewcode-block" id="unit_info"><a class="viewcode-back" href="../code_reference.html#Imperial_properties.unit_info">[docs]</a><span class="k">def</span> <span class="nf">unit_info</span><span class="p">():</span>
     <span class="sd">&#39;&#39;&#39;Displays default unit information.\n</span>
 <span class="sd">    - density = 1.94 slugs/ft^3</span>
-<span class="sd">    - specific_weight = 62.41 lb/ft^3</span>
+<span class="sd">    - specific_weight = 62.4 lb/ft^3</span>
 <span class="sd">    - dynamic_viscosity = 2.73e-5 lb*s/ft^2</span>
 <span class="sd">    - kinematic_viscosity = 1.407e-5 ft^2/s</span>
 <span class="sd">    - boiling_point = 212 F </span>
 <span class="sd">    - freezing_point = 32 F</span>
 <span class="sd">    - vapor_pressure = 1.781e-1 psia</span>
 <span class="sd">    - speed_of_sound = 4748 ft/s</span>
+<span class="sd">    - g = 32.2 ft/s^2</span>
 
 <span class="sd">    &#39;&#39;&#39;</span>
     
     <span class="n">info</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39;</span>
 <span class="s1">            density = 1.94 slugs/ft^3</span>
-<span class="s1">            specific_weight = 62.41 lb/ft^3</span>
+<span class="s1">            specific_weight = 62.4 lb/ft^3</span>
 <span class="s1">            dynamic_viscosity = 2.73e-5 lb*s/ft^2</span>
 <span class="s1">            kinematic_viscosity = 1.407e-5 ft^2/s</span>
 <span class="s1">            boiling_point = 212 F </span>
 <span class="s1">            melting_point = 32 F</span>
 <span class="s1">            vapor_pressure = 1.781e-1 psia</span>
 <span class="s1">            speed_of_sound = 4748 ft/s</span>
+<span class="s1">            g = 32.2 ft/s^2</span>
 <span class="s1">        &#39;&#39;&#39;</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">info</span><span class="p">)</span>
     <span class="k">return</span></div>

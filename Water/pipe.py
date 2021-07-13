@@ -8,6 +8,7 @@ and calculate losses.
 
 from __future__ import print_function
 import Water.tools as tools
+from Water import Imperial_properties as WATER
 import sqlite3
 from os import path
 
@@ -362,11 +363,11 @@ class Pipe:
         return h
 
     def minor_loss(self, flow):
-        '''Uses `Darcy-Weisbach equation`_ to calculate minor head loss through fittings in fittings_list.  
+        '''Uses `Minor Loss Equation`_ to calculate minor head loss through fittings in fittings_list.  
         
-           .. _Darcy-Weisbach equation: https://en.wikipedia.org/wiki/Darcy%E2%80%93Weisbach_equation   
+           .. _Minor Loss Equation: https://en.wikipedia.org/wiki/Minor_losses_in_pipe_flow#Minor_Losses   
 
-           .. math:: h_{minor} = f_D \\cdot \\frac{1}{2g} \\cdot \\frac{v^2}{D}     
+           .. math:: h_{minor} = K_L\\cdot \\frac{v^2}{2g}      
 
            :param flow: flow in gallons per minute (gpm)  
            :type flow: int  
@@ -380,12 +381,11 @@ class Pipe:
                3.0168... 
 
            '''
-        g = 32.2   # gravity in fps
         vel = tools.velocity(flow, self.inner_diameter)
         minor_loss = 0
         if len(self.fitting_list) > 0:
             for fitting in self.fitting_list:
-                loss = fitting[2]*vel**2/(2*g) * fitting[3]
+                loss = fitting[2]*vel**2/(2*WATER.g) * fitting[3]
                 minor_loss += loss
         return minor_loss
 

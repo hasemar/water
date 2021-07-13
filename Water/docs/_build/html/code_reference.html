@@ -410,9 +410,9 @@ on the tutorials page.</p>
 <dl class="method">
 <dt id="Water.Pipe.minor_loss">
 <code class="descname">minor_loss</code><span class="sig-paren">(</span><em>flow</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Water/pipe.html#Pipe.minor_loss"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Water.Pipe.minor_loss" title="Permalink to this definition">¶</a></dt>
-<dd><p>Uses <a class="reference external" href="https://en.wikipedia.org/wiki/Darcy%E2%80%93Weisbach_equation">Darcy-Weisbach equation</a> to calculate minor head loss through fittings in fittings_list.</p>
+<dd><p>Uses <a class="reference external" href="https://en.wikipedia.org/wiki/Minor_losses_in_pipe_flow#Minor_Losses">Minor Loss Equation</a> to calculate minor head loss through fittings in fittings_list.</p>
 <div class="math notranslate nohighlight">
-\[h_{minor} = f_D \cdot \frac{1}{2g} \cdot \frac{v^2}{D}\]</div>
+\[h_{minor} = K_L\cdot \frac{v^2}{2g}\]</div>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -672,19 +672,25 @@ on the tutorials page.</p>
 <hr class="docutils" />
 <dl class="class">
 <dt id="Water.Pump">
-<em class="property">class </em><code class="descclassname">Water.</code><code class="descname">Pump</code><a class="reference internal" href="_modules/Water/pumps.html#Pump"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Water.Pump" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">Water.</code><code class="descname">Pump</code><span class="sig-paren">(</span><em>target_flow=None</em>, <em>target_head=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Water/pumps.html#Pump"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Water.Pump" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Defines Pump object to plot and/or affinitized pump curve and performance</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Example:</th><td class="field-body"></td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>target_flow</strong> (<em>int</em>) – target flow (gpm), <em>default None</em></li>
+<li><strong>target_head</strong> (<em>int</em>) – target head (feet of water) <em>default None</em></li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Example:</th><td class="field-body"></td>
 </tr>
 </tbody>
 </table>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">Water</span> <span class="k">import</span> <span class="n">Pump</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">pump_1</span> <span class="o">=</span> <span class="n">Pump</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pump_1</span> <span class="o">=</span> <span class="n">Pump</span><span class="p">(</span><span class="n">target_flow</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">target_head</span><span class="o">=</span><span class="mi">250</span><span class="p">)</span>
 </pre></div>
 </div>
 <dl class="method">
@@ -1668,9 +1674,11 @@ design aspects</p>
 <dl class="function">
 <dt id="tools.minor_loss">
 <code class="descclassname">tools.</code><code class="descname">minor_loss</code><span class="sig-paren">(</span><em>velocity</em>, <em>k_val</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tools.html#minor_loss"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tools.minor_loss" title="Permalink to this definition">¶</a></dt>
-<dd><p>minor head loss using the <a class="reference external" href="https://en.wikipedia.org/wiki/Darcy%E2%80%93Weisbach_equation">Darcy-Weisbach equation</a></p>
-<div class="math notranslate nohighlight">
-\[h_{minor} = f_D \cdot \frac{1}{2g} \cdot \frac{v^2}{D}\]</div>
+<dd><p>Uses <a class="reference external" href="https://en.wikipedia.org/wiki/Minor_losses_in_pipe_flow#Minor_Losses">Minor Loss Equation</a> to calculate minor head loss through fittings in fittings_list.</p>
+<blockquote>
+<div><div class="math notranslate nohighlight">
+\[h_{minor} = K_L\cdot \frac{v^2}{2g}\]</div>
+</div></blockquote>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -1689,6 +1697,13 @@ design aspects</p>
 </tr>
 </tbody>
 </table>
+</dd></dl>
+
+<dl class="function">
+<dt id="tools.kinetic_loss">
+<code class="descclassname">tools.</code><code class="descname">kinetic_loss</code><span class="sig-paren">(</span><em>velocity</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tools.html#kinetic_loss"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tools.kinetic_loss" title="Permalink to this definition">¶</a></dt>
+<dd><p>calculate the kinetic loss term in the bernoulli equation</p>
+<p>..math:: frac{v^2}{2g}</p>
 </dd></dl>
 
 <dl class="function">
@@ -2066,14 +2081,15 @@ used in fluid mechanics in SI units</dd>
 <code class="descclassname">SI_properties.</code><code class="descname">unit_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/SI_properties.html#unit_info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SI_properties.unit_info" title="Permalink to this definition">¶</a></dt>
 <dd><p>Displays default unit information</p>
 <ul class="simple">
-<li>density = 1000 kg/m^3</li>
+<li>density = 999.7 kg/m^3</li>
 <li>specific_weight = 9807 N/m*3</li>
-<li>dynamic_viscosity = 1.002e-3  N*sec/m^2</li>
-<li>kinematic_viscosity = 1.004e-6  m^2/s</li>
+<li>dynamic_viscosity = 1.31e-3  N*sec/m^2</li>
+<li>kinematic_viscosity = 1.31e-6  m^2/s</li>
 <li>boiling_point = 100 C</li>
 <li>freezing_point = 0 C</li>
-<li>vapor_pressure = 2.338e3 N/m*2 (absolute)</li>
+<li>vapor_pressure = 1.23e3 N/m*2 (absolute)</li>
 <li>speed_of_sound = 1481 m/s</li>
+<li>g = 9.81 m/s^2</li>
 </ul>
 </dd></dl>
 
@@ -2090,13 +2106,14 @@ used in fluid mechanics in english units</dd>
 <dd><p>Displays default unit information.</p>
 <ul class="simple">
 <li>density = 1.94 slugs/ft^3</li>
-<li>specific_weight = 62.41 lb/ft^3</li>
+<li>specific_weight = 62.4 lb/ft^3</li>
 <li>dynamic_viscosity = 2.73e-5 lb*s/ft^2</li>
 <li>kinematic_viscosity = 1.407e-5 ft^2/s</li>
 <li>boiling_point = 212 F</li>
 <li>freezing_point = 32 F</li>
 <li>vapor_pressure = 1.781e-1 psia</li>
 <li>speed_of_sound = 4748 ft/s</li>
+<li>g = 32.2 ft/s^2</li>
 </ul>
 </dd></dl>
 
