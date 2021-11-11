@@ -166,6 +166,7 @@
 
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
 <span class="kn">import</span> <span class="nn">Water.tools</span> <span class="k">as</span> <span class="nn">tools</span>
+<span class="kn">from</span> <span class="nn">Water</span> <span class="k">import</span> <span class="n">Imperial_properties</span> <span class="k">as</span> <span class="n">WATER</span>
 <span class="kn">import</span> <span class="nn">sqlite3</span>
 <span class="kn">from</span> <span class="nn">os</span> <span class="k">import</span> <span class="n">path</span>
 
@@ -194,7 +195,8 @@
         <span class="mi">4</span> <span class="p">:</span> <span class="p">[</span><span class="mf">4.5</span><span class="p">,</span> <span class="mf">0.237</span><span class="p">],</span>
         <span class="mi">6</span> <span class="p">:</span> <span class="p">[</span><span class="mf">6.625</span><span class="p">,</span> <span class="mf">0.28</span><span class="p">],</span>
         <span class="mi">8</span> <span class="p">:</span> <span class="p">[</span><span class="mf">8.625</span><span class="p">,</span> <span class="mf">0.322</span><span class="p">],</span>
-        <span class="mi">10</span> <span class="p">:</span> <span class="p">[</span><span class="mf">10.75</span><span class="p">,</span> <span class="mf">0.365</span><span class="p">]</span>
+        <span class="mi">10</span> <span class="p">:</span> <span class="p">[</span><span class="mf">10.75</span><span class="p">,</span> <span class="mf">0.365</span><span class="p">],</span>
+        <span class="mi">12</span> <span class="p">:</span> <span class="p">[</span><span class="mf">12.75</span><span class="p">,</span> <span class="mf">0.43</span><span class="p">]</span>        
     <span class="p">},</span>
     <span class="mi">80</span> <span class="p">:</span> <span class="p">{</span>
         <span class="mi">1</span> <span class="p">:</span> <span class="p">[</span><span class="mf">1.315</span><span class="p">,</span> <span class="mf">0.179</span><span class="p">],</span>
@@ -206,7 +208,8 @@
         <span class="mi">4</span> <span class="p">:</span> <span class="p">[</span><span class="mf">4.5</span><span class="p">,</span> <span class="mf">0.337</span><span class="p">],</span>
         <span class="mi">6</span> <span class="p">:</span> <span class="p">[</span><span class="mf">6.625</span><span class="p">,</span> <span class="mf">0.432</span><span class="p">],</span>
         <span class="mi">8</span> <span class="p">:</span> <span class="p">[</span><span class="mf">8.625</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">],</span>
-        <span class="mi">10</span> <span class="p">:</span> <span class="p">[</span><span class="mf">10.75</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">]</span>
+        <span class="mi">10</span> <span class="p">:</span> <span class="p">[</span><span class="mf">10.75</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">],</span>
+        <span class="mi">12</span> <span class="p">:</span> <span class="p">[</span><span class="mf">12.75</span><span class="p">,</span> <span class="mf">0.728</span><span class="p">]</span>
     <span class="p">},</span>
     <span class="mi">52</span> <span class="p">:</span> <span class="p">{</span>
         <span class="mi">3</span> <span class="p">:</span> <span class="p">[</span><span class="mf">3.96</span><span class="p">,</span> <span class="mf">0.28</span><span class="p">],</span>
@@ -351,24 +354,23 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">outer_diameter</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39; outer diameter pipe property&#39;&#39;&#39;</span>
+        <span class="sd">&#39;&#39;&#39; outer diameter pipe property (inches) &#39;&#39;&#39;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">inner_diameter</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39;inner diameter pipe property&#39;&#39;&#39;</span>
+        <span class="sd">&#39;&#39;&#39;inner diameter pipe property (inches) &#39;&#39;&#39;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">outer_diameter</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">dims</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">volume</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39;pipe volume property&#39;&#39;&#39;</span>
+        <span class="sd">&#39;&#39;&#39;pipe volume property (cuft) &#39;&#39;&#39;</span>
         <span class="k">return</span> <span class="n">tools</span><span class="o">.</span><span class="n">volume_cyl</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">inner_diameter</span><span class="o">/</span><span class="mi">12</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">length</span><span class="p">)</span>
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">area</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39;pipe cross-sectional area property</span>
-<span class="sd">           &#39;&#39;&#39;</span>
+        <span class="sd">&#39;&#39;&#39;pipe cross-sectional area property (sqft) &#39;&#39;&#39;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">volume</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">length</span>
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">c_factor</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39;:pipe material C-factor property&#39;&#39;&#39;</span>
+        <span class="sd">&#39;&#39;&#39;:pipe material C-factor for Hazen-Williams eq. property&#39;&#39;&#39;</span>
         <span class="k">return</span> <span class="n">c_dict</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">kind</span><span class="p">]</span>
 
 <div class="viewcode-block" id="Pipe.search_material"><a class="viewcode-back" href="../../code_reference.html#Water.Pipe.search_material">[docs]</a>    <span class="k">def</span> <span class="nf">search_material</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">material</span><span class="p">,</span> <span class="n">coefficient</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -473,13 +475,13 @@
 
 <span class="sd">           :Example:</span>
 
-<span class="sd">           &gt;&gt;&gt; print(pipe.fitting_info())</span>
-<span class="sd">              Fittings list:</span>
+<span class="sd">           &gt;&gt;&gt; print(pipe.fitting_info())  </span>
+<span class="sd">           </span>
 <span class="sd">              elbow_90, standard_threaded: Kvalue = 0.899, qty = 2  </span>
 <span class="sd">              flow meter, flanged: Kvalue = 1.600, qty = 1</span>
 
 <span class="sd">            &#39;&#39;&#39;</span>
-        <span class="n">info</span> <span class="o">=</span> <span class="s1">&#39;Fittings list: </span><span class="se">\n</span><span class="s1">&#39;</span>
+        <span class="n">info</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
         <span class="k">for</span> <span class="n">fitting</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">fitting_list</span><span class="p">:</span>
             <span class="n">info</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">, </span><span class="si">{}</span><span class="s1">: Kvalue = </span><span class="si">{:.3f}</span><span class="s1">, qty = </span><span class="si">{}</span><span class="s1"> </span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">fitting</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
                                                      <span class="n">fitting</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
@@ -538,12 +540,11 @@
 <span class="sd">               3.0168... </span>
 
 <span class="sd">           &#39;&#39;&#39;</span>
-        <span class="n">g</span> <span class="o">=</span> <span class="mf">32.2</span>   <span class="c1"># gravity in fps</span>
         <span class="n">vel</span> <span class="o">=</span> <span class="n">tools</span><span class="o">.</span><span class="n">velocity</span><span class="p">(</span><span class="n">flow</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">inner_diameter</span><span class="p">)</span>
         <span class="n">minor_loss</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fitting_list</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">fitting</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">fitting_list</span><span class="p">:</span>
-                <span class="n">loss</span> <span class="o">=</span> <span class="n">fitting</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">*</span><span class="n">vel</span><span class="o">**</span><span class="mi">2</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">g</span><span class="p">)</span> <span class="o">*</span> <span class="n">fitting</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+                <span class="n">loss</span> <span class="o">=</span> <span class="n">fitting</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">*</span><span class="n">vel</span><span class="o">**</span><span class="mi">2</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">WATER</span><span class="o">.</span><span class="n">g</span><span class="p">)</span> <span class="o">*</span> <span class="n">fitting</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
                 <span class="n">minor_loss</span> <span class="o">+=</span> <span class="n">loss</span>
         <span class="k">return</span> <span class="n">minor_loss</span></div>
 

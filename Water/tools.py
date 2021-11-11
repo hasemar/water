@@ -246,7 +246,7 @@ def pipeDiameter(flow, velocity):
 
     return pipe_diam
 
-def reynolds(pipe_diam, flow=None, vel=None, viscocity=WATER.kinematic_viscosity):
+def reynolds(pipe_diam, flow=None, vel=None, viscosity=WATER.kinematic_viscosity):
     '''Reynolds Number Calculation
 
     .. math:: 
@@ -259,7 +259,7 @@ def reynolds(pipe_diam, flow=None, vel=None, viscocity=WATER.kinematic_viscosity
     :type flow: int/float
     :param vel: velocity (fps), *default None*
     :type vel: int/float
-    :param viscocity: kinematic viscocity of water (ft^2/s) *default 1.407E-5 ft^2/s*
+    :param viscosity: kinematic viscosity of water (ft^2/s) *default 1.407E-5 ft^2/s*
     :return: Reynolds Number
     :rtype: int
 

@@ -236,31 +236,31 @@ on the tutorials page.</p>
 <dl class="attribute">
 <dt id="Water.Pipe.outer_diameter">
 <code class="descname">outer_diameter</code><a class="headerlink" href="#Water.Pipe.outer_diameter" title="Permalink to this definition">¶</a></dt>
-<dd><p>outer diameter pipe property</p>
+<dd><p>outer diameter pipe property (inches)</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="Water.Pipe.inner_diameter">
 <code class="descname">inner_diameter</code><a class="headerlink" href="#Water.Pipe.inner_diameter" title="Permalink to this definition">¶</a></dt>
-<dd><p>inner diameter pipe property</p>
+<dd><p>inner diameter pipe property (inches)</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="Water.Pipe.volume">
 <code class="descname">volume</code><a class="headerlink" href="#Water.Pipe.volume" title="Permalink to this definition">¶</a></dt>
-<dd><p>pipe volume property</p>
+<dd><p>pipe volume property (cuft)</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="Water.Pipe.area">
 <code class="descname">area</code><a class="headerlink" href="#Water.Pipe.area" title="Permalink to this definition">¶</a></dt>
-<dd><p>pipe cross-sectional area property</p>
+<dd><p>pipe cross-sectional area property (sqft)</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="Water.Pipe.c_factor">
 <code class="descname">c_factor</code><a class="headerlink" href="#Water.Pipe.c_factor" title="Permalink to this definition">¶</a></dt>
-<dd><p>pipe material C-factor property</p>
+<dd><p>pipe material C-factor for Hazen-Williams eq. property</p>
 </dd></dl>
 
 <dl class="method">
@@ -360,11 +360,11 @@ on the tutorials page.</p>
 </tbody>
 </table>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">pipe</span><span class="o">.</span><span class="n">fitting_info</span><span class="p">())</span>
-<span class="go">   Fittings list:</span>
-<span class="go">   elbow_90, standard_threaded: Kvalue = 0.899, qty = 2</span>
-<span class="go">   flow meter, flanged: Kvalue = 1.600, qty = 1</span>
 </pre></div>
 </div>
+<blockquote>
+<div>elbow_90, standard_threaded: Kvalue = 0.899, qty = 2
+flow meter, flanged: Kvalue = 1.600, qty = 1</div></blockquote>
 </dd></dl>
 
 <dl class="method">
@@ -543,19 +543,19 @@ on the tutorials page.</p>
 <dl class="attribute">
 <dt id="Water.Tank.area">
 <code class="descname">area</code><a class="headerlink" href="#Water.Tank.area" title="Permalink to this definition">¶</a></dt>
-<dd><p>returns cross-sectional area of tank</p>
+<dd><p>returns cross-sectional area of tank in sqft</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="Water.Tank.vol">
 <code class="descname">vol</code><a class="headerlink" href="#Water.Tank.vol" title="Permalink to this definition">¶</a></dt>
-<dd><p>returns dry volume of tank</p>
+<dd><p>returns dry volume of tank in gallons</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="Water.Tank.useable">
 <code class="descname">useable</code><a class="headerlink" href="#Water.Tank.useable" title="Permalink to this definition">¶</a></dt>
-<dd><p>returns useable volume of tank</p>
+<dd><p>returns useable volume of tank in gallons</p>
 </dd></dl>
 
 <dl class="method">
@@ -573,7 +573,7 @@ on the tutorials page.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>height</strong> (<em>int/float</em>) – water level</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">water volume in cu. ft.</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">water volume (gallons)</td>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">float</td>
 </tr>
@@ -854,11 +854,12 @@ enter pump_id of pump to be deleted</p>
 
 <dl class="method">
 <dt id="Water.Pump.plot_curve">
-<code class="descname">plot_curve</code><span class="sig-paren">(</span><em>target_flow=None</em>, <em>tdh=None</em>, <em>vfd=True</em>, <em>eff=False</em>, <em>show=False</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Water/pumps.html#Pump.plot_curve"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Water.Pump.plot_curve" title="Permalink to this definition">¶</a></dt>
+<code class="descname">plot_curve</code><span class="sig-paren">(</span><em>target_flow=None</em>, <em>tdh=None</em>, <em>vfd=True</em>, <em>eff=False</em>, <em>num_pumps=1</em>, <em>show=False</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Water/pumps.html#Pump.plot_curve"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Water.Pump.plot_curve" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="docutils">
 <dt>creates a matplotlib plot of the pump curve.</dt>
 <dd>Default is to plot affinitized curves with full speed curve.
-User has option to add system curve and efficiency curve</dd>
+User has option to add parallel pumps, system curve and efficiency curve.
+Parallel pump curves only work when vfd=False.</dd>
 </dl>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -869,7 +870,8 @@ User has option to add system curve and efficiency curve</dd>
 <li><strong>tdh</strong> (<em>int/float</em>) – Total Dynamic Head (ft), <em>default None</em></li>
 <li><strong>vfd</strong> (<em>boolean</em>) – turn on/off affinitized pump curves, <em>default True</em></li>
 <li><strong>eff</strong> (<em>boolean</em>) – turn on/off pump efficiency curve, <em>default False</em></li>
-<li><strong>show</strong> (<em>boolean</em>) – show plot (keep false if using in an .ipynb), <em>default False</em></li>
+<li><strong>num_pumps</strong> (<em>int</em>) – number of pumps in parallel <em>default 1</em></li>
+<li><strong>show</strong> (<em>boolean</em>) – show plot (keep false if using in an .ipynb file), <em>default False</em></li>
 <li><strong>**kwargs</strong> – matplotlib.pyplot.plot keyword arguments</li>
 </ul>
 </td>
@@ -1488,7 +1490,7 @@ design aspects</p>
 
 <dl class="function">
 <dt id="tools.reynolds">
-<code class="descclassname">tools.</code><code class="descname">reynolds</code><span class="sig-paren">(</span><em>pipe_diam</em>, <em>flow=None</em>, <em>vel=None</em>, <em>viscocity=1.407e-05</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tools.html#reynolds"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tools.reynolds" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">tools.</code><code class="descname">reynolds</code><span class="sig-paren">(</span><em>pipe_diam</em>, <em>flow=None</em>, <em>vel=None</em>, <em>viscosity=1.407e-05</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tools.html#reynolds"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tools.reynolds" title="Permalink to this definition">¶</a></dt>
 <dd><p>Reynolds Number Calculation</p>
 <div class="math notranslate nohighlight">
 \[Re = \frac{\mu D_h}{\nu}\]</div>
@@ -1500,7 +1502,7 @@ design aspects</p>
 <li><strong>pipe_diam</strong> (<em>int/float</em>) – pipe diameter (inches)</li>
 <li><strong>flow</strong> (<em>int/float</em>) – flow (gpm), <em>default None</em></li>
 <li><strong>vel</strong> (<em>int/float</em>) – velocity (fps), <em>default None</em></li>
-<li><strong>viscocity</strong> – kinematic viscocity of water (ft^2/s) <em>default 1.407E-5 ft^2/s</em></li>
+<li><strong>viscosity</strong> – kinematic viscosity of water (ft^2/s) <em>default 1.407E-5 ft^2/s</em></li>
 </ul>
 </td>
 </tr>

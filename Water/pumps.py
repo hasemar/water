@@ -70,8 +70,11 @@ class Pump:
         exists = c.fetchall()        
         conn.commit()
         conn.close()
-    
-        return exists
+        if exists:
+            return exists
+        else:
+            print("Pump could not be found in database")
+            return None
 
     def add_pump(self, **kwargs):
         '''Add a pump to the sqlite3 database  

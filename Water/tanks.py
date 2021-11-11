@@ -62,7 +62,7 @@ class Tank:
 
     @property
     def area(self):
-        '''returns cross-sectional area of tank'''
+        '''returns cross-sectional area of tank in sqft'''
         if self.shape == 'vertical' or self.shape == 'horizontal':
             a = pi * self.diameter**2 / 4
         elif self.shape == 'box':
@@ -73,14 +73,14 @@ class Tank:
         return a
     @property
     def vol(self):
-        '''returns dry volume of tank'''
+        '''returns dry volume of tank in gallons'''
         if self.shape == 'horizontal':
-            return tools.cuft2gal(self.horizontal_vol(self.diameter))
+            return self.horizontal_vol(self.diameter)
         else:
             return tools.cuft2gal(self.area * self.height)   
     @property
     def useable(self):
-        '''returns useable volume of tank'''
+        '''returns useable volume of tank in gallons'''
         if self.shape == 'horizontal':
             v_dead = tools.cuft2gal(self.horizontal_vol(self.deadstorage))
             v_free = tools.cuft2gal(self.horizontal_vol(self.freeboard))
@@ -98,7 +98,7 @@ class Tank:
 
         :param height: water level 
         :type height: int/float
-        :return: water volume in cu. ft.
+        :return: water volume (gallons)
         :rtype: float
     
         '''
@@ -107,7 +107,7 @@ class Tank:
         h = height 
         v = L*(R**2 * acos((R-h)/R) - (R-h) * sqrt(2*R*h - h**2))
         
-        return v
+        return tools.cuft2gal(v)
 
     def _horizontal_vol_dict(self):
         '''returns a dict of volumes at heights ranging from 0 to self.diameter
@@ -194,65 +194,38 @@ class Tank:
         :rtype: string
         '''
         if self.shape == 'horizontal':
-            info = '''
-            {3:} \r\n
-            Base Elevation:------------- {4:} ft
-            Orientation:---------------- {5:}
-            Tank Length:---------------- {6:} ft
-            Tank Diameter:-------------- {7:} ft
-            Tank Cross-Sectional Area:-- {0:.1f} ft^2 
-            Total Volume:--------------- {1:.1f} gal
-            Effective Volume:----------- {2:.1f} gal
-            '''.format(
-                    self.area,
-                    self.vol,
-                    self.useable,
-                    self.name,
-                    self.elevation,
-                    self.shape,
-                    self.length,
-                    self.diameter
-                    )
+            info = f'''
+            {self.name} \r\n
+            Base Elevation:------------- {self.elevation} ft
+            Orientation:---------------- {self.shape}
+            Tank Length:---------------- {self.length} ft
+            Tank Diameter:-------------- {self.diameter} ft
+            Tank Cross-Sectional Area:-- {self.area:.1f} ft^2 
+            Total Volume:--------------- {self.vol:.1f} gal
+            Effective Volume:----------- {self.useable:.1f} gal
+            '''
         elif self.shape == 'box':
-            info = '''
-            {3:} \r\n
-            Base Elevation:------------- {4:} ft
-            Orientation:---------------- {5:}
-            Tank Length:---------------- {6:} ft
-            Tank Width:----------------- {7:} ft
-            Tank Cross-Sectional Area:-- {0:.1f} ft^2 
-            Total Volume:--------------- {1:.1f} gal
-            Effective Volume:----------- {2:.1f} gal
-            '''.format(
-                    self.area,
-                    self.vol,
-                    self.useable,
-                    self.name,
-                    self.elevation,
-                    self.shape,
-                    self.length,
-                    self.width
-                    )
+            info = f'''
+            {self.name} \r\n
+            Base Elevation:------------- {self.elevation} ft
+            Orientation:---------------- {self.shape}
+            Tank Length:---------------- {self.length} ft
+            Tank Width:----------------- {self.width} ft
+            Tank Cross-Sectional Area:-- {self.area:.1f} ft^2 
+            Total Volume:--------------- {self.vol:.1f} gal
+            Effective Volume:----------- {self.useable:.1f} gal
+            '''
         else:
-             info = '''
-            {3:} \r\n
-            Base Elevation:------------- {4:} ft
-            Orientation:---------------- {5:}
-            Tank Height:---------------- {6:} ft
-            Tank Diameter:-------------- {7:} ft
-            Tank cross-sectional area:-- {0:.1f} ft^2
-            Total volume:--------------- {1:.1f} gal
-            Effective volume:----------- {2:.1f} gal
-            '''.format(
-                    self.area,
-                    self.vol,
-                    self.useable,
-                    self.name,
-                    self.elevation,
-                    self.shape,
-                    self.height,
-                    self.diameter
-                    )
+             info = f'''
+            {self.name} \r\n
+            Base Elevation:------------- {self.elevation} ft
+            Orientation:---------------- {self.shape}
+            Tank Height:---------------- {self.height} ft
+            Tank Diameter:-------------- {self.diameter} ft
+            Tank cross-sectional area:-- {self.area:.1f} ft^2
+            Total volume:--------------- {self.vol:.1f} gal
+            Effective volume:----------- {self.useable:.1f} gal
+            '''
 
         if details:
             perc = self.getPercent(self.useable, total_vol)
@@ -267,34 +240,18 @@ class Tank:
             vols.append(fb_vol)
             vols.append(total_calc_vol)
             
-            info +='''
-            Storage Partition    |    Vol (gal)    |    Height(ft)
+            info +=f'''
+            Storage Partition |\tVol (gal)  |  Height(ft)
             ------------------------------------------------------
-            Dead Storage              {0:.1f}           {1:.1f}  
-            Fire-Flow                 {2:.1f}           {3:.1f}
-            Standby                   {4:.1f}           {5:.1f}
-            Equalizing                {6:.1f}           {7:.1f}
-            Operational               {8:.1f}           {9:.1f}
-            Freeboard                 {10:.1f}          {11:.1f}
+            Dead Storage\t{ds_vol:.1f}\t\t{self.deadstorage:.1f}  
+            Fire-Flow\t\t{FFS*perc:.1f}\t\t{self.getHeight(FFS*perc):.1f}  
+            Standby\t\t{SB*perc:.1f}\t\t{self.getHeight(SB*perc):.1f}  
+            Equalizing\t\t{ES*perc:.1f}\t\t{self.getHeight(ES*perc):.1f}  
+            Operational\t\t{OS*perc:.1f}\t\t{self.getHeight(OS*perc):.1f}  
+            Freeboard\t\t{fb_vol:.1f}\t\t{self.freeboard:.1f}  
             ------------------------------------------------------
-            TOTALS                    {12:.1f}            {13:.1f} 
-            '''.format(
-                ds_vol,
-                self.deadstorage,
-                FFS * perc,
-                self.getHeight(FFS*perc),
-                SB * perc,
-                self.getHeight(SB*perc),
-                ES * perc,
-                self.getHeight(ES*perc),
-                OS * perc,
-                self.getHeight(OS*perc),
-                fb_vol,
-                self.freeboard,
-                total_calc_vol,
-                total_h
-                )
-
+            TOTALS\t\t{total_calc_vol:.1f}\t\t{total_h:.1f} 
+            '''
         return info
 
 #-----------------------------------------------------------------

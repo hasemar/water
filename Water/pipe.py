@@ -37,7 +37,8 @@ pipe_dims = {
         4 : [4.5, 0.237],
         6 : [6.625, 0.28],
         8 : [8.625, 0.322],
-        10 : [10.75, 0.365]
+        10 : [10.75, 0.365],
+        12 : [12.75, 0.43]        
     },
     80 : {
         1 : [1.315, 0.179],
@@ -49,7 +50,8 @@ pipe_dims = {
         4 : [4.5, 0.337],
         6 : [6.625, 0.432],
         8 : [8.625, 0.5],
-        10 : [10.75, 0.5]
+        10 : [10.75, 0.5],
+        12 : [12.75, 0.728]
     },
     52 : {
         3 : [3.96, 0.28],
@@ -194,24 +196,23 @@ class Pipe:
 
     @property
     def outer_diameter(self):
-        ''' outer diameter pipe property'''
+        ''' outer diameter pipe property (inches) '''
         return self.dims[0]
     @property
     def inner_diameter(self):
-        '''inner diameter pipe property'''
+        '''inner diameter pipe property (inches) '''
         return self.outer_diameter - 2 * self.dims[1]
     @property
     def volume(self):
-        '''pipe volume property'''
+        '''pipe volume property (cuft) '''
         return tools.volume_cyl(self.inner_diameter/12, self.length)
     @property
     def area(self):
-        '''pipe cross-sectional area property
-           '''
+        '''pipe cross-sectional area property (sqft) '''
         return self.volume/self.length
     @property
     def c_factor(self):
-        ''':pipe material C-factor property'''
+        ''':pipe material C-factor for Hazen-Williams eq. property'''
         return c_dict[self.kind]
 
     def search_material(self, material, coefficient=None):
@@ -316,13 +317,13 @@ class Pipe:
 
            :Example:
 
-           >>> print(pipe.fitting_info())
-              Fittings list:
+           >>> print(pipe.fitting_info())  
+           
               elbow_90, standard_threaded: Kvalue = 0.899, qty = 2  
               flow meter, flanged: Kvalue = 1.600, qty = 1
 
             '''
-        info = 'Fittings list: \n'
+        info = ''
         for fitting in self.fitting_list:
             info += '{}, {}: Kvalue = {:.3f}, qty = {} \n'.format(fitting[0],
                                                      fitting[1],
