@@ -4,7 +4,7 @@
 '''
 from __future__ import print_function, division
 import matplotlib.pyplot as plt
-from numpy import linspace, any, interp
+from numpy import linspace, any, interp, array
 import sqlite3
 from os import path
 
@@ -306,10 +306,18 @@ class Pump:
             self.affinity_data.append([data * percent for data in pump_data])
         return self.affinity_data
 
-    def plot_curve(self, target_flow=None, tdh=None, vfd=True, eff=False, show=False, **kwargs):
+    def plot_curve(self, 
+                   target_flow=None, 
+                   tdh=None, 
+                   vfd=True, 
+                   eff=False, 
+                   num_pumps=1, 
+                   show=False, 
+                   **kwargs):
         '''creates a matplotlib plot of the pump curve.
             Default is to plot affinitized curves with full speed curve. 
-            User has option to add system curve and efficiency curve
+            User has option to add parallel pumps, system curve and efficiency curve.
+            Parallel pump curves only work when vfd=False.
 
         :param target_flow: flow point to plot (gpm), *default None*  
         :type target_flow: int/float
@@ -319,7 +327,9 @@ class Pump:
         :type vfd: boolean
         :param eff: turn on/off pump efficiency curve, *default False*
         :type eff: boolean
-        :param show: show plot (keep false if using in an .ipynb), *default False*
+        :param num_pumps: number of pumps in parallel *default 1*  
+        :type num_pumps: int  
+        :param show: show plot (keep false if using in an .ipynb file), *default False*
         :type show: boolean
         :param \**kwargs: matplotlib.pyplot.plot keyword arguments
         :return: pump curve for pump object
@@ -358,7 +368,6 @@ class Pump:
         if eff:
             self.ax[0] = plt.subplot2grid((3,1), (0,0), rowspan=2)
             self.ax[1] = plt.subplot2grid((3,1), (2,0))
-
             self.ax[1].plot(self.flow, self.eff, label='efficiency', color='grey')
             self.ax[1].set_ylabel('efficiency')
             self.ax[1].set_xlabel('flow (gpm)')
@@ -372,7 +381,8 @@ class Pump:
             for h, l in zip(self.vfd_head, labels):
                 self.ax[0].plot(self.flow, h, label=l, **kwargs)
         else:
-            self.ax[0].plot(self.flow, self.head, label='60hz', **kwargs)
+            for n in range(1,num_pumps+1):
+                self.ax[0].plot(array(self.flow)*n, self.head, label='pump # ' + str(n), **kwargs)
 
         if any(target_flow) and any(tdh):
             self.ax[0].plot(target_flow, tdh,
@@ -439,7 +449,7 @@ if __name__=="__main__":
     design_x = 50
     design_y = 60
 
-    pump.plot_curve(system_flow, system_head, vfd=False, eff=True)
+    pump.plot_curve(system_flow, system_head, vfd=False, eff=True, num_pumps=2)
     pump2.plot_curve(design_x, design_y, eff=True)
     
     plt.show()
