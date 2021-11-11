@@ -355,7 +355,7 @@ class Pump:
             # plot curve without affinitized curves and with efficiency curve
             pump_1.plot_curve(target_flow=FLOW, tdh=TDH, vfd=False, eff=True, show=True)
 
-        .. image:: pump_ex1.png
+        .. image:: ./images/pump_ex1.png
 
         See :doc:`Pump Class Example <tutorial>` for affinitize curve functionality and how to 
         plot a system curve along with the pump curve. 
