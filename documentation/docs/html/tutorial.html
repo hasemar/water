@@ -1,0 +1,621 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Code Examples and Tutorials &mdash; Water 1.1.2 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Built-In Parameter Data" href="data.html" />
+    <link rel="prev" title="Water Package Code Reference" href="code_reference.html" />
+    <link href="_static/myStyle.css" rel="stylesheet" type="text/css">
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #2980B9" >
+          
+
+          
+            <a href="index.html">
+          
+
+          
+            
+            <img src="_static/water_small.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="code_reference.html">Water Package Code Reference</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Code Examples and Tutorials</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#pipe-class-examples">Pipe Class Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pump-class-examples">Pump Class Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#tank-class-examples">Tank Class Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#genset-class-examples">Genset Class Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#bringing-it-all-together">Bringing it All Together</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="data.html">Built-In Parameter Data</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Water</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Code Examples and Tutorials</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/tutorial.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="code-examples-and-tutorials">
+<h1>Code Examples and Tutorials<a class="headerlink" href="#code-examples-and-tutorials" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="pipe-class-examples">
+<span id="pipe-example"></span><h2>Pipe Class Examples<a class="headerlink" href="#pipe-class-examples" title="Permalink to this headline">¶</a></h2>
+<p>The <em>Water.Pipe</em> class allows you to create a pipe object to apply flow calculations. It is useful to
+start at a pump and create your pipe objects based on pipe size and/or material. You can add fittings
+to each pipe object and calculate the major and minor losses through the pipe based on flow.</p>
+<p><strong>Example #1:</strong> Calculating the losses from a pump’s discharge through a pipe network consisting of the following fittings:</p>
+<blockquote>
+<div><ul class="simple">
+<li>90 degree elbow, quantity 2</li>
+<li>through-tee, quantity 1</li>
+<li>branch-tee, quantity 1</li>
+<li>gate valve, quantity 1</li>
+</ul>
+<p>The pipe is 4-inch schedule 40 steel pipe and 60 ft long.</p>
+</div></blockquote>
+<div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">Water</span> <span class="kn">import</span> <span class="n">Pipe</span>
+
+ <span class="c1"># assign the flow you want to analyze in gallons per minute</span>
+ <span class="n">flow</span> <span class="o">=</span> <span class="mi">300</span>       <span class="c1"># gpm</span>
+
+ <span class="c1"># create the pipe object</span>
+ <span class="n">pipe_1</span> <span class="o">=</span> <span class="n">Pipe</span><span class="p">(</span><span class="n">length</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s1">&#39;STEEL&#39;</span><span class="p">,</span> <span class="n">sch</span><span class="o">=</span><span class="mi">40</span><span class="p">)</span>
+
+ <span class="c1"># add fittings to the pipe object</span>
+ <span class="n">pipe_1</span><span class="o">.</span><span class="n">fitting</span><span class="p">(</span><span class="n">fitting_type</span><span class="o">=</span><span class="s1">&#39;elbow_90&#39;</span><span class="p">,</span> <span class="n">con_type</span><span class="o">=</span><span class="s1">&#39;standard_threaded&#39;</span><span class="p">,</span> <span class="n">qty</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+ <span class="n">pipe_1</span><span class="o">.</span><span class="n">fitting</span><span class="p">(</span><span class="s1">&#39;tee_through&#39;</span><span class="p">,</span> <span class="s1">&#39;standard_threaded&#39;</span><span class="p">,</span> <span class="n">qty</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+ <span class="n">pipe_1</span><span class="o">.</span><span class="n">fitting</span><span class="p">(</span><span class="s1">&#39;tee_branch&#39;</span><span class="p">,</span> <span class="s1">&#39;standard_threaded&#39;</span><span class="p">,</span> <span class="n">qty</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+ <span class="n">pipe_1</span><span class="o">.</span><span class="n">fitting</span><span class="p">(</span><span class="s1">&#39;valve&#39;</span><span class="p">,</span> <span class="s1">&#39;gate&#39;</span><span class="p">,</span> <span class="n">qty</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+ <span class="c1"># apply the get_losses function to compute head loss</span>
+ <span class="n">losses</span> <span class="o">=</span> <span class="n">pipe_1</span><span class="o">.</span><span class="n">get_losses</span><span class="p">(</span><span class="n">flow</span><span class="p">)</span>
+
+ <span class="k">print</span><span class="p">(</span><span class="s1">&#39;head loss at {} gpm = {:.2f} ft&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">flow</span><span class="p">,</span> <span class="n">losses</span><span class="p">))</span>
+</pre></div>
+</td></tr></table></div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">output</span><span class="p">:</span> <span class="n">head</span> <span class="n">loss</span> <span class="n">at</span> <span class="mi">300</span> <span class="n">gpm</span> <span class="o">=</span> <span class="mf">5.60</span> <span class="n">ft</span>
+</pre></div>
+</div>
+<p>You can get a list of fittings in the pipe object by using the <em>Pipe.fitting_info()</em> method.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">pipe_1</span><span class="o">.</span><span class="n">fitting_info</span><span class="p">())</span>
+<span class="go">       Fittings list:</span>
+<span class="go">        elbow_90, standard_threaded: Kvalue = 0.899, qty = 2</span>
+<span class="go">        tee_through, standard_threaded: Kvalue = 0.225, qty = 1</span>
+<span class="go">        tee_branch, standard_threaded: Kvalue = 1.124, qty = 1</span>
+<span class="go">        valve, gate: Kvalue = 0.275, qty = 1</span>
+</pre></div>
+</div>
+<p><strong>Example #2:</strong> Building from example #1, this is an example of finding the Total Dynamic Head for a pipe network consisting
+of a pump, pipe and fittings, and a tank at an elevated location.</p>
+<img alt="_images/pipe_ex2.png" src="_images/pipe_ex2.png" />
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">Water</span> <span class="kn">import</span> <span class="n">Pipe</span>
+
+<span class="c1"># assign the flow you want to analyze in gallons per minute</span>
+<span class="n">flow</span> <span class="o">=</span> <span class="mi">300</span>       <span class="c1"># gpm</span>
+<span class="n">L</span> <span class="o">=</span> <span class="mi">100</span>          <span class="c1"># ft</span>
+
+<span class="c1"># create the 2 pipe segments in the pipe network</span>
+<span class="n">pipe_1</span> <span class="o">=</span> <span class="n">Pipe</span><span class="p">(</span><span class="n">length</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s1">&#39;STEEL&#39;</span><span class="p">,</span> <span class="n">sch</span><span class="o">=</span><span class="mi">40</span><span class="p">)</span>
+<span class="n">pipe_2</span> <span class="o">=</span> <span class="n">Pipe</span><span class="p">(</span><span class="n">length</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s1">&#39;STEEL&#39;</span><span class="p">,</span> <span class="n">sch</span><span class="o">=</span><span class="mi">40</span><span class="p">)</span>
+
+<span class="c1"># add fittings to the pipe segments</span>
+<span class="n">pipe_1</span><span class="o">.</span><span class="n">fitting</span><span class="p">(</span><span class="n">fitting_type</span><span class="o">=</span><span class="s1">&#39;elbow_90&#39;</span><span class="p">,</span> <span class="n">con_type</span><span class="o">=</span><span class="s1">&#39;standard_threaded&#39;</span><span class="p">,</span> <span class="n">qty</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">pipe_1</span><span class="o">.</span><span class="n">fitting</span><span class="p">(</span><span class="s1">&#39;tee_through&#39;</span><span class="p">,</span> <span class="s1">&#39;standard_threaded&#39;</span><span class="p">,</span> <span class="n">qty</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">pipe_1</span><span class="o">.</span><span class="n">fitting</span><span class="p">(</span><span class="s1">&#39;tee_branch&#39;</span><span class="p">,</span> <span class="s1">&#39;standard_threaded&#39;</span><span class="p">,</span> <span class="n">qty</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">pipe_1</span><span class="o">.</span><span class="n">fitting</span><span class="p">(</span><span class="s1">&#39;valve&#39;</span><span class="p">,</span> <span class="s1">&#39;gate&#39;</span><span class="p">,</span> <span class="n">qty</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="n">pipe_2</span><span class="o">.</span><span class="n">fitting</span><span class="p">(</span><span class="s1">&#39;elbow_90&#39;</span><span class="p">,</span> <span class="s1">&#39;standard_threaded&#39;</span><span class="p">,</span> <span class="n">qty</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="c1"># apply the get_losses function to compute major and minor losses</span>
+<span class="n">losses</span> <span class="o">=</span> <span class="n">pipe_1</span><span class="o">.</span><span class="n">get_losses</span><span class="p">(</span><span class="n">flow</span><span class="p">)</span> <span class="o">+</span> <span class="n">pipe_2</span><span class="o">.</span><span class="n">get_losses</span><span class="p">(</span><span class="n">flow</span><span class="p">)</span>
+
+<span class="n">TDH</span> <span class="o">=</span> <span class="n">L</span> <span class="o">+</span> <span class="n">losses</span>
+
+<span class="k">print</span><span class="p">(</span><span class="s1">&#39;Size Pump for {} gpm at {:.0f} feet of Head&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">flow</span><span class="p">,</span> <span class="n">TDH</span><span class="p">))</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">output</span><span class="p">:</span> <span class="n">Size</span> <span class="n">Pump</span> <span class="k">for</span> <span class="mi">300</span> <span class="n">gpm</span> <span class="n">at</span> <span class="mi">153</span> <span class="n">feet</span> <span class="n">of</span> <span class="n">Head</span>
+</pre></div>
+</div>
+<hr class="docutils" />
+</div>
+<div class="section" id="pump-class-examples">
+<span id="pump-example"></span><h2>Pump Class Examples<a class="headerlink" href="#pump-class-examples" title="Permalink to this headline">¶</a></h2>
+<p>The <em>Water.Pump</em> class allows you to create a pump class to help in sizing a pump.
+The Water package includes a database of pumps that you can add to.
+Once pump data is loaded into the pump object you can plot its pump curve.</p>
+<p><strong>Example #1:</strong> Load existing pump data into the a pump object and plot it’s curve.</p>
+<div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">Water</span> <span class="kn">import</span> <span class="n">Pump</span>
+
+<span class="c1"># design parameters</span>
+ <span class="n">FLOW</span> <span class="o">=</span> <span class="mi">100</span>    <span class="c1"># gpm</span>
+ <span class="n">TDH</span> <span class="o">=</span> <span class="mi">111</span>            <span class="c1"># ft head</span>
+
+ <span class="c1"># define pump object and load pump data</span>
+ <span class="n">pump_1</span> <span class="o">=</span> <span class="n">Pump</span><span class="p">()</span>
+ <span class="n">pump_1</span><span class="o">.</span><span class="n">load_pump</span><span class="p">(</span><span class="s1">&#39;Goulds&#39;</span><span class="p">,</span> <span class="s1">&#39;3657 1.5x2 -6: 3SS&#39;</span><span class="p">)</span>
+
+ <span class="c1"># plot curve without affinitized curves and with efficiency curve</span>
+ <span class="n">pump_1</span><span class="o">.</span><span class="n">plot_curve</span><span class="p">(</span><span class="n">target_flow</span><span class="o">=</span><span class="n">FLOW</span><span class="p">,</span> <span class="n">tdh</span><span class="o">=</span><span class="n">TDH</span><span class="p">,</span> <span class="n">vfd</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">eff</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</pre></div>
+</td></tr></table></div>
+<img alt="_images/pump_ex1.png" src="_images/pump_ex1.png" />
+<p><strong>Example #2:</strong> Load new pump data into database, create a system curve and plot affinitized pump curve with the system curve.</p>
+<div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">Water</span> <span class="kn">import</span> <span class="n">Pump</span>
+
+<span class="c1"># create a pump object</span>
+<span class="n">pump_2</span> <span class="o">=</span> <span class="n">Pump</span><span class="p">()</span>
+
+<span class="c1"># define new pump parameters as a dictionary</span>
+<span class="n">new_pump_data</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;model&#39;</span> <span class="p">:</span> <span class="s1">&#39;BF 1-1/2 x 2 - 10&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;mfg&#39;</span> <span class="p">:</span> <span class="s1">&#39;Goulds&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;flow&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">150</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">250</span><span class="p">],</span>
+        <span class="s1">&#39;head&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="mi">400</span><span class="p">,</span> <span class="mi">400</span><span class="p">,</span> <span class="mi">390</span><span class="p">,</span> <span class="mi">372</span><span class="p">,</span> <span class="mi">340</span><span class="p">,</span> <span class="mi">270</span><span class="p">],</span>
+        <span class="s1">&#39;eff&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mf">0.49</span><span class="p">,</span> <span class="mf">0.56</span><span class="p">,</span> <span class="mf">0.60</span><span class="p">,</span> <span class="mf">0.54</span><span class="p">],</span>
+        <span class="s1">&#39;bep&#39;</span> <span class="p">:</span> <span class="p">[</span><span class="mi">200</span><span class="p">,</span> <span class="mi">340</span><span class="p">],</span>
+        <span class="s1">&#39;rpm&#39;</span> <span class="p">:</span> <span class="mi">3500</span><span class="p">,</span>
+        <span class="s1">&#39;impeller&#39;</span> <span class="p">:</span> <span class="mf">9.1875</span>
+        <span class="p">}</span>
+<span class="c1"># add pump to database, this will load the parameters into the object variables as well</span>
+<span class="n">pump_2</span><span class="o">.</span><span class="n">add_pump</span><span class="p">(</span><span class="o">**</span><span class="n">new_pump_data</span><span class="p">)</span>
+
+<span class="c1"># creating a mock system curve</span>
+<span class="n">system_flow</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">220</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+
+<span class="n">system_head</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">flow</span> <span class="ow">in</span> <span class="n">system_flow</span><span class="p">:</span>
+    <span class="n">system_head</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">220</span> <span class="o">+</span> <span class="mi">20</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="o">/</span><span class="p">(</span><span class="n">flow</span><span class="o">*.</span><span class="mo">005</span><span class="p">)))</span>
+
+<span class="c1"># plot curve with system curve</span>
+<span class="n">pump_2</span><span class="o">.</span><span class="n">plot_curve</span><span class="p">(</span><span class="n">system_flow</span><span class="p">,</span> <span class="n">system_head</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</pre></div>
+</td></tr></table></div>
+<img alt="_images/pump_ex2.png" src="_images/pump_ex2.png" />
+<hr class="docutils" />
+</div>
+<div class="section" id="tank-class-examples">
+<span id="tank-example"></span><h2>Tank Class Examples<a class="headerlink" href="#tank-class-examples" title="Permalink to this headline">¶</a></h2>
+<p>You can use the tank class to create tank objects and apply common engineering
+calculations to them. Common tank properties such as total volume, cross sectional area,
+and useable volume are automatically calculated once the object is instantiated.</p>
+<p><strong>Example #1:</strong>  Create a tank object with the following parameters.</p>
+<blockquote>
+<div><ul class="simple">
+<li>height = 45 feet</li>
+<li>diameter = 60 feet</li>
+<li>freeboard = 3 feet</li>
+<li>dead storage = 2 feet</li>
+<li>elevation = 230 feet</li>
+</ul>
+</div></blockquote>
+<div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">Water</span> <span class="kn">import</span> <span class="n">Tank</span>
+
+<span class="c1"># create a dictionary for the tank parameters</span>
+<span class="n">tank_data</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;name&#39;</span> <span class="p">:</span> <span class="s1">&#39;Tank 1&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;diameter&#39;</span> <span class="p">:</span> <span class="mi">60</span><span class="p">,</span>
+    <span class="s1">&#39;height&#39;</span> <span class="p">:</span> <span class="mi">45</span><span class="p">,</span>
+    <span class="s1">&#39;freeboard&#39;</span> <span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+    <span class="s1">&#39;deadstorage&#39;</span> <span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+    <span class="s1">&#39;elevation&#39;</span> <span class="p">:</span> <span class="mi">230</span>
+    <span class="p">}</span>
+
+<span class="c1"># instantiate object</span>
+<span class="n">tank_1</span> <span class="o">=</span> <span class="n">Tank</span><span class="p">(</span><span class="o">**</span><span class="n">tank_data</span><span class="p">)</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">tank_1</span><span class="o">.</span><span class="n">vol</span><span class="p">,</span> <span class="s1">&#39;gallons&#39;</span><span class="p">)</span>
+</pre></div>
+</td></tr></table></div>
+<p><em>output: 951777.695 gallons</em></p>
+<p>You can print out a report of the tank properties using the following</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">tank_1</span><span class="o">.</span><span class="n">get_info</span><span class="p">())</span>
+</pre></div>
+</div>
+<p>Tank 1</p>
+<blockquote>
+<div><div class="line-block">
+<div class="line">Base Elevation:————- 230 ft</div>
+<div class="line">Orientation:—————- vertical</div>
+<div class="line">Tank Height:—————- 45 ft</div>
+<div class="line">Tank Diameter:————– 60 ft</div>
+<div class="line">Tank cross-sectional area:– 2827.4 ft^2</div>
+<div class="line">Total volume:————— 951777.7 gal</div>
+<div class="line">Effective volume:———– 846024.6 gal</div>
+</div>
+</div></blockquote>
+</div></blockquote>
+<p><strong>Example #2:</strong></p>
+<p>A shape property can be defined for horizontal tanks to easily calculate water volume.  In this example we will
+graph the volume change as the water level rises in a 10 ft diameter horizontal tank.</p>
+<div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">Water</span> <span class="kn">import</span> <span class="n">Tank</span><span class="p">,</span> <span class="n">tools</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+
+<span class="c1"># create a dictionary for the tank parameters, note we use the &#39;length&#39; keyword here</span>
+<span class="n">tank_data</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;name&#39;</span> <span class="p">:</span> <span class="s1">&#39;Horizontal Tank&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;diameter&#39;</span> <span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+            <span class="s1">&#39;length&#39;</span> <span class="p">:</span> <span class="mi">20</span><span class="p">,</span>
+            <span class="s1">&#39;freeboard&#39;</span> <span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+            <span class="s1">&#39;deadstorage&#39;</span> <span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="s1">&#39;elevation&#39;</span> <span class="p">:</span> <span class="mi">100</span><span class="p">,</span>
+            <span class="s1">&#39;shape&#39;</span> <span class="p">:</span> <span class="s1">&#39;horizontal&#39;</span>
+            <span class="p">}</span>
+
+<span class="c1">#instantiate object</span>
+<span class="n">horiz_tank</span> <span class="o">=</span> <span class="n">Tank</span><span class="p">(</span><span class="o">**</span><span class="n">tank_data</span><span class="p">)</span>
+
+<span class="n">vols</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">level</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">horiz_tank</span><span class="o">.</span><span class="n">diameter</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+    <span class="n">vols</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">horiz_tank</span><span class="o">.</span><span class="n">horizontal_vol</span><span class="p">(</span><span class="n">level</span><span class="p">))</span>
+<span class="k">print</span><span class="p">(</span><span class="n">vols</span><span class="p">)</span>
+
+<span class="c1"># plot a graph of the volume change while the tank is filling</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">vols</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Volume Change When Tank is Filling&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Water Level (ft)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Volume of Water (gallons)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</td></tr></table></div>
+<img alt="_images/horiz_tank.png" src="_images/horiz_tank.png" />
+</div>
+<hr class="docutils" id="genset-example" />
+<div class="section" id="genset-class-examples">
+<h2>Genset Class Examples<a class="headerlink" href="#genset-class-examples" title="Permalink to this headline">¶</a></h2>
+<p>The Genset Class enables you to create a genset object and apply various loads to it.
+Methods within the class can calculate run times and load capacities.</p>
+<p><strong>Note:</strong>  This should be used for getting “in the ballpark” only. Most genset manufacturer’s
+provide sizing tools to help specify generators.</p>
+<p><strong>Example #1:</strong>  Create a genset object for the folloing loads.</p>
+<blockquote>
+<div><div class="line-block">
+<div class="line">1 - 5 hp pump with 480v 3ph motor for domestic use</div>
+<div class="line">1 - 7.5 hp pump with 460v 3ph motor for domestic use</div>
+<div class="line">2 - 25 hp pumps with 460v 3ph motor for fire-flow use</div>
+<div class="line">200 watts for pump house lighting</div>
+<div class="line">2 kw for controls, outlets and heater power</div>
+</div>
+</div></blockquote>
+<div class="highlight-python notranslate"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">Water</span> <span class="kn">import</span> <span class="n">Genset</span>
+
+<span class="n">gen</span> <span class="o">=</span> <span class="n">Genset</span><span class="p">(</span><span class="mi">480</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+<span class="c1"># adding domestic pumps</span>
+<span class="n">gen</span><span class="o">.</span><span class="n">add_motor_load</span><span class="p">(</span><span class="n">power</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;hp&#39;</span><span class="p">,</span> <span class="n">fire</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+<span class="n">gen</span><span class="o">.</span><span class="n">add_motor_load</span><span class="p">(</span><span class="mf">7.5</span><span class="p">)</span>
+
+<span class="c1"># adding fire flow pumps</span>
+<span class="n">gen</span><span class="o">.</span><span class="n">add_motor_load</span><span class="p">(</span><span class="mi">25</span><span class="p">,</span> <span class="n">fire</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">gen</span><span class="o">.</span><span class="n">add_motor_load</span><span class="p">(</span><span class="mi">25</span><span class="p">,</span> <span class="n">fire</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+<span class="c1"># adding lighting other resistive loads</span>
+<span class="n">gen</span><span class="o">.</span><span class="n">add_resistive_load</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;watts&#39;</span><span class="p">)</span>
+<span class="n">gen</span><span class="o">.</span><span class="n">add_resistive_load</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;kw&#39;</span><span class="p">)</span>
+</pre></div>
+</td></tr></table></div>
+</div>
+<hr class="docutils" />
+<div class="section" id="bringing-it-all-together">
+<h2>Bringing it All Together<a class="headerlink" href="#bringing-it-all-together" title="Permalink to this headline">¶</a></h2>
+<p>Sizing a pump using the Pipe Class and Pump Class in a Jupyter Notebook</p>
+<p>See <a class="reference internal" href="detailed_pump_size.html"><span class="doc">Detailed Pump Sizing</span></a></p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="data.html" class="btn btn-neutral float-right" title="Built-In Parameter Data" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="code_reference.html" class="btn btn-neutral float-left" title="Water Package Code Reference" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2021, Ryan Haseman
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
