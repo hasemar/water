@@ -1,22 +1,22 @@
 # water
- - sizing water distribution systems - 
+ - water is a python package tailored for water system engineering - 
 
- This package helps designers size water distribution systems. It is based on 
- the energy equatation, and common fluid dynamics equations and assumptions.
+ This package helps engineers with common engineering tasks when designing and
+ working with municipal water systems. Units are in US industry standard.
 
  Modules:
  Tank:
- Create a tank of diameter and height. You can specify freeboard, deadstorage and elevation.
+ Create a tank of diameter and height and shape. You can specify freeboard, deadstorage and elevation partitions.
  Use to calculate storage requirements (Equalizing, Standby and Operating)
 
- Fittings:
- Create fittings to calculate minor losses. Specify kind, style, size and schedule (default 40)
- To calculate K value you need to specify a Reynolds number 
-
  Pumps:
- Create pump object. Uses mfg's pump curve data from csv file. Plots curve using polynomial regression
- TO DO:
- plot vfd speed curves
- plot system curve (constant pressure)
- create new curve --> creates csv file and saves it to pumps folder
- calculates run cost with efficiencies
+ Create pump object. Uses mfg's pump curve data saved in a sqlite db with the ability to add to the db. Curves can be plotted with or without efficiency curve, with applied affinity laws and with multiple parallel pumps. 
+
+ Pipe:  
+ Create pipe objects with length and diameter. Apply a flow to get head loss. Fittings can be added to the pipe object to get minor losses.
+
+ Genset:
+ Create a generator object and apply resistive and inductive loads to get aid in genset size.
+
+ Tools:
+ collection of functions used throughout the Classes and also can be used as needed separately. 
