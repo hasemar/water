@@ -1,10 +1,10 @@
-'''Pipe :
+"""Pipe :
 
 This module holds the data for a variety of fittings and pipe sizes.
 It holds a class called Pipe that allows you to create Pipe objects
 and calculate losses.
 
-'''
+"""
 
 from __future__ import print_function
 import Water.tools as tools
@@ -100,11 +100,11 @@ pipe_dims = {
     }
 }
 
-'''fitting dictionary:
+"""fitting dictionary:
 
     holds fitting shape and connection type. For each connection 
     type there is a kfactor list [geometry, k1, k_infinity]
-'''
+"""
 
 fitting_dict = {
     'elbow_90' : {
@@ -161,7 +161,7 @@ fitting_dict = {
 }
 
 class Pipe:
-    '''Defines Pipe object to add pipe section and fittings for head loss calculations.
+    """Defines Pipe object to add pipe section and fittings for head loss calculations.
 
     See :doc:`data <data>` for available pipe properties.
 
@@ -183,7 +183,7 @@ class Pipe:
     >>> from Water import Pipe
     >>> pipe = Pipe(length=10, size=4, kind='STEEL', sch=40)
      
-    '''
+    """
 
     def __init__(self,length, size, kind='PVC', sch='C900 DR-18', Re=2000):
         self.kind = kind
@@ -196,27 +196,27 @@ class Pipe:
 
     @property
     def outer_diameter(self):
-        ''' outer diameter pipe property (inches) '''
+        """ outer diameter pipe property (inches) """
         return self.dims[0]
     @property
     def inner_diameter(self):
-        '''inner diameter pipe property (inches) '''
+        """inner diameter pipe property (inches) """
         return self.outer_diameter - 2 * self.dims[1]
     @property
     def volume(self):
-        '''pipe volume property (cuft) '''
+        """pipe volume property (cuft) """
         return tools.volume_cyl(self.inner_diameter/12, self.length)
     @property
     def area(self):
-        '''pipe cross-sectional area property (sqft) '''
+        """pipe cross-sectional area property (sqft) """
         return self.volume/self.length
     @property
     def c_factor(self):
-        ''':pipe material C-factor for Hazen-Williams eq. property'''
+        """:pipe material C-factor for Hazen-Williams eq. property"""
         return c_dict[self.kind]
 
     def search_material(self, material, coefficient=None):
-        '''Checks sqlite database for existing material record
+        """Checks sqlite database for existing material record
 
            :param material: pipe material
            :param coefficient: Hazen Williams coefficient for major pipe losses
@@ -225,21 +225,21 @@ class Pipe:
            :return: record(s) if one exists 
            :rtype: list
            
-           '''
+           """
         conn = sqlite3.connect(db_path)
         c = conn.cursor()
         existing_params = {'material' : material, 'coefficient' : coefficient}
         
         if coefficient:
-            sqlquery='''SELECT *
+            sqlquery="""SELECT *
                         FROM 
                             hazen
-                        WHERE material=:material AND coefficient=:coefficient'''
+                        WHERE material=:material AND coefficient=:coefficient"""
         else:
-            sqlquery='''SELECT * 
+            sqlquery="""SELECT * 
                         FROM 
                             hazen 
-                        WHERE material=:material''' 
+                        WHERE material=:material""" 
         
         c.execute(sqlquery, existing_params)
         result = c.fetchall()        
@@ -249,13 +249,13 @@ class Pipe:
         return result
     
     def add_material(self, material, coefficient):
-        '''Adds a record to the hazen williams coefficient table of the sqlite db
+        """Adds a record to the hazen williams coefficient table of the sqlite db
 
             :param material: pipe material
            :param coefficient: Hazen Williams coefficient for major pipe losses
            :type material: string
            :type coefficient: int
-        '''
+        """
 
         conn = sqlite3.connect(db_path)
         c = conn.cursor()
@@ -263,13 +263,13 @@ class Pipe:
         exists = self.search_material(material, coefficient)
         
         if len(exists) == 0:
-            sqlinsert = '''INSERT INTO 
+            sqlinsert = """INSERT INTO 
                             hazen(
                                 material,
                                 coefficient) 
                             values(
                                 :material,
-                                :coefficient)'''
+                                :coefficient)"""
 
             params = {'material' : material, 'coefficient': coefficient}
             
@@ -283,7 +283,7 @@ class Pipe:
                 print(each_mat)
         
     def fitting(self, fitting_type=None, con_type=None, qty=1, Kvalue=None):
-        '''Adds fitting to Pipe object's fitting_list to add to head loss
+        """Adds fitting to Pipe object's fitting_list to add to head loss
         
         :param fitting_type: keyword from fitting dictionary, (default None)  
         :param con_type: keyword from fitting dictionary, (default None)  
@@ -303,7 +303,7 @@ class Pipe:
         >>> # creating custom fitting
         >>> pipe.fitting('flow meter', 'flanged', qty=1, Kvalue=1.6)
         
-        '''
+        """
         if fitting_type in fitting_dict and con_type in fitting_dict[fitting_type]:
             Kfactors = fitting_dict[fitting_type][con_type]
             if not Kvalue:
@@ -312,7 +312,7 @@ class Pipe:
         self.fitting_list.append((fitting_type, con_type, Kvalue,qty))
     
     def fitting_info(self):
-        ''':return: list of fittings currently defined in pipe object
+        """:return: list of fittings currently defined in pipe object
            :rtype: string
 
            :Example:
@@ -322,7 +322,7 @@ class Pipe:
               elbow_90, standard_threaded: Kvalue = 0.899, qty = 2  
               flow meter, flanged: Kvalue = 1.600, qty = 1
 
-            '''
+            """
         info = ''
         for fitting in self.fitting_list:
             info += '{}, {}: Kvalue = {:.3f}, qty = {} \n'.format(fitting[0],
@@ -333,7 +333,7 @@ class Pipe:
         return info
 
     def print_fitting(self):
-        ''':return: prints out fitting dictionary for a quick reference'''
+        """:return: prints out fitting dictionary for a quick reference"""
 
         for each_fitting in fitting_dict:
             print(each_fitting)
@@ -342,7 +342,7 @@ class Pipe:
                 print('\t', each_type)
 
     def major_loss(self, flow):
-        '''Uses `Hazen-Williams equation`_ to calculate major head loss for pipe object.  
+        """Uses `Hazen-Williams equation`_ to calculate major head loss for pipe object.  
   
            .. _Hazen-Williams equation: https://en.wikipedia.org/wiki/Hazen%E2%80%93Williams_equation   
 
@@ -359,12 +359,12 @@ class Pipe:
            >>> pipe.major_loss(flow)
                0.4272... 
 
-           '''
+           """
         h = (10.45 * self.length * flow**1.852)/(self.c_factor**1.852 * self.inner_diameter**4.8704)
         return h
 
     def minor_loss(self, flow):
-        '''Uses `Minor Loss Equation`_ to calculate minor head loss through fittings in fittings_list.  
+        """Uses `Minor Loss Equation`_ to calculate minor head loss through fittings in fittings_list.  
         
            .. _Minor Loss Equation: https://en.wikipedia.org/wiki/Minor_losses_in_pipe_flow#Minor_Losses   
 
@@ -381,7 +381,7 @@ class Pipe:
            >>> pipe.minor_loss(flow)
                3.0168... 
 
-           '''
+           """
         vel = tools.velocity(flow, self.inner_diameter)
         minor_loss = 0
         if len(self.fitting_list) > 0:
@@ -391,7 +391,7 @@ class Pipe:
         return minor_loss
 
     def get_losses(self, flow):
-        ''' Calculate the major and minor losses through the Pipe object.
+        """ Calculate the major and minor losses through the Pipe object.
         
         :param flow: in gallons per minute (gpm)
         :type flow: int
@@ -404,7 +404,7 @@ class Pipe:
         >>> pipe.get_losses(flow)
             3.4441...
 
-           '''
+           """
         total_loss = self.major_loss(flow) + self.minor_loss(flow)
         return total_loss
         

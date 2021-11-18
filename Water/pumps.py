@@ -1,7 +1,7 @@
-'''Pumps Module:
+"""Pumps Module:
 
     This module calculates and produces pump curves based on mfg's data points
-'''
+"""
 from __future__ import print_function, division
 import matplotlib.pyplot as plt
 from numpy import linspace, any, interp, array
@@ -12,7 +12,7 @@ BASE_DIR = path.dirname(path.abspath(__file__))
 db_path = path.join(BASE_DIR, "water.db")
 
 class Pump:
-    '''Defines Pump object to plot and/or affinitized pump curve and performance  
+    """Defines Pump object to plot and/or affinitized pump curve and performance  
        
        :param target_flow: target flow (gpm), *default None*
        :type target_flow: int
@@ -24,7 +24,7 @@ class Pump:
        >>> from Water import Pump
        >>> pump_1 = Pump(target_flow=100, target_head=250)
        
-    '''     
+    """     
     def __init__(self, target_flow=None, target_head=None):
         self.target_flow = target_flow
         self.target_head = target_head
@@ -41,7 +41,7 @@ class Pump:
         self.affinity_data = []
 
     def search_pump(self, pump_model, impeller=None):
-        '''Checks sqlite database for existing pump record
+        """Checks sqlite database for existing pump record
 
            :param pump_model: pump model
            :param impeller: impeller diameter in inches, *default None*
@@ -50,21 +50,21 @@ class Pump:
            :return: pump record if one exists 
            :rtype: list
            
-           '''
+           """
         conn = sqlite3.connect(db_path)
         c = conn.cursor()
         existing_params = {'model' : pump_model, 'impeller' : impeller}
         
         if impeller:
-            sqlquery='''SELECT * 
+            sqlquery="""SELECT * 
                         FROM 
                             pumps 
-                        WHERE model=:model AND impeller=:impeller'''   
+                        WHERE model=:model AND impeller=:impeller"""   
         else:
-            sqlquery='''SELECT * 
+            sqlquery="""SELECT * 
                         FROM 
                             pumps 
-                        WHERE model=:model''' 
+                        WHERE model=:model""" 
     
         c.execute(sqlquery, existing_params)
         exists = c.fetchall()        
@@ -77,7 +77,7 @@ class Pump:
             return None
 
     def add_pump(self, **kwargs):
-        '''Add a pump to the sqlite3 database  
+        """Add a pump to the sqlite3 database  
 
            :param \**kwargs: Use dictionary to specify parameters  
            :type \**kwargs: dictionary
@@ -110,7 +110,7 @@ class Pump:
 
             pump_1.add_pump(**kwargs) 
           
-        '''
+        """
         self.flow = kwargs.get('flow', [])
         self.head = kwargs.get('head', [])
         self.eff = kwargs.get('eff', [])
@@ -126,7 +126,7 @@ class Pump:
         exists = self.search_pump(self.model, self.impeller)
         
         if len(exists) == 0:
-            sqlinsert = '''INSERT INTO 
+            sqlinsert = """INSERT INTO 
                             pumps(
                                 manufacturer,
                                 model,
@@ -156,7 +156,7 @@ class Pump:
                                 :impeller,
                                 :flowArray,
                                 :headArray,
-                                :effArray)'''
+                                :effArray)"""
 
             params = {'mfg' : self.mfg,
                     'model': self.model,
@@ -182,25 +182,25 @@ class Pump:
                 print(each_pump[:12])
         
     def available_pumps(self):
-        '''returns pump table from pumps.db'''
+        """returns pump table from pumps.db"""
 
         conn = sqlite3.connect(db_path)
         c = conn.cursor()
-        c.execute('''SELECT
+        c.execute("""SELECT
                         pumpID,
                         manufacturer,
                         model,
                         bestFlow,
                         bestHead
                      FROM
-                        pumps''')
+                        pumps""")
         for eachPump in c.fetchall():
             print(eachPump)
         conn.commit()
         conn.close()
         
     def load_pump(self, mfg, model, impeller=None):
-        '''Loads pump data from sqlite3 database into pump object
+        """Loads pump data from sqlite3 database into pump object
             
            :param mfg: pump manufacturer  
            :type mfg: string  
@@ -214,7 +214,7 @@ class Pump:
            >>> pump_2 = Pump()
            >>> pump_2.load_pump('Goulds', '3657 1.5x2 -6: 3SS')
 
-           '''
+           """
         multiples = self.search_pump(model, impeller)
         print(multiples)
         if len(multiples) == 0:
@@ -226,13 +226,13 @@ class Pump:
             c = conn.cursor()
             params = {'mfg' : mfg, 'model' : model, 'impeller' : impeller}
             if impeller == None:
-                sqlquery = '''SELECT * FROM pumps
+                sqlquery = """SELECT * FROM pumps
                               WHERE manufacturer=:mfg AND model=:model;
-                           '''
+                           """
             else:
-                sqlquery = '''SELECT * FROM pumps
+                sqlquery = """SELECT * FROM pumps
                               WHERE manufacturer=:mfg AND model=:model AND impeller=:impeller
-                            '''
+                            """
             c.execute(sqlquery, params)
 
 
@@ -255,22 +255,22 @@ class Pump:
                 print('Pump loaded from database')
 
     def delete_pump(self, pump_id):
-        '''deletes a pump record from the database
+        """deletes a pump record from the database
             enter pump_id of pump to be deleted 
             
             :param pump_id: pump id from pump table in database
             :type pump_id: int
 
-            '''
+            """
 
         conn = sqlite3.connect(db_path)
         c = conn.cursor()
         params = {'pumpID' : pump_id}
-        c.execute('''SELECT * FROM pumps
-                     WHERE pumpID=:pumpID''',params)
+        c.execute("""SELECT * FROM pumps
+                     WHERE pumpID=:pumpID""",params)
         if len(c.fetchall()) > 0:
-            c.execute('''DELETE FROM pumps
-                         WHERE pumpID=:pumpID''',params)
+            c.execute("""DELETE FROM pumps
+                         WHERE pumpID=:pumpID""",params)
             print('pumpID', pump_id, 'was deleted from the database.')
         else:
             print('No pumps with pumpID', pump_id, 'was found in the database')
@@ -279,21 +279,21 @@ class Pump:
         
     @property
     def vfd_flow(self):
-        '''affinitized array of pump flows property'''
+        """affinitized array of pump flows property"""
         return self._affinitize(self.flow, 1)
 
     @property
     def vfd_head(self):
-        '''affinitized array of heads property'''
+        """affinitized array of heads property"""
         return self._affinitize(self.head, 2)
 
     @property
     def vfd_eff(self):
-        '''affinitized array of efficiencies property'''
+        """affinitized array of efficiencies property"""
         return self._affinitize(self.eff, 3)
 
     def _affinitize(self, pump_data, pwr):
-        '''creates affinitized curves for flow, head and efficiency for motor speeds at:  
+        """creates affinitized curves for flow, head and efficiency for motor speeds at:  
 
         Frequency =\n
         - 60 hz
@@ -302,7 +302,7 @@ class Pump:
         - 30 hz
         - 20 hz
         - 10 hz
-        '''
+        """
         percent_speed = (linspace(60,10,6)/60)**pwr
         
         for percent in percent_speed:
@@ -317,7 +317,7 @@ class Pump:
                    num_pumps=1, 
                    show=False, 
                    **kwargs):
-        '''creates a matplotlib plot of the pump curve.
+        """creates a matplotlib plot of the pump curve.
             Default is to plot affinitized curves with full speed curve. 
             User has option to add parallel pumps, system curve and efficiency curve.
             Parallel pump curves only work when vfd=False.
@@ -360,7 +360,7 @@ class Pump:
         See :doc:`Pump Class Example <tutorial>` for affinitize curve functionality and how to 
         plot a system curve along with the pump curve. 
         
-        '''
+        """
         if self.impeller:
             title_str = 'Pump: ' + self.model + ' - ' + str(self.rpm) + ' RPM - ' + str(self.impeller) + '" impeller'
         else:
@@ -406,7 +406,7 @@ class Pump:
             plt.show()
 
     def find_head(self, flow):
-        ''' Returns head value from pump curve based on flow input.
+        """ Returns head value from pump curve based on flow input.
             If flow is not a known value it will interprolate between the
             two closest points on the curve.
 
@@ -422,7 +422,7 @@ class Pump:
         >>> print(h, 'ft')
             100.125 ft
             
-        '''
+        """
         try:
             if flow in self.flow:
                 head = self.head[self.flow.index(flow)]
@@ -475,12 +475,12 @@ if __name__=="__main__":
 
     conn = sqlite3.connect(db_path)
     c = conn.cursor()
-    c.execute('''Select pumpID
+    c.execute("""Select pumpID
                  From
                     pumps
                  Where
                     model='test pump'
-             ''')
+             """)
     pump_id = c.fetchall()    
     pump.delete_pump(pump_id=pump_id[0][0])
     pump.available_pumps()

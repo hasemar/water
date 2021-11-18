@@ -3,7 +3,7 @@ from math import pi, acos, sqrt
 from Water import tools
 
 class Tank:
-    '''Defines Tank object to calculate storage and other tank properties.
+    """Defines Tank object to calculate storage and other tank properties.
 
     :param \**kwargs: keyword arguments
     :type \**kwargs: dictionary
@@ -43,7 +43,7 @@ class Tank:
             # or tank object can be instantiated with individually specified parameters
             tank_2 = Tank(name='Tank 2', diameter=30, height=45)
             
-    '''
+    """
     
     def __init__(self, **kwargs):
         self.name = kwargs.get('name')
@@ -62,7 +62,7 @@ class Tank:
 
     @property
     def area(self):
-        '''returns cross-sectional area of tank in sqft'''
+        """returns cross-sectional area of tank in sqft"""
         if self.shape == 'vertical' or self.shape == 'horizontal':
             a = pi * self.diameter**2 / 4
         elif self.shape == 'box':
@@ -73,14 +73,14 @@ class Tank:
         return a
     @property
     def vol(self):
-        '''returns dry volume of tank in gallons'''
+        """returns dry volume of tank in gallons"""
         if self.shape == 'horizontal':
             return self.horizontal_vol(self.diameter)
         else:
             return tools.cuft2gal(self.area * self.height)   
     @property
     def useable(self):
-        '''returns useable volume of tank in gallons'''
+        """returns useable volume of tank in gallons"""
         if self.shape == 'horizontal':
             v_dead = tools.cuft2gal(self.horizontal_vol(self.deadstorage))
             v_free = tools.cuft2gal(self.horizontal_vol(self.freeboard))
@@ -89,7 +89,7 @@ class Tank:
             return tools.cuft2gal((self.height - self.deadstorage - self.freeboard) * self.area)
    
     def horizontal_vol(self, height):
-        '''calculate filled volume of horizontal tank at a specific height
+        """calculate filled volume of horizontal tank at a specific height
             .. math::  
             
                 A_w &= \\pi r^2 - r^2 arcos\\big{(}\\frac{(r-h)}{r}\\big{)} + (r-h)\\sqrt{2rh - h^2}
@@ -101,7 +101,7 @@ class Tank:
         :return: water volume (gallons)
         :rtype: float
     
-        '''
+        """
         L = self.length
         R = self.diameter/2
         h = height 
@@ -110,10 +110,10 @@ class Tank:
         return tools.cuft2gal(v)
 
     def _horizontal_vol_dict(self):
-        '''returns a dict of volumes at heights ranging from 0 to self.diameter
+        """returns a dict of volumes at heights ranging from 0 to self.diameter
         This is used to get the water level in a horizontal tank, given the water
         volume. Opted to just create a "lookup table" rather than solve for h.
-        '''
+        """
         L = self.length
         R = self.diameter/2
         l = self.diameter/1001
@@ -127,7 +127,7 @@ class Tank:
         return vol_lookup
     
     def getPercent(self, vol, of_vol):
-        '''simple percentage calculation used to get the tank 
+        """simple percentage calculation used to get the tank 
         volume percentage of total system volume
         
         :param vol: tank or partition volume (numerator)
@@ -137,7 +137,7 @@ class Tank:
         :return: percentage of total/system volume
         :rtype: float
         
-        '''
+        """
         try:
             p = vol/of_vol 
         except ZeroDivisionError as e:
@@ -147,7 +147,7 @@ class Tank:
             return p 
 
     def getHeight(self, vol, units='gal'):
-        '''calculates the water level in ft at given volume
+        """calculates the water level in ft at given volume
         
         :param vol: water volume
         :param units: units volume is given ('gal' or 'cuft')
@@ -156,7 +156,7 @@ class Tank:
         :return: water level in ft
         :rtype: float 
 
-        '''
+        """
         units = units.lower()
         assert (units == 'gal' or units == 'cuft'), "units must be either 'gal' or 'cuft'" 
         
@@ -175,7 +175,7 @@ class Tank:
             return h
         
     def getInfo(self, SB=0, ES=0, OS=0, FFS=0, total_vol=0, details=False):
-        '''returns string of the current tank properties
+        """returns string of the current tank properties
 
         :param SB: system's required standby storage in gallons, *default 0*
         :param ES: system's required equalizing in gallons, *default 0*
@@ -192,9 +192,9 @@ class Tank:
         :return: tank object information, if details True it shows storage partition volumes and heights
             relative to whole system
         :rtype: string
-        '''
+        """
         if self.shape == 'horizontal':
-            info = f'''
+            info = f"""
             {self.name} \r\n
             Base Elevation:------------- {self.elevation} ft
             Orientation:---------------- {self.shape}
@@ -203,9 +203,9 @@ class Tank:
             Tank Cross-Sectional Area:-- {self.area:.1f} ft^2 
             Total Volume:--------------- {self.vol:.1f} gal
             Effective Volume:----------- {self.useable:.1f} gal
-            '''
+            """
         elif self.shape == 'box':
-            info = f'''
+            info = f"""
             {self.name} \r\n
             Base Elevation:------------- {self.elevation} ft
             Orientation:---------------- {self.shape}
@@ -214,9 +214,9 @@ class Tank:
             Tank Cross-Sectional Area:-- {self.area:.1f} ft^2 
             Total Volume:--------------- {self.vol:.1f} gal
             Effective Volume:----------- {self.useable:.1f} gal
-            '''
+            """
         else:
-             info = f'''
+             info = f"""
             {self.name} \r\n
             Base Elevation:------------- {self.elevation} ft
             Orientation:---------------- {self.shape}
@@ -225,7 +225,7 @@ class Tank:
             Tank cross-sectional area:-- {self.area:.1f} ft^2
             Total volume:--------------- {self.vol:.1f} gal
             Effective volume:----------- {self.useable:.1f} gal
-            '''
+            """
 
         if details:
             perc = self.getPercent(self.useable, total_vol)
@@ -240,7 +240,7 @@ class Tank:
             vols.append(fb_vol)
             vols.append(total_calc_vol)
             
-            info +=f'''
+            info +=f"""
             Storage Partition |\tVol (gal)  |  Height(ft)
             ------------------------------------------------------
             Dead Storage\t{ds_vol:.1f}\t\t{self.deadstorage:.1f}  
@@ -251,7 +251,7 @@ class Tank:
             Freeboard\t\t{fb_vol:.1f}\t\t{self.freeboard:.1f}  
             ------------------------------------------------------
             TOTALS\t\t{total_calc_vol:.1f}\t\t{total_h:.1f} 
-            '''
+            """
         return info
 
 #-----------------------------------------------------------------
