@@ -17,6 +17,9 @@ Currently units are the U.S. water industry standard form:
 
 Some helper functions, such as area and volume are not unit specific and as long as you maintain unit consistency
 the units can be what ever you want. This reference will identify when a function will return specific units.
+
+This project is currently in need of some serious opensource contributions! 
+If you would like to contribute, visit my project `Github Page <https://github.com/hasemar/water>`.
   
 Requirements
 --------------
@@ -37,6 +40,7 @@ Contents
     code_reference
     tutorial
     data
+    Github Page <https://github.com/hasemar/water>
 
 
 Indices and tables
