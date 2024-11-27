@@ -49,3 +49,8 @@ Indices and tables
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
+
+Contribute!
+-------------
+
+Help make this package great! The `Water code repository <https://github.com/hasemar/water>`_ is on Github and I would love some help making it better. I have reached the top end of my programming knowledge (and time commitment). There are many things that would make this tool more useful. 
