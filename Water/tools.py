@@ -34,7 +34,7 @@ def coeffs(num_ERUs):
     elif num_ERUs > 500:
         return 1.6, 225
     else:
-        raise Exception("Number of ERU's must be a positive integer")
+        raise Exception("Number of ERU's must be a positive integer.")
 
 def PHD(MDD, num_ERUs):
     """Peak Hour Demand Calculation from the `2019 DOH Water System Design Manual Table 3-1 <https://www.doh.wa.gov/Portals/1/Documents/Pubs/331-123.pdf?ver=2019-10-03-153237-220#page=51>`__ 
