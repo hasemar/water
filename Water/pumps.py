@@ -125,7 +125,7 @@ class Pump:
         # check if pump currently exists in database
         exists = self.search_pump(self.model, self.impeller)
         
-        if len(exists) == 0:
+        if exists == None:
             sqlinsert = """INSERT INTO 
                             pumps(
                                 manufacturer,
@@ -367,7 +367,6 @@ class Pump:
             title_str = 'Pump: ' + self.model + ' - ' + str(self.rpm) + ' RPM'
 
         self.fig, self.ax = plt.subplots(2,1,figsize=(8,4.95))
-        plt.style.use('seaborn-whitegrid')
         if eff:
             self.ax[0] = plt.subplot2grid((3,1), (0,0), rowspan=2)
             self.ax[1] = plt.subplot2grid((3,1), (2,0))
