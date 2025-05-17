@@ -1,0 +1,19 @@
+[project]
+name = "water"
+version = "1.1"
+description = "This Package is intended to help engineers with common tasks when designing and working with municipal water systems. Units ar ein US industry standard."
+authors = [
+    {name = "Ryan Haseman"}
+]
+license = {text = "MIT License"}
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "numpy (>=2.2.5,<3.0.0)",
+    "matplotlib (>=3.10.3,<4.0.0)"
+]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
