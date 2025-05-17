@@ -105,3 +105,6 @@ ENV/
 
 # water config file
 water_config.py
+
+# poetry stuff
+poetry.lock
